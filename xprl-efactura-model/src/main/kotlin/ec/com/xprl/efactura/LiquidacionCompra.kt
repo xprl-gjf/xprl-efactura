@@ -11,6 +11,7 @@ class LiquidacionCompra(
     emisor: Emisor,
     val proveedor: Proveedor,
     val valores: Valores,
+    val reembolso: Reembolso?,
     val detalles: List<ComprobanteDetalle>
     ) : ComprobanteElectronicoBase<LiquidacionCompra>(secuencial, fechaEmision, emisor) {
 
@@ -25,5 +26,16 @@ class LiquidacionCompra(
         val totalDescuento: UDecimalValue,
         val totalConImpuestos: Map<ImpuestoIdentidad, ImpuestoLiquidacionTotal>,
         val importeTotal: UDecimalValue,
+    )
+
+    data class Reembolso(
+        val codDocReembolso: CodeValue,
+        val totals: ReembolsoTotals
+    )
+
+    data class ReembolsoTotals(
+        val totalComprobantesReembolso: UDecimalValue,
+        val totalBaseImponibleReembolso: UDecimalValue,
+        val totalImpuestoReembolso: UDecimalValue
     )
 }

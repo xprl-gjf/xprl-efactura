@@ -77,6 +77,12 @@ private fun createInfoLiquidacionCompra(
         moneda = it.moneda
         pagos = createPagos(it.pagos)
     }
+    liquidacion.reembolso?.let {
+        codDocReembolso = it.codDocReembolso
+        totalComprobantesReembolso = it.totals.totalComprobantesReembolso
+        totalBaseImponibleReembolso = it.totals.totalBaseImponibleReembolso
+        totalImpuestoReembolso = it.totals.totalImpuestoReembolso
+    }
 }
 
 private fun createLiquidacionCompraDetalles(
