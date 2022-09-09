@@ -12,43 +12,56 @@ import kotlinx.datetime.LocalDate
 class LiquidacionCompraBuilder: CompositeBuilder<LiquidacionCompraBuilder, LiquidacionCompra>(
     LiquidacionCompra::class.java,
     innerBuilderProperties = { builder -> listOf(
-        builder.emisor,
-        builder.proveedor,
-        builder.valores,
-        *(builder.detalles ?: emptyList<Builder<*>>()).toTypedArray()
-    ) },
+            builder.emisor,
+            builder.proveedor,
+            builder.valores
+        ) + (
+            builder.detalles ?: emptyList()
+        )
+    },
     requires("sequencial") { it.secuencial},
     requires("fechaEmision") { it.fechaEmision },
     requires("emisor") { it.emisor },
     requires("proveedor") { it.proveedor},
     requires("valores") { it.valores },
     requiresNotEmpty("detalles") { it.detalles }
-) {
-    private var secuencial: SecuencialValue? = null
-    private var fechaEmision: LocalDate? = null
-    private var emisor: EmisorBuilder? = null
-    private var proveedor: ProveedorBuilder? = null
-    private var valores: ValoresBuilder? = null
-    private var detalles: List<ComprobanteDetalleBuilder>? = null
+), ILiquidacionCompraBuilder {
+    internal var secuencial: SecuencialValue? = null
+    internal var fechaEmision: LocalDate? = null
+    internal var emisor: EmisorBuilder? = null
+    internal var proveedor: ProveedorBuilder? = null
+    internal var valores: ValoresBuilder? = null
+    internal var detalles: List<ComprobanteDetalleBuilder>? = null
+    internal var reembolso: ReembolsoBuilder? = null
+    internal var reembolsoDetalles: List<ReembolsoDetalleBuilder>? = null
 
-    fun setSecuencial(value: SecuencialValue) = apply { secuencial = value }
-    fun setFechaEmision(value: LocalDate) = apply { fechaEmision = value}
-    fun setEmisor(value: EmisorBuilder) = apply { emisor = value }
-    fun updateEmisor(value: EmisorBuilder) = apply {
+    override fun setSecuencial(value: SecuencialValue) = apply { secuencial = value }
+    override fun setFechaEmision(value: LocalDate) = apply { fechaEmision = value}
+    override fun setEmisor(value: EmisorBuilder) = apply { emisor = value }
+    override fun updateEmisor(value: EmisorBuilder) = apply {
         emisor = if (emisor == null) { value } else { emisor!! + value }
     }
-    fun setProveedor(value: ProveedorBuilder) = apply { proveedor = value }
-    fun updateProveedor(value: ProveedorBuilder) = apply {
+    override fun setProveedor(value: ProveedorBuilder) = apply { proveedor = value }
+    override fun updateProveedor(value: ProveedorBuilder) = apply {
         proveedor = if (proveedor == null) { value } else { proveedor!! + value }
     }
-    fun setValores(value: ValoresBuilder) = apply { valores = value }
-    fun updateValores(value: ValoresBuilder) = apply {
+    override fun setValores(value: ValoresBuilder) = apply { valores = value }
+    override fun updateValores(value: ValoresBuilder) = apply {
         valores = if (valores == null) { value } else { valores!! + value }
     }
-    fun setDetalles(vararg values: ComprobanteDetalleBuilder) = setDetalles(values.toList())
-    fun setDetalles(values: List<ComprobanteDetalleBuilder>) = apply { detalles = values }
-    fun updateDetalles(values: List<ComprobanteDetalleBuilder>) = apply {
+    override fun setDetalles(vararg values: ComprobanteDetalleBuilder) = setDetalles(values.toList())
+    override fun setDetalles(values: List<ComprobanteDetalleBuilder>) = apply { detalles = values }
+    override fun updateDetalles(values: List<ComprobanteDetalleBuilder>) = apply {
         detalles = if (detalles == null) { values } else { detalles!! + values }
+    }
+    override fun setReembolso(value: ReembolsoBuilder?) = apply { reembolso = value }
+    override fun updateReembolso(value: ReembolsoBuilder) = apply {
+        reembolso = if (reembolso == null) { value } else { reembolso!! + value }
+    }
+    override fun setReembolsoDetalles(vararg values: ReembolsoDetalleBuilder) = setReembolsoDetalles(values.toList())
+    override fun setReembolsoDetalles(values: List<ReembolsoDetalleBuilder>?) = apply { reembolsoDetalles = values }
+    override fun updateReembolsoDetalles(values: List<ReembolsoDetalleBuilder>) = apply {
+        reembolsoDetalles = if (reembolsoDetalles == null) { values } else { reembolsoDetalles!! + values }
     }
 
     operator fun plus(other: LiquidacionCompraBuilder) = merge(other)
@@ -59,6 +72,8 @@ class LiquidacionCompraBuilder: CompositeBuilder<LiquidacionCompraBuilder, Liqui
         other.proveedor?.let { updateProveedor(it) }
         other.valores?.let { updateValores(it) }
         other.detalles?.let { updateDetalles(it) }
+        other.reembolso?.let { updateReembolso(it) }
+        other.reembolsoDetalles?.let { updateReembolsoDetalles(it) }
     }
 
     override fun validatedBuild() = LiquidacionCompra(
@@ -67,7 +82,73 @@ class LiquidacionCompraBuilder: CompositeBuilder<LiquidacionCompraBuilder, Liqui
         emisor!!.build(),
         proveedor!!.build(),
         valores!!.build(),
-        detalles!!.map { it.build() }
+        detalles!!.map { it.build() },
+        reembolso?.build(),
+        reembolsoDetalles?.map { it.build() }
     )
 }
+
+/**
+ * Mutable builder for a [LiquidacionCompra] that includes mandatory reembolsos.
+ *
+ * Behaves as a [LiquidacionCompraBuilder], but with a constraint that
+ * `reembolso` and `reembolsoDetalles` fields are mandatory.
+ */
+class LiquidacionCompraForReembolsosBuilder(private val inner: LiquidacionCompraBuilder): CompositeBuilder<LiquidacionCompraForReembolsosBuilder, LiquidacionCompra>(
+    LiquidacionCompra::class.java,
+    innerBuilderProperties = { builder -> listOf(
+        builder.inner.emisor,
+        builder.inner.proveedor,
+        builder.inner.valores,
+        builder.inner.reembolso,
+        ) + (
+        builder.inner.detalles ?: emptyList()
+        ) + (
+        builder.inner.reembolsoDetalles ?: emptyList()
+        )
+    },
+    requires("sequencial") { it.inner.secuencial},
+    requires("fechaEmision") { it.inner.fechaEmision },
+    requires("emisor") { it.inner.emisor },
+    requires("proveedor") { it.inner.proveedor},
+    requires("valores") { it.inner.valores },
+    requiresNotEmpty("detalles") { it.inner.detalles },
+    requires("reembolso") { it.inner.reembolso },
+    requiresNotEmpty("reembolseDetalles") { it.inner.reembolsoDetalles }
+), ILiquidacionCompraBuilder by inner {
+
+    override val isValid: Boolean
+        get() = super.isValid
+
+    override val invalidProperties: List<String>
+        get() = super.invalidProperties
+
+    override fun build(): LiquidacionCompra = super.build()
+
+    override fun validatedBuild() = inner.build()
+}
+
+
+/**
+ * Common interface for implementations of LiquidacionCompraBuilder
+ */
+interface ILiquidacionCompraBuilder: Builder<LiquidacionCompra> {
+    fun setSecuencial(value: SecuencialValue): ILiquidacionCompraBuilder
+    fun setFechaEmision(value: LocalDate): ILiquidacionCompraBuilder
+    fun setEmisor(value: EmisorBuilder): ILiquidacionCompraBuilder
+    fun updateEmisor(value: EmisorBuilder): ILiquidacionCompraBuilder
+    fun setProveedor(value: ProveedorBuilder): ILiquidacionCompraBuilder
+    fun updateProveedor(value: ProveedorBuilder): ILiquidacionCompraBuilder
+    fun setValores(value: ValoresBuilder): ILiquidacionCompraBuilder
+    fun updateValores(value: ValoresBuilder): ILiquidacionCompraBuilder
+    fun setDetalles(vararg values: ComprobanteDetalleBuilder): ILiquidacionCompraBuilder
+    fun setDetalles(values: List<ComprobanteDetalleBuilder>): ILiquidacionCompraBuilder
+    fun updateDetalles(values: List<ComprobanteDetalleBuilder>): ILiquidacionCompraBuilder
+    fun setReembolso(value: ReembolsoBuilder?): ILiquidacionCompraBuilder
+    fun updateReembolso(value: ReembolsoBuilder): ILiquidacionCompraBuilder
+    fun setReembolsoDetalles(vararg values: ReembolsoDetalleBuilder): ILiquidacionCompraBuilder
+    fun setReembolsoDetalles(values: List<ReembolsoDetalleBuilder>?): ILiquidacionCompraBuilder
+    fun updateReembolsoDetalles(values: List<ReembolsoDetalleBuilder>): ILiquidacionCompraBuilder
+}
+
 

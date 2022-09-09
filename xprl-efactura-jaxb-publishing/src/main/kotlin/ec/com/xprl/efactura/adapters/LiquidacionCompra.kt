@@ -15,6 +15,7 @@ internal class LiquidacionCompra(
     val valores: Valores = Valores(src.valores)
     val reembolso: Reembolso? = src.reembolso?.let { Reembolso(it) }
     val detalles: List<ComprobanteDetalle> = src.detalles.map { ComprobanteDetalle(it) }
+    val reembolsoDetalles: List<ReembolsoDetalle>? = src.reembolsoDetalles?.map { ReembolsoDetalle(it) }
 
 
     internal class Valores(val src: LiquidacionCompra.Valores) {
@@ -43,7 +44,7 @@ internal class LiquidacionCompra(
         val totals: ReembolsoTotals = ReembolsoTotals(src.totals)
 
         val codDocReembolso: String
-            get() = String.format("%03d", src.codDocReembolso.value)
+            get() = String.format("%02d", src.codDocReembolso.value)
     }
 
     internal class ReembolsoTotals(val src: LiquidacionCompra.ReembolsoTotals) {

@@ -46,7 +46,6 @@ internal class AlphanumericCodeValueTest {
             " ",            // blank
             "X".repeat(26),  // value too long
             "ABC\n123",     // newline
-            "ABC 123",      // whitespace
             "ABC&123",      // invalid char
         ).asArgs()
 
@@ -55,7 +54,11 @@ internal class AlphanumericCodeValueTest {
             "X".repeat(25),
             "ABC123",
             "ABC-123",
-            "ABC_123"
+            "ABC_123",
+            "ABC+123",
+            "ABC*123",
+            "ABC.123",
+            "ABC 123",      // whitespace
         ).asArgs()
     }
 }

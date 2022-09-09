@@ -23,6 +23,10 @@ internal fun createLiquidacionCompra(
     infoTributaria = createInfoTributaria(formatted, ambiente, tipoEmision, claveAcceso)
     infoLiquidacionCompra = createInfoLiquidacionCompra(formatted)
     detalles = createLiquidacionCompraDetalles(formatted)
+
+    formatted.reembolsoDetalles?.let {
+        reembolsos = createLiquidacionCompraReembolsos(it)
+    }
 }
 
 private fun createInfoTributaria(
@@ -83,6 +87,57 @@ private fun createInfoLiquidacionCompra(
         totalBaseImponibleReembolso = it.totals.totalBaseImponibleReembolso
         totalImpuestoReembolso = it.totals.totalImpuestoReembolso
     }
+}
+
+
+private fun createLiquidacionCompraReembolsos(
+    reembolsos: Iterable<ReembolsoDetalle>
+) = ec.gob.sri.liquidacion.v1_0_0.Reembolsos().apply {
+    with (reembolsoDetalle) {
+        reembolsos.map {
+            createReembolsoDetalle(it)
+        }.forEach {
+            add(it)
+        }
+    }
+}
+
+private fun createReembolsoDetalle(
+    reembolso: ReembolsoDetalle
+) = ec.gob.sri.liquidacion.v1_0_0.Reembolsos.ReembolsoDetalle().apply {
+    tipoIdentificacionProveedorReembolso = reembolso.tipoIdentificación
+    identificacionProveedorReembolso = reembolso.identificación
+    codPaisPagoProveedorReembolso = reembolso.paisPago
+    tipoProveedorReembolso = reembolso.tipoProveedorReembolso
+    codDocReembolso = reembolso.docReembolso.codDocReembolso
+    estabDocReembolso = reembolso.docReembolso.estabDocReembolso
+    ptoEmiDocReembolso = reembolso.docReembolso.ptoEmiDocReembolso
+    secuencialDocReembolso = reembolso.docReembolso.secuencialDocReembolso
+    fechaEmisionDocReembolso = reembolso.docReembolso.fechaEmisionDocReembolso
+    numeroautorizacionDocReemb = reembolso.docReembolso.numeroAutorizacion
+    detalleImpuestos = createReembolsoDetalleImpuestos(reembolso.impuestos)
+}
+
+private fun createReembolsoDetalleImpuestos(
+    impuestos: Iterable<DetalleImpuesto>
+) = ec.gob.sri.liquidacion.v1_0_0.DetalleImpuestos().apply {
+    with (detalleImpuesto) {
+        impuestos.map {
+            createDetalleImpuesto(it)
+        }.forEach {
+            add(it)
+        }
+    }
+}
+
+private fun createDetalleImpuesto(
+    impuesto: DetalleImpuesto
+) = ec.gob.sri.liquidacion.v1_0_0.DetalleImpuestos.DetalleImpuesto().apply {
+    codigo = impuesto.codigo
+    codigoPorcentaje = impuesto.codigoPorcentaje
+    tarifa = impuesto.tarifa
+    baseImponibleReembolso = impuesto.baseImponible
+    impuestoReembolso = impuesto.valor
 }
 
 private fun createLiquidacionCompraDetalles(

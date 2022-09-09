@@ -28,9 +28,9 @@ class AlphanumericCodeValue private constructor (val value: String) {
                 value,
                 "alphanumeric id",
                 ALPHANUMERIC_CODE_VALUE_MAX_LENGTH,
-                allowBlank = false
             ) {
-                it.isValidIdentifier(allowExtendedChars=true)
+                val allowedSymbols = "_-+*.".toList()
+                it.isValidSimpleAlpha(allowedSymbols)
             }
     }
 }

@@ -65,7 +65,10 @@ internal inline fun <reified T : Any> validateLength(
 }
 
 internal fun Char.isValidSimpleAlpha(): Boolean =
-    isLetter() || isSpace()
+    isLetterOrDigit() || isSpace()
+
+internal fun Char.isValidSimpleAlpha(allowedSymbols: Iterable<Char>): Boolean =
+    isValidSimpleAlpha() || (allowedSymbols.contains(this))
 
 internal fun Char.isValidIdentifier(allowExtendedChars: Boolean = false): Boolean =
     isLetterOrDigit() || (allowExtendedChars && isUnderscoreOrHyphen())
