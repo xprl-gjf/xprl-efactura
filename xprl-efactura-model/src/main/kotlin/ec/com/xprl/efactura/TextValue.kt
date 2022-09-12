@@ -21,8 +21,8 @@ open class TextValue protected constructor (value: CharSequence) {
         /**
          * Factory function to create a [TextValue] from a string.
          *
-         * Note that HTML special characters (&,<,>) will be html-encoded,
-         * e.g. as &amp; &lt; or &gt respectively.
+         * Note that HTML special characters (&,<,>,/) will be html-encoded,
+         * e.g. as &amp; &lt; &gt or &sol; respectively.
          *
          * @exception IllegalArgumentException the string value is not a valid [TextValue].
          */
@@ -34,6 +34,7 @@ open class TextValue protected constructor (value: CharSequence) {
                 "&" -> "&amp;"
                 "<" -> "&lt;"
                 ">" -> "&gt;"
+                "/" -> "&sol;"
                 else -> it.value
             }
         }
@@ -50,6 +51,6 @@ open class TextValue protected constructor (value: CharSequence) {
         }
 
         private val lineBreaksRegex = Regex("[\\u000A\\u000B\\u000C\\u000D\\u0085\\u2028\\u2029]")
-        private val htmlEncodeRegex = Regex("[&<>]")
+        private val htmlEncodeRegex = Regex("[&<>/]")
     }
 }

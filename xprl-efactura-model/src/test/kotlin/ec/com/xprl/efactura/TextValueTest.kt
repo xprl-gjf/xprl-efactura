@@ -34,8 +34,8 @@ internal class TextValueTest {
 
     /**
      * Verify that when a [TextValue] is created from a string containing
-     * 'special characters' (e.g. &<>), then those characters are substituted
-     * with corresponding HTML entity references (e.g. &amp; &lt; &gt; ).
+     * 'special characters' (e.g. &<>/), then those characters are substituted
+     * with corresponding HTML entity references (e.g. &amp; &lt; &gt; &sol; ).
      */
     @ParameterizedTest(name = "html-escaped value {0}")
     @MethodSource("getHtmlEscapedValues")
@@ -80,7 +80,7 @@ internal class TextValueTest {
         @JvmStatic
         private fun getHtmlEscapedValues(): List<Arguments> = listOf(
             arguments("ABC&123", "ABC&amp;123"),
-            arguments("ABC&<>123", "ABC&amp;&lt;&gt;123"),
+            arguments("ABC&<>/123", "ABC&amp;&lt;&gt;&sol;123"),
             arguments(">", "&gt;"),      // solitary html-escaped char
             arguments("&".repeat(60), "&amp;".repeat(60))
         )
