@@ -52,7 +52,7 @@ internal fun createLiquidacionCompra(
 ) = LiquidacionCompra_1_1_0().apply {
     val formatted = LiquidacionCompra(liquidacion)
     id = COMPROBANTE_ID
-    version = "1.0.0"
+    version = "1.1.0"
     infoTributaria = createInfoTributaria(formatted, ambiente, tipoEmision, claveAcceso)
     infoLiquidacionCompra = createInfoLiquidacionCompra(formatted)
     detalles = createLiquidacionCompraDetalles(formatted)
