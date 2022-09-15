@@ -10,6 +10,10 @@ sealed class IdentityValue(value: CharSequence) {
 
     override fun toString() = value
 
+    companion object {
+        /* empty - included solely to support extensions */
+    }
+
     /**
      * Representación de una identidad por RUC.
      */

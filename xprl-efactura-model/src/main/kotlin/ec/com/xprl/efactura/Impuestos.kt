@@ -9,7 +9,11 @@ package ec.com.xprl.efactura
 enum class TipoImpuesto(val value: Int) {
     IVA(2),
     ICE(3),
-    IRBPNR(5)
+    IRBPNR(5);
+
+    companion object {
+        /* empty - included solely to support extensions */
+    }
 }
 
 /**
@@ -18,7 +22,11 @@ enum class TipoImpuesto(val value: Int) {
 data class ImpuestoIdentidad(
     val tipoImpuesto: TipoImpuesto,
     val codigoPorcentaje: Int
-)
+) {
+    companion object {
+        /* empty - included solely to support extensions */
+    }
+}
 
 /**
  * Immutable representation of an impuesto total value for a comprobante electrónico.

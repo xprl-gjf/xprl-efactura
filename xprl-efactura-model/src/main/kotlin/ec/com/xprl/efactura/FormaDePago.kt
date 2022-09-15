@@ -15,4 +15,8 @@ enum class FormaDePago(val value: Int) {
     TARJETA_DE_CREDITO(19),
     OTROS_CON_SISTEMA_FINANCIERO(20),
     ENDOSO_DE_TITULOS(21);
+
+    companion object {
+        /* empty - included solely to support extensions */
+    }
 }

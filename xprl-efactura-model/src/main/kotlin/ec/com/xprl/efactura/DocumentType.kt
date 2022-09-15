@@ -13,6 +13,10 @@ enum class DocumentType(val value: Int) {
     NOTA_DE_DEBITO(5),
     GUIA_DE_REMISION(6),
     COMPROBANTE_DE_RETENCION(7);
+
+    companion object {
+        /* empty - included solely to support extensions */
+    }
 }
 
 /**

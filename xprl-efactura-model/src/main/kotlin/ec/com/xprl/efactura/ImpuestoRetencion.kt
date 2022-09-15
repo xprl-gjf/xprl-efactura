@@ -5,7 +5,12 @@ package ec.com.xprl.efactura
 
 sealed class ImpuestoRetencionIdentidad(
     val tipoImpuesto: TipoImpuestoRetencion,
-    val codigoPorcentaje: Int)
+    val codigoPorcentaje: Int) {
+
+    companion object {
+        /* empty - included solely to support extensions */
+    }
+}
 
 
 data class ImpuestoRetencionValor(
@@ -23,7 +28,11 @@ data class ImpuestoRetencionValor(
 enum class TipoImpuestoRetencion(val codigo: Int) {
     RENTA(1),
     IVA(2),
-    ISD(6)
+    ISD(6);
+
+    companion object {
+        /* empty - included solely to support extensions */
+    }
 }
 
 class ImpuestoRetencionIva(
