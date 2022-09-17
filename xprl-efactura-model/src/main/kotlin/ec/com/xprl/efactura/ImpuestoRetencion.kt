@@ -23,11 +23,12 @@ data class ImpuestoRetencionValor(
  * Valores por el campo `código` por impuestos a retener.
  *
  * Según [SRI Ficha técnica v2.21](https://www.sri.gob.ec/o/sri-portlet-biblioteca-alfresco-internet/descargar/435ca226-b48d-4080-bb12-bf03a54527fd/FICHA%20TE%cc%81CNICA%20COMPROBANTES%20ELECTRO%cc%81NICOS%20ESQUEMA%20OFFLINE%20Versio%cc%81n%202.21.pdf),
- * Tabla 19.
+ * Tabla 19 y también Tabla 22
  */
 enum class TipoImpuestoRetencion(val codigo: Int) {
     RENTA(1),
     IVA(2),
+    IVA_PRESUNTIVO_Y_RENTA(4),
     ISD(6);
 
     companion object {
@@ -83,4 +84,9 @@ typealias RentaPorcentaje = Int
 class ImpuestoRetencionRenta(
     portentaje: RentaPorcentaje
 ) : ImpuestoRetencionIdentidad(TipoImpuestoRetencion.RENTA, portentaje)
+
+
+class ImpuestoRetencionIvaPresuntivoYRenta(
+    portentaje: RentaPorcentaje
+) : ImpuestoRetencionIdentidad(TipoImpuestoRetencion.IVA_PRESUNTIVO_Y_RENTA, portentaje)
 

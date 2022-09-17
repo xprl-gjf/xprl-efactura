@@ -31,7 +31,6 @@ e.g.
                 </xsd:restriction>
         </xsd:simpleType>
 
-                                <xsd:element name="reembolsos" minOccurs="0" type="reembolsos"/>
 +                               <xsd:element minOccurs="0" name="retenciones">
 +                                       <xsd:complexType>
 +                                               <xsd:sequence>
@@ -48,7 +47,6 @@ e.g.
 +                                               </xsd:sequence>
 +                                       </xsd:complexType>
 +                               </xsd:element>
-                                <xsd:element name="tipoNegociable" minOccurs="0" type="tipoNegociable"/>
 
  */
 
@@ -64,6 +62,9 @@ internal fun createFactura(
     infoTributaria = createInfoTributaria(formatted, ambiente, tipoEmision, claveAcceso)
     infoFactura = createInfoFactura(formatted)
     detalles = createFacturaDetalles(formatted)
+    retenciones = formatted.retenciones?.let {
+        createFacturaRetenciones(it)
+    }
 }
 
 private fun createInfoTributaria(
@@ -150,7 +151,6 @@ private fun createComprobanteDetalle(
     detalle.detallesAdicionales?.let {
         detallesAdicionales = createDetallesAdicionales(it)
     }
-
 }
 
 private fun createImpuestos(
@@ -217,6 +217,27 @@ private fun createPago(
     total = pago.total
     plazo = pago.plazoValue
     unidadTiempo = pago.plazoUnidadTiempo
+}
+
+private fun createFacturaRetenciones(
+    retenciones: List<Factura.Retencion>
+) = ec.gob.sri.factura.v1_1_0.Factura.Retenciones().apply {
+    with(retencion) {
+        retenciones.map {
+            createFacturaRetencion(it)
+        }.forEach {
+            add(it)
+        }
+    }
+}
+
+private fun createFacturaRetencion(
+    retencion: Factura.Retencion
+) = ec.gob.sri.factura.v1_1_0.Factura.Retenciones.Retencion().apply {
+    codigo = retencion.codigo
+    codigoPorcentaje = retencion.codigoPorcentaje
+    tarifa = retencion.tarifa
+    valor = retencion.valor
 }
 
 private fun createDetallesAdicionales(detalles: Iterable<DetalleAdicionale>) =

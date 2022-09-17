@@ -14,8 +14,9 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
     innerBuilderProperties = { builder -> listOf(
         builder.emisor,
         builder.comprador,
-        builder.valores,
-        *(builder.detalles ?: emptyList<Builder<*>>()).toTypedArray()
+        builder.valores
+    ) + (
+        builder.detalles ?: emptyList()
     ) },
     requires("sequencial") { it.secuencial},
     requires("fechaEmision") { it.fechaEmision },
@@ -30,6 +31,7 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
     private var comprador: CompradorBuilder? = null
     private var valores: ValoresBuilder? = null
     private var detalles: List<ComprobanteDetalleBuilder>? = null
+    private var retenciones: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>? = null
 
     fun setSecuencial(value: SecuencialValue) = apply { secuencial = value }
     fun setFechaEmision(value: LocalDate) = apply { fechaEmision = value}
@@ -50,6 +52,10 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
     fun updateDetalles(values: List<ComprobanteDetalleBuilder>) = apply {
         detalles = if (detalles == null) { values } else { detalles!! + values }
     }
+    fun setRetenciones(values: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>?) = apply { retenciones = values }
+    fun updateRetenciones(values: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>) = apply {
+        retenciones = if (retenciones == null) { values } else { retenciones!! + values }
+    }
 
     operator fun plus(other: FacturaBuilder) = merge(other)
     fun merge(other: FacturaBuilder) = apply {
@@ -59,6 +65,7 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
         other.comprador?.let { updateComprador(it) }
         other.valores?.let { updateValores(it) }
         other.detalles?.let { updateDetalles(it) }
+        other.retenciones?.let { updateRetenciones(it) }
     }
 
     override fun validatedBuild() = Factura(
@@ -67,7 +74,8 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
         emisor!!.build(),
         comprador!!.build(),
         valores!!.build(),
-        detalles!!.map { it.build() }
+        detalles!!.map { it.build() },
+        retenciones
     )
 }
 

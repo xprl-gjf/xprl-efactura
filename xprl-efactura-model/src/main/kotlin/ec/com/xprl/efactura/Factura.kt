@@ -11,7 +11,8 @@ class Factura(
     emisor: Emisor,
     val comprador: Comprador,
     val valores: Valores,
-    val detalles: List<ComprobanteDetalle>
+    val detalles: List<ComprobanteDetalle>,
+    val retenciones: Map<ImpuestoRetencionIvaPresuntivoYRenta, Retencion>? = null  // v1.1.0 only
     ) : ComprobanteElectronicoBase<Factura>(secuencial, fechaEmision, emisor) {
 
     data class Valores(
@@ -28,5 +29,10 @@ class Factura(
         val totalDescuento: UDecimalValue,
         val totalConImpuestos: Map<ImpuestoIdentidad, ImpuestoTotal>,
         val importeTotal: UDecimalValue,
+    )
+
+    data class Retencion(
+        val tarifa: UDecimalValue,
+        val valor: UDecimalValue
     )
 }

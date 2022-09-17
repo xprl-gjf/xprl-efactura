@@ -1,6 +1,7 @@
 package ec.com.xprl.efactura.adapters
 
 import ec.com.xprl.efactura.Factura
+import ec.com.xprl.efactura.ImpuestoRetencionIvaPresuntivoYRenta
 import java.math.BigDecimal
 
 /**
@@ -14,7 +15,9 @@ internal class Factura(
     val comprador: Comprador = Comprador(src.comprador)
     val valores: Valores = Valores(src.valores)
     val detalles: List<ComprobanteDetalle> = src.detalles.map { ComprobanteDetalle(it) }
-
+    val retenciones: List<Retencion>? = src.retenciones?.map { (k, v) ->
+        Retencion(k, v)
+    }
 
     internal class Valores(val src: Factura.Valores) {
         val totals: Totals = Totals(src.totals)
@@ -42,5 +45,19 @@ internal class Factura(
         val importeTotal: BigDecimal
             get() = src.importeTotal.toBigDecimal()
     }
-}
 
+
+    internal class Retencion(
+        val srcIdentidad: ImpuestoRetencionIvaPresuntivoYRenta,
+        val srcValor: Factura.Retencion
+    ) {
+        val codigo: String
+            get() = srcIdentidad.tipoImpuesto.codigo.toString()
+        val codigoPorcentaje: String
+            get() = srcIdentidad.codigoPorcentaje.toString()
+        val tarifa: BigDecimal
+            get() = srcValor.tarifa.toBigDecimal()
+        val valor: BigDecimal
+            get() = srcValor.valor.toBigDecimal()
+    }
+}
