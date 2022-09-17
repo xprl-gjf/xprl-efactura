@@ -23,6 +23,9 @@ internal fun createComprobanteRetencion(
     infoTributaria = createInfoTributaria(formatted, ambiente, tipoEmision, claveAcceso)
     infoCompRetencion = createInfoCompRetencion(formatted)
     impuestos = createImpuestos(formatted.valores.impuestos)
+    infoAdicional = formatted.infoAdicional?.let {
+        createInfosAdicionales(it)
+    }
 }
 
 private fun createInfoTributaria(
@@ -97,3 +100,21 @@ private fun createImpuesto(
     fechaEmisionDocSustento = impuesto.fechaEmisionDocSustento
 }
 
+private fun createInfosAdicionales(info: Map<String, String>) =
+    ec.gob.sri.retencion.v1_0_0.ComprobanteRetencion.InfoAdicional().apply {
+        with (campoAdicional) {
+            info.map { (name, value) ->
+                createInfoAdicionale(name, value)
+            }.forEach {
+                add(it)
+            }
+        }
+    }
+
+private fun createInfoAdicionale(
+    name: String,
+    value: String
+) = ec.gob.sri.retencion.v1_0_0.ComprobanteRetencion.InfoAdicional.CampoAdicional().apply {
+    this.nombre = name
+    this.value = value
+}

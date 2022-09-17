@@ -23,6 +23,9 @@ internal fun createNotaDebito(
     infoTributaria = createInfoTributaria(formatted, ambiente, tipoEmision, claveAcceso)
     infoNotaDebito = createInfoNotaDebito(formatted)
     motivos = createMotivos(formatted)
+    infoAdicional = formatted.infoAdicional?.let {
+        createInfosAdicionales(it)
+    }
 }
 
 
@@ -119,4 +122,24 @@ private fun createMotivo(
 ) = ec.gob.sri.debito.v1_0_0.NotaDebito.Motivos.Motivo().apply {
     razon = motivo.razon
     valor = motivo.valor
+}
+
+
+private fun createInfosAdicionales(info: Map<String, String>) =
+    ec.gob.sri.debito.v1_0_0.NotaDebito.InfoAdicional().apply {
+        with (campoAdicional) {
+            info.map { (name, value) ->
+                createInfoAdicionale(name, value)
+            }.forEach {
+                add(it)
+            }
+        }
+    }
+
+private fun createInfoAdicionale(
+    name: String,
+    value: String
+) = ec.gob.sri.debito.v1_0_0.NotaDebito.InfoAdicional.CampoAdicional().apply {
+    this.nombre = name
+    this.value = value
 }

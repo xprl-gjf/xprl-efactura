@@ -1,7 +1,9 @@
 package ec.com.xprl.efactura.builders.debito
 
+import ec.com.xprl.efactura.InfoAdicional
 import ec.com.xprl.efactura.NotaDebito
 import ec.com.xprl.efactura.SecuencialValue
+import ec.com.xprl.efactura.TextValue
 import ec.com.xprl.efactura.builders.*
 import kotlinx.datetime.LocalDate
 
@@ -20,12 +22,14 @@ class NotaDebitoBuilder: CompositeBuilder<NotaDebitoBuilder, NotaDebito>(
     requires("emisor") { it.emisor },
     requires("comprador") { it.comprador },
     requires("debito") { it.debito },
+    requiresNotMoreThan("infoAdicional", 15) { it.infoAdicional }
 ) {
     private var secuencial: SecuencialValue? = null
     private var fechaEmision: LocalDate? = null
     private var emisor: EmisorBuilder? = null
     private var comprador: CompradorBuilder? = null
     private var debito: DebitoBuilder? = null
+    private var infoAdicional: InfoAdicional? = null
 
     fun setSecuencial(value: SecuencialValue) = apply { secuencial = value }
     fun setFechaEmision(value: LocalDate) = apply { fechaEmision = value}
@@ -41,6 +45,11 @@ class NotaDebitoBuilder: CompositeBuilder<NotaDebitoBuilder, NotaDebito>(
     fun updateDebito(value: DebitoBuilder) = apply {
         debito = if (debito == null) { value } else { debito!! + value }
     }
+    fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>) = setInfoAdicional(values.toMap())
+    fun setInfoAdicional(values: InfoAdicional?) = apply { infoAdicional = values }
+    fun updateInfoAdicional(values: InfoAdicional) = apply {
+        infoAdicional = if (infoAdicional == null) { values } else { infoAdicional!! + values }
+    }
 
     operator fun plus(other: NotaDebitoBuilder) = merge(other)
     fun merge(other: NotaDebitoBuilder) = apply {
@@ -49,6 +58,7 @@ class NotaDebitoBuilder: CompositeBuilder<NotaDebitoBuilder, NotaDebito>(
         other.emisor?.let { updateEmisor(it) }
         other.comprador?.let { updateComprador(it) }
         other.debito?.let { updateDebito(it) }
+        other.infoAdicional?.let { updateInfoAdicional(it) }
     }
 
     override fun validatedBuild() = NotaDebito(
@@ -57,5 +67,6 @@ class NotaDebitoBuilder: CompositeBuilder<NotaDebitoBuilder, NotaDebito>(
         emisor!!.build(),
         comprador!!.build(),
         debito!!.build(),
+        infoAdicional
     )
 }

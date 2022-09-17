@@ -12,8 +12,9 @@ class Factura(
     val comprador: Comprador,
     val valores: Valores,
     val detalles: List<ComprobanteDetalle>,
-    val retenciones: Map<ImpuestoRetencionIvaPresuntivoYRenta, Retencion>? = null  // v1.1.0 only
-    ) : ComprobanteElectronicoBase<Factura>(secuencial, fechaEmision, emisor) {
+    val retenciones: Map<ImpuestoRetencionIvaPresuntivoYRenta, Retencion>? = null,  // v1.1.0 only
+    infoAdicional: InfoAdicional? = null
+    ) : ComprobanteElectronicoBase<Factura>(secuencial, fechaEmision, emisor, infoAdicional) {
 
     data class Valores(
         val totals: Totals,

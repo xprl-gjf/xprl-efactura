@@ -10,8 +10,9 @@ class GuiaRemision(
     fechaEmision: LocalDate,
     emisor: Emisor,
     val remision: Remision,
-    val destinatarios: List<Destinatario>
-) : ComprobanteElectronicoBase<GuiaRemision>(secuencial, fechaEmision, emisor) {
+    val destinatarios: List<Destinatario>,
+    infoAdicional: InfoAdicional? = null
+) : ComprobanteElectronicoBase<GuiaRemision>(secuencial, fechaEmision, emisor, infoAdicional) {
 
     data class Remision(
         val dirPartida: TextValue,
@@ -49,6 +50,6 @@ class GuiaRemision(
         val cantitad: UDecimalValue,
         val codigoInterno: AlphanumericCodeValue? = null,
         val codigoAdicional: AlphanumericCodeValue? = null,
-        val detallesAdicionales: List<DetalleAdicionale>? = null
+        val detallesAdicionales: DetalleAdicional? = null
     )
 }

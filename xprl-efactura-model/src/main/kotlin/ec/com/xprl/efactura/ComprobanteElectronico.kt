@@ -2,6 +2,8 @@ package ec.com.xprl.efactura
 
 import kotlinx.datetime.LocalDate
 
+typealias InfoAdicional = Map<TextValue, TextValue>
+
 /**
  * Interface shared by all types of comprobante electrónico.
  */
@@ -9,6 +11,7 @@ sealed interface ComprobanteElectronico {
     val secuencial: SecuencialValue
     val fechaEmision: LocalDate
     val emisor: Emisor
+    val infoAdicional: InfoAdicional?
 }
 
 /**
@@ -24,7 +27,8 @@ sealed interface PublishableComprobante<T: ComprobanteElectronico> {
 sealed class ComprobanteElectronicoBase<T : ComprobanteElectronico>(
     final override val secuencial: SecuencialValue,
     final override val fechaEmision: LocalDate,
-    final override val emisor: Emisor
+    final override val emisor: Emisor,
+    final override val infoAdicional: InfoAdicional? = null
 ): ComprobanteElectronico, PublishableComprobante<T> {
 
     /**

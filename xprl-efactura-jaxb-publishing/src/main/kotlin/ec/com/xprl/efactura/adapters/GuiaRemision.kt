@@ -82,8 +82,8 @@ internal class GuiaRemision(
         val codigoAdicional: String?
             get() = src.codigoAdicional?.value
 
-        val detallesAdicionales: List<DetalleAdicionale>? = src.detallesAdicionales?.map {
-            DetalleAdicionale(it)
-        }
+        val detallesAdicionales: Map<String, String>? = src.detallesAdicionales?.map { (k, v) ->
+            k.value to v.value
+        }?.toMap()
     }
 }

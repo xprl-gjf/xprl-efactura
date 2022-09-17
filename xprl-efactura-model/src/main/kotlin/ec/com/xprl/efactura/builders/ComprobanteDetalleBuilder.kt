@@ -13,7 +13,8 @@ class ComprobanteDetalleBuilder: AbstractBuilder<ComprobanteDetalleBuilder, Comp
     requires("precioUnitario") { it.precioUnitario },
     requires("descuento") { it.descuento },
     requires("precioTotalSinImpuesto") { it.precioTotalSinImpuesto },
-    requiresNotEmpty("impuestos") { it.impuestos }
+    requiresNotEmpty("impuestos") { it.impuestos },
+    requiresNotMoreThan("detallesAdicionales", 3) { it.detallesAdicionales }
 ) {
     private var codigoPrincipal: AlphanumericCodeValue? = null
     private var descripcion: TextValue? = null
@@ -23,7 +24,7 @@ class ComprobanteDetalleBuilder: AbstractBuilder<ComprobanteDetalleBuilder, Comp
     private var precioTotalSinImpuesto: UDecimalValue? = null
     private var impuestos: Map<ImpuestoIdentidad, ImpuestoDetalle>? = null
     private var codigoAuxiliar: AlphanumericCodeValue? = null
-    private var detallesAdicionales: List<DetalleAdicionale>? = null
+    private var detallesAdicionales: DetalleAdicional? = null
 
     fun setCodigoPrincipal(value: AlphanumericCodeValue) = apply { codigoPrincipal = value }
     fun setDescripcion(value: TextValue) = apply { descripcion = value }
@@ -36,9 +37,9 @@ class ComprobanteDetalleBuilder: AbstractBuilder<ComprobanteDetalleBuilder, Comp
         impuestos = if (impuestos == null) { value } else { impuestos!! + value }
     }
     fun setCodigoAuxiliar(value: AlphanumericCodeValue?) = apply { codigoAuxiliar = value }
-    fun setDetallesAdicionales(vararg values: DetalleAdicionale) = setDetallesAdicionales(values.toList())
-    fun setDetallesAdicionales(value: List<DetalleAdicionale>?) = apply { detallesAdicionales = value }
-    fun updateDetallesAdicionales(value: List<DetalleAdicionale>) = apply {
+    fun setDetallesAdicionales(vararg values: Pair<TextValue, TextValue>) = setDetallesAdicionales(values.toMap())
+    fun setDetallesAdicionales(value: DetalleAdicional?) = apply { detallesAdicionales = value }
+    fun updateDetallesAdicionales(value: DetalleAdicional) = apply {
         detallesAdicionales = if (detallesAdicionales == null) { value } else { detallesAdicionales!! + value }
     }
 

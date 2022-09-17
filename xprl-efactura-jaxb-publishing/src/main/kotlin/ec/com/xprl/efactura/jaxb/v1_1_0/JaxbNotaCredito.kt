@@ -46,6 +46,9 @@ internal fun createNotaCredito(
     infoTributaria = createInfoTributaria(formatted, ambiente, tipoEmision, claveAcceso)
     infoNotaCredito = createInfoNotaCredito(formatted)
     detalles = createComprobanteDetalles(formatted)
+    infoAdicional = formatted.infoAdicional?.let {
+        createInfosAdicionales(it)
+    }
 }
 
 private fun createInfoTributaria(
@@ -171,4 +174,23 @@ private fun createTotalImpuesto(
     baseImponible = impuesto.baseImponible
     valor = impuesto.valor
     valorDevolucionIva = impuesto.valorDevolucionIva
+}
+
+private fun createInfosAdicionales(info: Map<String, String>) =
+    ec.gob.sri.credito.v1_1_0.NotaCredito.InfoAdicional().apply {
+        with (campoAdicional) {
+            info.map { (name, value) ->
+                createInfoAdicionale(name, value)
+            }.forEach {
+                add(it)
+            }
+        }
+    }
+
+private fun createInfoAdicionale(
+    name: String,
+    value: String
+) = ec.gob.sri.credito.v1_1_0.NotaCredito.InfoAdicional.CampoAdicional().apply {
+    this.nombre = name
+    this.value = value
 }

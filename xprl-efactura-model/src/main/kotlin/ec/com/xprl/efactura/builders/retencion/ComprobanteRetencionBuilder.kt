@@ -1,10 +1,13 @@
 package ec.com.xprl.efactura.builders.retencion
 
 import ec.com.xprl.efactura.ComprobanteRetencion
+import ec.com.xprl.efactura.InfoAdicional
 import ec.com.xprl.efactura.SecuencialValue
+import ec.com.xprl.efactura.TextValue
 import ec.com.xprl.efactura.builders.CompositeBuilder
 import ec.com.xprl.efactura.builders.EmisorBuilder
 import ec.com.xprl.efactura.builders.requires
+import ec.com.xprl.efactura.builders.requiresNotMoreThan
 import kotlinx.datetime.LocalDate
 
 class ComprobanteRetencionBuilder : CompositeBuilder<ComprobanteRetencionBuilder, ComprobanteRetencion>(
@@ -19,12 +22,14 @@ class ComprobanteRetencionBuilder : CompositeBuilder<ComprobanteRetencionBuilder
     requires("emisor") { it.emisor },
     requires("sujecto") { it.sujecto },
     requires("valores") { it.valores },
+    requiresNotMoreThan("infoAdicional", 15) { it.infoAdicional }
 ) {
     private var secuencial: SecuencialValue? = null
     private var fechaEmision: LocalDate? = null
     private var emisor: EmisorBuilder? = null
     private var sujecto: SujectoBuilder? = null
     private var valores: ValoresBuilder? = null
+    private var infoAdicional: InfoAdicional? = null
 
     fun setSecuencial(value: SecuencialValue) = apply { secuencial = value }
     fun setFechaEmision(value: LocalDate) = apply { fechaEmision = value}
@@ -40,6 +45,11 @@ class ComprobanteRetencionBuilder : CompositeBuilder<ComprobanteRetencionBuilder
     fun updateValores(value: ValoresBuilder) = apply {
         valores = if (valores == null) { value } else { valores!! + value }
     }
+    fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>) = setInfoAdicional(values.toMap())
+    fun setInfoAdicional(values: InfoAdicional?) = apply { infoAdicional = values }
+    fun updateInfoAdicional(values: InfoAdicional) = apply {
+        infoAdicional = if (infoAdicional == null) { values } else { infoAdicional!! + values }
+    }
 
     operator fun plus(other: ComprobanteRetencionBuilder) = merge(other)
     fun merge(other: ComprobanteRetencionBuilder) = apply {
@@ -48,6 +58,7 @@ class ComprobanteRetencionBuilder : CompositeBuilder<ComprobanteRetencionBuilder
         other.emisor?.let { updateEmisor(it) }
         other.sujecto?.let { updateSujecto(it) }
         other.valores?.let { updateValores(it) }
+        other.infoAdicional?.let { updateInfoAdicional(it) }
     }
 
     override fun validatedBuild() = ComprobanteRetencion(
@@ -55,6 +66,7 @@ class ComprobanteRetencionBuilder : CompositeBuilder<ComprobanteRetencionBuilder
         fechaEmision!!,
         emisor!!.build(),
         sujecto!!.build(),
-        valores!!.build()
+        valores!!.build(),
+        infoAdicional
     )
 }

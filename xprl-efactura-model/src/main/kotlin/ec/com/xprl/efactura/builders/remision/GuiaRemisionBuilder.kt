@@ -20,13 +20,15 @@ class GuiaRemisionBuilder: CompositeBuilder<GuiaRemisionBuilder, GuiaRemision>(
     requires("fechaEmision") { it.fechaEmision },
     requires("emisor") { it.emisor },
     requires("remision") { it.remision},
-    requiresNotEmpty("destinatarios") { it.destinatarios }
+    requiresNotEmpty("destinatarios") { it.destinatarios },
+    requiresNotMoreThan("infoAdicional", 15) { it.infoAdicional }
 ) {
     private var secuencial: SecuencialValue? = null
     private var fechaEmision: LocalDate? = null
     private var emisor: EmisorBuilder? = null
     private var remision: RemisionBuilder? = null
     private var destinatarios: List<DestinatarioBuilder>? = null
+    private var infoAdicional: InfoAdicional? = null
 
     fun setSecuencial(value: SecuencialValue) = apply { secuencial = value }
     fun setFechaEmision(value: LocalDate) = apply { fechaEmision = value}
@@ -43,6 +45,11 @@ class GuiaRemisionBuilder: CompositeBuilder<GuiaRemisionBuilder, GuiaRemision>(
     fun updateDestinatarios(values: List<DestinatarioBuilder>) = apply {
         destinatarios = if (destinatarios == null) { values } else { destinatarios!! + values }
     }
+    fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>) = setInfoAdicional(values.toMap())
+    fun setInfoAdicional(values: InfoAdicional?) = apply { infoAdicional = values }
+    fun updateInfoAdicional(values: InfoAdicional) = apply {
+        infoAdicional = if (infoAdicional == null) { values } else { infoAdicional!! + values }
+    }
 
     operator fun plus(other: GuiaRemisionBuilder) = merge(other)
     fun merge(other: GuiaRemisionBuilder) = apply {
@@ -51,6 +58,7 @@ class GuiaRemisionBuilder: CompositeBuilder<GuiaRemisionBuilder, GuiaRemision>(
         other.emisor?.let { updateEmisor(it) }
         other.remision?.let { updateRemision(it) }
         other.destinatarios?.let { updateDestinatarios(it) }
+        other.infoAdicional?.let { updateInfoAdicional(it) }
     }
 
     override fun validatedBuild() = GuiaRemision(
@@ -58,7 +66,8 @@ class GuiaRemisionBuilder: CompositeBuilder<GuiaRemisionBuilder, GuiaRemision>(
         fechaEmision!!,
         emisor!!.build(),
         remision!!.build(),
-        destinatarios!!.map { it.build() }
+        destinatarios!!.map { it.build() },
+        infoAdicional
     )
 }
 

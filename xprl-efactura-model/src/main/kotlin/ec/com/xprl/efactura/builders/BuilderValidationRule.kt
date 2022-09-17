@@ -36,3 +36,22 @@ internal fun <T: Builder<*>> requiresNotEmpty(
     it != null &&
     (it as? Collection<*>)?.isNotEmpty() ?: (it as? Map<*, *>)?.isNotEmpty() ?: true
 }
+
+
+/**
+ * Create a [Builder] validation rule to check that a builder property (that is a collection)
+ * contains fewer than the specified number of items.
+ */
+internal fun <T: Builder<*>> requiresNotMoreThan(
+    propertyName: String,
+    maxItems: Int,
+    propertyGetter: (T) -> Any?
+) = BuilderValidationRule(
+    propertyGetter,
+    "$propertyName contains more than $maxItems items"
+) {
+    val count = (it as? Collection<*>)?.size
+        ?: (it as? Map<*, *>)?.size
+        ?: 0
+    (count <= maxItems)
+}

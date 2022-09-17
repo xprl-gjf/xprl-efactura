@@ -23,7 +23,8 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
     requires("emisor") { it.emisor },
     requires("comprador") { it.comprador},
     requires("valores") { it.valores },
-    requiresNotEmpty("detalles") { it.detalles }
+    requiresNotEmpty("detalles") { it.detalles },
+    requiresNotMoreThan("infoAdicionales", 15) { it.infoAdicional }
 ) {
     private var secuencial: SecuencialValue? = null
     private var fechaEmision: LocalDate? = null
@@ -32,6 +33,7 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
     private var valores: ValoresBuilder? = null
     private var detalles: List<ComprobanteDetalleBuilder>? = null
     private var retenciones: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>? = null
+    private var infoAdicional: InfoAdicional? = null
 
     fun setSecuencial(value: SecuencialValue) = apply { secuencial = value }
     fun setFechaEmision(value: LocalDate) = apply { fechaEmision = value}
@@ -56,6 +58,11 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
     fun updateRetenciones(values: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>) = apply {
         retenciones = if (retenciones == null) { values } else { retenciones!! + values }
     }
+    fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>) = setInfoAdicional(values.toMap())
+    fun setInfoAdicional(values: InfoAdicional?) = apply { infoAdicional = values }
+    fun updateInfoAdicional(values: InfoAdicional) = apply {
+        infoAdicional = if (infoAdicional == null) { values } else { infoAdicional!! + values }
+    }
 
     operator fun plus(other: FacturaBuilder) = merge(other)
     fun merge(other: FacturaBuilder) = apply {
@@ -66,6 +73,7 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
         other.valores?.let { updateValores(it) }
         other.detalles?.let { updateDetalles(it) }
         other.retenciones?.let { updateRetenciones(it) }
+        other.infoAdicional?.let { updateInfoAdicional(it) }
     }
 
     override fun validatedBuild() = Factura(
@@ -75,7 +83,8 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
         comprador!!.build(),
         valores!!.build(),
         detalles!!.map { it.build() },
-        retenciones
+        retenciones,
+        infoAdicional
     )
 }
 

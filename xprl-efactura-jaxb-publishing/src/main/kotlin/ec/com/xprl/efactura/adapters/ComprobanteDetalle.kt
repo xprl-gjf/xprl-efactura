@@ -25,8 +25,8 @@ class ComprobanteDetalle(val src: ComprobanteDetalle) {
     val impuestos: List<DetalleImpuesto> = src.impuestos.map { (k, v) ->
         DetalleImpuesto(k, v)
     }
-    val detallesAdicionales: List<DetalleAdicionale>? = src.detallesAdicionales?.map {
-        DetalleAdicionale(it)
-    }
+    val detallesAdicionales: Map<String, String>? = src.detallesAdicionales?.map{ (k, v) ->
+        k.value to v.value
+    }?.toMap()
 }
 

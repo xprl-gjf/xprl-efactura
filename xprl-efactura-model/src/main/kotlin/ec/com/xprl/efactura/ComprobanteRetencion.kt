@@ -11,8 +11,9 @@ class ComprobanteRetencion(
     fechaEmision: LocalDate,
     emisor: Emisor,
     val sujecto: Sujecto,
-    val valores: Valores
-) : ComprobanteElectronicoBase<Factura>(secuencial, fechaEmision, emisor) {
+    val valores: Valores,
+    infoAdicional: InfoAdicional? = null
+) : ComprobanteElectronicoBase<Factura>(secuencial, fechaEmision, emisor, infoAdicional) {
 
     data class Sujecto(
         val identificación: IdentityValue,

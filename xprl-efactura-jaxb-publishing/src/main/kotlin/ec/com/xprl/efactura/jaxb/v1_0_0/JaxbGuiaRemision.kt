@@ -23,6 +23,9 @@ internal fun createGuiaRemision(
     infoTributaria = createInfoTributaria(formatted, ambiente, tipoEmision, claveAcceso)
     infoGuiaRemision = createInfoGuiaRemision(formatted)
     destinatarios = createDestinatarios(formatted)
+    infoAdicional = formatted.infoAdicional?.let {
+        createInfosAdicionales(it)
+    }
 }
 
 private fun createInfoTributaria(
@@ -122,11 +125,11 @@ private fun createDestinatarioDetalle(
     }
 }
 
-private fun createDestinatarioDetallesAdicionales(detalles: Iterable<DetalleAdicionale>) =
+private fun createDestinatarioDetallesAdicionales(detalles: Map<String, String>) =
     ec.gob.sri.remision.v1_0_0.Detalle.DetallesAdicionales().apply {
         with (detAdicional) {
-            detalles.map {
-                createDestinatarioDetalleAdicionale(it)
+            detalles.map { (name, value) ->
+                createDestinatarioDetalleAdicionale(name, value)
             }.forEach {
                 add(it)
             }
@@ -134,8 +137,28 @@ private fun createDestinatarioDetallesAdicionales(detalles: Iterable<DetalleAdic
     }
 
 private fun createDestinatarioDetalleAdicionale(
-    detalle: DetalleAdicionale
+    nombre: String,
+    valor: String
 ) = ec.gob.sri.remision.v1_0_0.Detalle.DetallesAdicionales.DetAdicional().apply {
-    nombre = detalle.nombre
-    valor = detalle.valor
+    this.nombre = nombre
+    this.valor = valor
+}
+
+private fun createInfosAdicionales(info: Map<String, String>) =
+    ec.gob.sri.remision.v1_0_0.GuiaRemision.InfoAdicional().apply {
+        with (campoAdicional) {
+            info.map { (name, value) ->
+                createInfoAdicionale(name, value)
+            }.forEach {
+                add(it)
+            }
+        }
+    }
+
+private fun createInfoAdicionale(
+    name: String,
+    value: String
+) = ec.gob.sri.remision.v1_0_0.GuiaRemision.InfoAdicional.CampoAdicional().apply {
+    this.nombre = name
+    this.value = value
 }

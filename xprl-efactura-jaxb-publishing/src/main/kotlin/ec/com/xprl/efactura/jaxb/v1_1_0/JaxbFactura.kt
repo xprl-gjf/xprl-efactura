@@ -65,6 +65,9 @@ internal fun createFactura(
     retenciones = formatted.retenciones?.let {
         createFacturaRetenciones(it)
     }
+    infoAdicional = formatted.infoAdicional?.let {
+        createInfosAdicionales(it)
+    }
 }
 
 private fun createInfoTributaria(
@@ -240,11 +243,11 @@ private fun createFacturaRetencion(
     valor = retencion.valor
 }
 
-private fun createDetallesAdicionales(detalles: Iterable<DetalleAdicionale>) =
+private fun createDetallesAdicionales(detalles: Map<String, String>) =
     ec.gob.sri.factura.v1_1_0.Factura.Detalles.Detalle.DetallesAdicionales().apply {
         with (detAdicional) {
-            detalles.map {
-                createDetalleAdicionale(it)
+            detalles.map { (nombre, valor) ->
+                createDetalleAdicionale(nombre, valor)
             }.forEach {
                 add(it)
             }
@@ -252,8 +255,29 @@ private fun createDetallesAdicionales(detalles: Iterable<DetalleAdicionale>) =
     }
 
 private fun createDetalleAdicionale(
-    detalle: DetalleAdicionale
+    nombre: String,
+    valor: String
 ) = ec.gob.sri.factura.v1_1_0.Factura.Detalles.Detalle.DetallesAdicionales.DetAdicional().apply {
-    nombre = detalle.nombre
-    valor = detalle.valor
+    this.nombre = nombre
+    this.valor = valor
+}
+
+
+private fun createInfosAdicionales(info: Map<String, String>) =
+    ec.gob.sri.factura.v1_1_0.Factura.InfoAdicional().apply {
+        with (campoAdicional) {
+            info.map { (name, value) ->
+                createInfoAdicionale(name, value)
+            }.forEach {
+                add(it)
+            }
+        }
+    }
+
+private fun createInfoAdicionale(
+    name: String,
+    value: String
+) = ec.gob.sri.factura.v1_1_0.Factura.InfoAdicional.CampoAdicional().apply {
+    this.nombre = name
+    this.value = value
 }

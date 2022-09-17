@@ -24,7 +24,8 @@ class LiquidacionCompraBuilder: CompositeBuilder<LiquidacionCompraBuilder, Liqui
     requires("emisor") { it.emisor },
     requires("proveedor") { it.proveedor},
     requires("valores") { it.valores },
-    requiresNotEmpty("detalles") { it.detalles }
+    requiresNotEmpty("detalles") { it.detalles },
+    requiresNotMoreThan("infoAdicional", 15) { it.infoAdicional }
 ), ILiquidacionCompraBuilder {
     internal var secuencial: SecuencialValue? = null
     internal var fechaEmision: LocalDate? = null
@@ -34,6 +35,7 @@ class LiquidacionCompraBuilder: CompositeBuilder<LiquidacionCompraBuilder, Liqui
     internal var detalles: List<ComprobanteDetalleBuilder>? = null
     internal var reembolso: ReembolsoBuilder? = null
     internal var reembolsoDetalles: List<ReembolsoDetalleBuilder>? = null
+    internal var infoAdicional: InfoAdicional? = null
 
     override fun setSecuencial(value: SecuencialValue) = apply { secuencial = value }
     override fun setFechaEmision(value: LocalDate) = apply { fechaEmision = value}
@@ -63,6 +65,11 @@ class LiquidacionCompraBuilder: CompositeBuilder<LiquidacionCompraBuilder, Liqui
     override fun updateReembolsoDetalles(values: List<ReembolsoDetalleBuilder>) = apply {
         reembolsoDetalles = if (reembolsoDetalles == null) { values } else { reembolsoDetalles!! + values }
     }
+    override fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>) = setInfoAdicional(values.toMap())
+    override fun setInfoAdicional(values: InfoAdicional?) = apply { infoAdicional = values }
+    override fun updateInfoAdicional(values: InfoAdicional) = apply {
+        infoAdicional = if (infoAdicional == null) { values } else { infoAdicional!! + values }
+    }
 
     operator fun plus(other: LiquidacionCompraBuilder) = merge(other)
     fun merge(other: LiquidacionCompraBuilder) = apply {
@@ -74,6 +81,7 @@ class LiquidacionCompraBuilder: CompositeBuilder<LiquidacionCompraBuilder, Liqui
         other.detalles?.let { updateDetalles(it) }
         other.reembolso?.let { updateReembolso(it) }
         other.reembolsoDetalles?.let { updateReembolsoDetalles(it) }
+        other.infoAdicional?.let { updateInfoAdicional(it) }
     }
 
     override fun validatedBuild() = LiquidacionCompra(
@@ -84,7 +92,8 @@ class LiquidacionCompraBuilder: CompositeBuilder<LiquidacionCompraBuilder, Liqui
         valores!!.build(),
         detalles!!.map { it.build() },
         reembolso?.build(),
-        reembolsoDetalles?.map { it.build() }
+        reembolsoDetalles?.map { it.build() },
+        infoAdicional
     )
 }
 
@@ -114,7 +123,8 @@ class LiquidacionCompraForReembolsosBuilder(private val inner: LiquidacionCompra
     requires("valores") { it.inner.valores },
     requiresNotEmpty("detalles") { it.inner.detalles },
     requires("reembolso") { it.inner.reembolso },
-    requiresNotEmpty("reembolseDetalles") { it.inner.reembolsoDetalles }
+    requiresNotEmpty("reembolseDetalles") { it.inner.reembolsoDetalles },
+    requiresNotMoreThan("infoAdicional", 15) { it.inner.infoAdicional }
 ), ILiquidacionCompraBuilder by inner {
 
     override val isValid: Boolean
@@ -149,6 +159,9 @@ interface ILiquidacionCompraBuilder: Builder<LiquidacionCompra> {
     fun setReembolsoDetalles(vararg values: ReembolsoDetalleBuilder): ILiquidacionCompraBuilder
     fun setReembolsoDetalles(values: List<ReembolsoDetalleBuilder>?): ILiquidacionCompraBuilder
     fun updateReembolsoDetalles(values: List<ReembolsoDetalleBuilder>): ILiquidacionCompraBuilder
+    fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>): ILiquidacionCompraBuilder
+    fun setInfoAdicional(values: InfoAdicional?): ILiquidacionCompraBuilder
+    fun updateInfoAdicional(values: InfoAdicional): ILiquidacionCompraBuilder
 }
 
 

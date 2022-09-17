@@ -1,8 +1,6 @@
 package ec.com.xprl.efactura.builders.credito
 
-import ec.com.xprl.efactura.ComprobanteDetalle
-import ec.com.xprl.efactura.NotaCredito
-import ec.com.xprl.efactura.SecuencialValue
+import ec.com.xprl.efactura.*
 import ec.com.xprl.efactura.builders.*
 import kotlinx.datetime.LocalDate
 
@@ -21,7 +19,8 @@ class NotaCreditoBuilder: CompositeBuilder<NotaCreditoBuilder, NotaCredito>(
     requires("emisor") { it.emisor },
     requires("comprador") { it.comprador },
     requires("credito") { it.credito },
-    requiresNotEmpty("detalles") { it.detalles }
+    requiresNotEmpty("detalles") { it.detalles },
+    requiresNotMoreThan("infoAdicional", 15) { it.infoAdicional }
 ) {
     private var secuencial: SecuencialValue? = null
     private var fechaEmision: LocalDate? = null
@@ -29,6 +28,7 @@ class NotaCreditoBuilder: CompositeBuilder<NotaCreditoBuilder, NotaCredito>(
     private var comprador: CompradorBuilder? = null
     private var credito: CreditoBuilder? = null
     private var detalles: List<ComprobanteDetalle>? = null
+    private var infoAdicional: InfoAdicional? = null
 
     fun setSecuencial(value: SecuencialValue) = apply { secuencial = value }
     fun setFechaEmision(value: LocalDate) = apply { fechaEmision = value}
@@ -49,6 +49,11 @@ class NotaCreditoBuilder: CompositeBuilder<NotaCreditoBuilder, NotaCredito>(
     fun updateDetalles(values: List<ComprobanteDetalle>) = apply {
         detalles = if (detalles == null) { values } else { detalles!! + values }
     }
+    fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>) = setInfoAdicional(values.toMap())
+    fun setInfoAdicional(values: InfoAdicional?) = apply { infoAdicional = values }
+    fun updateInfoAdicional(values: InfoAdicional) = apply {
+        infoAdicional = if (infoAdicional == null) { values } else { infoAdicional!! + values }
+    }
 
     operator fun plus(other: NotaCreditoBuilder) = merge(other)
     fun merge(other: NotaCreditoBuilder) = apply {
@@ -58,6 +63,7 @@ class NotaCreditoBuilder: CompositeBuilder<NotaCreditoBuilder, NotaCredito>(
         other.comprador?.let { updateComprador(it) }
         other.credito?.let { updateCredito(it) }
         other.detalles?.let { updateDetalles(it) }
+        other.infoAdicional?.let { updateInfoAdicional(it) }
     }
 
     override fun validatedBuild() = NotaCredito(
@@ -66,6 +72,7 @@ class NotaCreditoBuilder: CompositeBuilder<NotaCreditoBuilder, NotaCredito>(
         emisor!!.build(),
         comprador!!.build(),
         credito!!.build(),
-        detalles!!
+        detalles!!,
+        infoAdicional
     )
 }

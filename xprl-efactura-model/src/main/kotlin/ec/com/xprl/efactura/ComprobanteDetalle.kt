@@ -1,5 +1,7 @@
 package ec.com.xprl.efactura
 
+typealias DetalleAdicional = Map<TextValue, TextValue>
+
 data class ComprobanteDetalle(
     val codigoPrincipal: AlphanumericCodeValue,
     val descripcion: TextValue,
@@ -9,5 +11,5 @@ data class ComprobanteDetalle(
     val precioTotalSinImpuesto: UDecimalValue,
     val impuestos: Map<ImpuestoIdentidad, ImpuestoDetalle>,
     val codigoAuxiliar: AlphanumericCodeValue? = null,
-    val detallesAdicionales: List<DetalleAdicionale>? = null
+    val detallesAdicionales: DetalleAdicional? = null
 )
