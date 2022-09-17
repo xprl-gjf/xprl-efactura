@@ -131,8 +131,8 @@ class InvalidBuilderOperation(
 ) : Exception(message(typename, errors)) {
     companion object {
         private fun message(typename: String, errors: List<String>) = errors.joinToString(
-            "\n",
-            prefix = "Cannot build $typename:\n"
+            "\n\t",
+            prefix = "Cannot build $typename:\n\t"
         )
     }
 }

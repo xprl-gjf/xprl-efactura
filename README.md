@@ -101,15 +101,13 @@ fun main(args: Array<String>) {
 
 @Throws(IllegalArgumentException::class, NumberFormatException::class, InvalidBuilderOperation::class)
 private fun createFactura(): Factura {
-    val emisorBuilder = EmisorBuilder()
-        .setRUC(IdentityValue.RUC.from("9999999999001"))
-        .setRazonSocial(TextValue.from("ACME Widgets Cia"))
-        //...
-    
     return FacturaBuilder()
         .setSecuencial(SecuencialValue.from(1))
         .setFechaEmision(Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date)
-        .setEmisor(emisorBuilder)
+        .setEmisor(EmisorBuilder()
+            .setRUC(IdentityValue.RUC.from("9999999999001"))
+            .setRazonSocial(TextValue.from("ACME Widgets Cia"))
+        )
         //...
         .build()
 }
