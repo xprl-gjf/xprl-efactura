@@ -62,6 +62,9 @@ internal fun createFactura(
     infoTributaria = createInfoTributaria(formatted, ambiente, tipoEmision, claveAcceso)
     infoFactura = createInfoFactura(formatted)
     detalles = createFacturaDetalles(formatted)
+    reembolsos = formatted.reembolsoDetalles?.let {
+        createReembolsos(it)
+    }
     retenciones = formatted.retenciones?.let {
         createFacturaRetenciones(it)
     }
@@ -124,6 +127,12 @@ private fun createInfoFactura(
         pagos = createPagos(it.pagos)
         valorRetIva = it.retIva
         valorRetRenta = it.retRenta
+    }
+    factura.reembolso?.let {
+        codDocReembolso = it.codDocReembolso
+        totalComprobantesReembolso = it.totals.totalComprobantesReembolso
+        totalBaseImponibleReembolso = it.totals.totalBaseImponibleReembolso
+        totalImpuestoReembolso = it.totals.totalImpuestoReembolso
     }
 }
 
@@ -220,6 +229,56 @@ private fun createPago(
     total = pago.total
     plazo = pago.plazoValue
     unidadTiempo = pago.plazoUnidadTiempo
+}
+
+private fun createReembolsos(
+    reembolsos: Iterable<ReembolsoDetalle>
+) = ec.gob.sri.factura.v1_1_0.Reembolsos().apply {
+    with (reembolsoDetalle) {
+        reembolsos.map {
+            createReembolsoDetalle(it)
+        }.forEach {
+            add(it)
+        }
+    }
+}
+
+private fun createReembolsoDetalle(
+    reembolso: ReembolsoDetalle
+) = ec.gob.sri.factura.v1_1_0.Reembolsos.ReembolsoDetalle().apply {
+    tipoIdentificacionProveedorReembolso = reembolso.tipoIdentificación
+    identificacionProveedorReembolso = reembolso.identificación
+    codPaisPagoProveedorReembolso = reembolso.paisPago
+    tipoProveedorReembolso = reembolso.tipoProveedorReembolso
+    codDocReembolso = reembolso.docReembolso.codDocReembolso
+    estabDocReembolso = reembolso.docReembolso.estabDocReembolso
+    ptoEmiDocReembolso = reembolso.docReembolso.ptoEmiDocReembolso
+    secuencialDocReembolso = reembolso.docReembolso.secuencialDocReembolso
+    fechaEmisionDocReembolso = reembolso.docReembolso.fechaEmisionDocReembolso
+    numeroautorizacionDocReemb = reembolso.docReembolso.numeroAutorizacion
+    detalleImpuestos = createReembolsoDetalleImpuestos(reembolso.impuestos)
+}
+
+private fun createReembolsoDetalleImpuestos(
+    impuestos: Iterable<DetalleImpuesto>
+) = ec.gob.sri.factura.v1_1_0.DetalleImpuestos().apply {
+    with (detalleImpuesto) {
+        impuestos.map {
+            createReembolsoDetalleImpuesto(it)
+        }.forEach {
+            add(it)
+        }
+    }
+}
+
+private fun createReembolsoDetalleImpuesto(
+    impuesto: DetalleImpuesto
+) = ec.gob.sri.factura.v1_1_0.DetalleImpuestos.DetalleImpuesto().apply {
+    codigo = impuesto.codigo
+    codigoPorcentaje = impuesto.codigoPorcentaje
+    tarifa = impuesto.tarifa
+    baseImponibleReembolso = impuesto.baseImponible
+    impuestoReembolso = impuesto.valor
 }
 
 private fun createFacturaRetenciones(

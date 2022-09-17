@@ -15,6 +15,8 @@ internal class Factura(
     val comprador: Comprador = Comprador(src.comprador)
     val valores: Valores = Valores(src.valores)
     val detalles: List<ComprobanteDetalle> = src.detalles.map { ComprobanteDetalle(it) }
+    val reembolso: Reembolso? = src.reembolso?.let { Reembolso(it) }
+    val reembolsoDetalles: List<ReembolsoDetalle>? = src.reembolsoDetalles?.map { ReembolsoDetalle(it) }
     val retenciones: List<Retencion>? = src.retenciones?.map { (k, v) ->
         Retencion(k, v)
     }

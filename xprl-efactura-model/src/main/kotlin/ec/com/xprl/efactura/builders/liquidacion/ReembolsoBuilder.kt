@@ -1,12 +1,12 @@
 package ec.com.xprl.efactura.builders.liquidacion
 
 import ec.com.xprl.efactura.CodeValue
-import ec.com.xprl.efactura.LiquidacionCompra
+import ec.com.xprl.efactura.Reembolso
 import ec.com.xprl.efactura.builders.CompositeBuilder
 import ec.com.xprl.efactura.builders.requires
 
-class ReembolsoBuilder: CompositeBuilder<ReembolsoBuilder, LiquidacionCompra.Reembolso>(
-    LiquidacionCompra.Reembolso::class.java,
+class ReembolsoBuilder: CompositeBuilder<ReembolsoBuilder, Reembolso>(
+    Reembolso::class.java,
     innerBuilderProperties =  listOf{ it.totals },
     requires("totals") { it.totals },
     requires("codDocReembolso") { it.codDocReembolso }
@@ -26,7 +26,7 @@ class ReembolsoBuilder: CompositeBuilder<ReembolsoBuilder, LiquidacionCompra.Ree
         other.codDocReembolso?.let { setCodDocReembolso(it) }
     }
 
-    override fun validatedBuild() = LiquidacionCompra.Reembolso(
+    override fun validatedBuild() = Reembolso(
         codDocReembolso!!,
         totals!!.build(),
     )

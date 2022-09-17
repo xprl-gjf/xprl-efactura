@@ -126,14 +126,14 @@ private fun createReembolsoDetalleImpuestos(
 ) = ec.gob.sri.liquidacion.v1_0_0.DetalleImpuestos().apply {
     with (detalleImpuesto) {
         impuestos.map {
-            createDetalleImpuesto(it)
+            createReembolsoDetalleImpuesto(it)
         }.forEach {
             add(it)
         }
     }
 }
 
-private fun createDetalleImpuesto(
+private fun createReembolsoDetalleImpuesto(
     impuesto: DetalleImpuesto
 ) = ec.gob.sri.liquidacion.v1_0_0.DetalleImpuestos.DetalleImpuesto().apply {
     codigo = impuesto.codigo

@@ -5,10 +5,10 @@ import ec.com.xprl.efactura.builders.AbstractBuilder
 import ec.com.xprl.efactura.builders.requires
 
 /**
- * Mutable builder for [LiquidacionCompra.ReembolsoTotals].
+ * Mutable builder for [Reembolso.ReembolsoTotals].
  */
-class ReembolsoTotalsBuilder: AbstractBuilder<ReembolsoTotalsBuilder, LiquidacionCompra.ReembolsoTotals>(
-    LiquidacionCompra.ReembolsoTotals::class.java,
+class ReembolsoTotalsBuilder: AbstractBuilder<ReembolsoTotalsBuilder, Reembolso.ReembolsoTotals>(
+    Reembolso.ReembolsoTotals::class.java,
     requires("totalComprobantesReembolso") { it.totalComprobantesReembolso },
     requires("totalBaseImponibleReembolso") { it.totalBaseImponibleReembolso },
     requires("totalImpuestoReembolso") { it.totalImpuestoReembolso },
@@ -28,7 +28,7 @@ class ReembolsoTotalsBuilder: AbstractBuilder<ReembolsoTotalsBuilder, Liquidacio
         other.totalComprobantesReembolso?.let { setTotalImpuestoReembolso(it) }
     }
 
-    override fun validatedBuild() = LiquidacionCompra.ReembolsoTotals(
+    override fun validatedBuild() = Reembolso.ReembolsoTotals(
         totalComprobantesReembolso!!,
         totalComprobantesReembolso!!,
         totalComprobantesReembolso!!

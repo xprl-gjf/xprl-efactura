@@ -133,6 +133,20 @@ class LiquidacionCompraForReembolsosBuilder(private val inner: LiquidacionCompra
     override val invalidProperties: List<String>
         get() = super.invalidProperties
 
+
+    operator fun plus(other: LiquidacionCompraForReembolsosBuilder) = merge(other)
+    fun merge(other: LiquidacionCompraForReembolsosBuilder) = apply {
+        other.inner.secuencial?.let { setSecuencial(it) }
+        other.inner.fechaEmision?.let { setFechaEmision(it) }
+        other.inner.emisor?.let { updateEmisor(it) }
+        other.inner.proveedor?.let { updateProveedor(it) }
+        other.inner.valores?.let { updateValores(it) }
+        other.inner.detalles?.let { updateDetalles(it) }
+        other.inner.reembolso?.let { updateReembolso(it) }
+        other.inner.reembolsoDetalles?.let { updateReembolsoDetalles(it) }
+        other.inner.infoAdicional?.let { updateInfoAdicional(it) }
+    }
+
     override fun build(): LiquidacionCompra = super.build()
 
     override fun validatedBuild() = inner.build()

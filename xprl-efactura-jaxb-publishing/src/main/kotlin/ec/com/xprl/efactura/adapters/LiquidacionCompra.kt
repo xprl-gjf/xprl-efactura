@@ -38,21 +38,4 @@ internal class LiquidacionCompra(
         val importeTotal: BigDecimal
             get() = src.importeTotal.toBigDecimal()
     }
-
-
-    internal class Reembolso(val src: LiquidacionCompra.Reembolso) {
-        val totals: ReembolsoTotals = ReembolsoTotals(src.totals)
-
-        val codDocReembolso: String
-            get() = String.format("%02d", src.codDocReembolso.value)
-    }
-
-    internal class ReembolsoTotals(val src: LiquidacionCompra.ReembolsoTotals) {
-        val totalComprobantesReembolso: BigDecimal
-            get() = src.totalComprobantesReembolso.toBigDecimal()
-        val totalBaseImponibleReembolso: BigDecimal
-            get() = src.totalBaseImponibleReembolso.toBigDecimal()
-        val totalImpuestoReembolso: BigDecimal
-            get() = src.totalImpuestoReembolso.toBigDecimal()
-    }
 }

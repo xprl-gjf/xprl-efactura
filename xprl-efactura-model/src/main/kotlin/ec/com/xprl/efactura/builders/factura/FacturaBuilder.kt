@@ -2,9 +2,38 @@ package ec.com.xprl.efactura.builders.factura
 
 import ec.com.xprl.efactura.*
 import ec.com.xprl.efactura.builders.*
+import ec.com.xprl.efactura.builders.liquidacion.ReembolsoBuilder
+import ec.com.xprl.efactura.builders.liquidacion.ReembolsoDetalleBuilder
 import ec.com.xprl.efactura.builders.requires
 import ec.com.xprl.efactura.builders.requiresNotEmpty
 import kotlinx.datetime.LocalDate
+
+/**
+ * Common interface for implementations of FacturaBuilder
+ */
+interface IFacturaBuilder: Builder<Factura> {
+    fun setSecuencial(value: SecuencialValue): FacturaBuilder
+    fun setFechaEmision(value: LocalDate): FacturaBuilder
+    fun setEmisor(value: EmisorBuilder): FacturaBuilder
+    fun updateEmisor(value: EmisorBuilder): FacturaBuilder
+    fun setComprador(value: CompradorBuilder): FacturaBuilder
+    fun updateComprador(value: CompradorBuilder): FacturaBuilder
+    fun setValores(value: ValoresBuilder): FacturaBuilder
+    fun updateValores(value: ValoresBuilder): FacturaBuilder
+    fun setDetalles(vararg values: ComprobanteDetalleBuilder): FacturaBuilder
+    fun setDetalles(values: List<ComprobanteDetalleBuilder>): FacturaBuilder
+    fun updateDetalles(values: List<ComprobanteDetalleBuilder>): FacturaBuilder
+    fun setReembolso(value: ReembolsoBuilder?): FacturaBuilder
+    fun updateReembolso(value: ReembolsoBuilder): FacturaBuilder
+    fun setReembolsoDetalles(vararg values: ReembolsoDetalleBuilder): FacturaBuilder
+    fun setReembolsoDetalles(values: List<ReembolsoDetalleBuilder>?): FacturaBuilder
+    fun updateReembolsoDetalles(values: List<ReembolsoDetalleBuilder>): FacturaBuilder
+    fun setRetenciones(values: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>?): FacturaBuilder
+    fun updateRetenciones(values: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>): FacturaBuilder
+    fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>): FacturaBuilder
+    fun setInfoAdicional(values: InfoAdicional?): FacturaBuilder
+    fun updateInfoAdicional(values: InfoAdicional): FacturaBuilder
+}
 
 /**
  * Mutable builder for a [Factura].
@@ -14,10 +43,13 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
     innerBuilderProperties = { builder -> listOf(
         builder.emisor,
         builder.comprador,
-        builder.valores
+        builder.valores,
+        builder.reembolso
     ) + (
         builder.detalles ?: emptyList()
-    ) },
+    ) + (
+        builder.reembolsoDetalles ?: emptyList()
+    )},
     requires("sequencial") { it.secuencial},
     requires("fechaEmision") { it.fechaEmision },
     requires("emisor") { it.emisor },
@@ -25,42 +57,53 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
     requires("valores") { it.valores },
     requiresNotEmpty("detalles") { it.detalles },
     requiresNotMoreThan("infoAdicionales", 15) { it.infoAdicional }
-) {
-    private var secuencial: SecuencialValue? = null
-    private var fechaEmision: LocalDate? = null
-    private var emisor: EmisorBuilder? = null
-    private var comprador: CompradorBuilder? = null
-    private var valores: ValoresBuilder? = null
-    private var detalles: List<ComprobanteDetalleBuilder>? = null
-    private var retenciones: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>? = null
-    private var infoAdicional: InfoAdicional? = null
+), IFacturaBuilder {
+    internal var secuencial: SecuencialValue? = null
+    internal var fechaEmision: LocalDate? = null
+    internal var emisor: EmisorBuilder? = null
+    internal var comprador: CompradorBuilder? = null
+    internal var valores: ValoresBuilder? = null
+    internal var detalles: List<ComprobanteDetalleBuilder>? = null
+    internal var reembolso: ReembolsoBuilder? = null
+    internal var reembolsoDetalles: List<ReembolsoDetalleBuilder>? = null
+    internal var retenciones: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>? = null
+    internal var infoAdicional: InfoAdicional? = null
 
-    fun setSecuencial(value: SecuencialValue) = apply { secuencial = value }
-    fun setFechaEmision(value: LocalDate) = apply { fechaEmision = value}
-    fun setEmisor(value: EmisorBuilder) = apply { emisor = value }
-    fun updateEmisor(value: EmisorBuilder) = apply {
+    override fun setSecuencial(value: SecuencialValue) = apply { secuencial = value }
+    override fun setFechaEmision(value: LocalDate) = apply { fechaEmision = value}
+    override fun setEmisor(value: EmisorBuilder) = apply { emisor = value }
+    override fun updateEmisor(value: EmisorBuilder) = apply {
         emisor = if (emisor == null) { value } else { emisor!! + value }
     }
-    fun setComprador(value: CompradorBuilder) = apply { comprador = value }
-    fun updateComprador(value: CompradorBuilder) = apply {
+    override fun setComprador(value: CompradorBuilder) = apply { comprador = value }
+    override fun updateComprador(value: CompradorBuilder) = apply {
         comprador = if (comprador == null) { value } else { comprador!! + value }
     }
-    fun setValores(value: ValoresBuilder) = apply { valores = value }
-    fun updateValores(value: ValoresBuilder) = apply {
+    override fun setValores(value: ValoresBuilder) = apply { valores = value }
+    override fun updateValores(value: ValoresBuilder) = apply {
         valores = if (valores == null) { value } else { valores!! + value }
     }
-    fun setDetalles(vararg values: ComprobanteDetalleBuilder) = setDetalles(values.toList())
-    fun setDetalles(values: List<ComprobanteDetalleBuilder>) = apply { detalles = values }
-    fun updateDetalles(values: List<ComprobanteDetalleBuilder>) = apply {
+    override fun setDetalles(vararg values: ComprobanteDetalleBuilder) = setDetalles(values.toList())
+    override fun setDetalles(values: List<ComprobanteDetalleBuilder>) = apply { detalles = values }
+    override fun updateDetalles(values: List<ComprobanteDetalleBuilder>) = apply {
         detalles = if (detalles == null) { values } else { detalles!! + values }
     }
-    fun setRetenciones(values: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>?) = apply { retenciones = values }
-    fun updateRetenciones(values: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>) = apply {
+    override fun setReembolso(value: ReembolsoBuilder?) = apply { reembolso = value }
+    override fun updateReembolso(value: ReembolsoBuilder) = apply {
+        reembolso = if (reembolso == null) { value } else { reembolso!! + value }
+    }
+    override fun setReembolsoDetalles(vararg values: ReembolsoDetalleBuilder) = setReembolsoDetalles(values.toList())
+    override fun setReembolsoDetalles(values: List<ReembolsoDetalleBuilder>?) = apply { reembolsoDetalles = values }
+    override fun updateReembolsoDetalles(values: List<ReembolsoDetalleBuilder>) = apply {
+        reembolsoDetalles = if (reembolsoDetalles == null) { values } else { reembolsoDetalles!! + values }
+    }
+    override fun setRetenciones(values: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>?) = apply { retenciones = values }
+    override fun updateRetenciones(values: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>) = apply {
         retenciones = if (retenciones == null) { values } else { retenciones!! + values }
     }
-    fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>) = setInfoAdicional(values.toMap())
-    fun setInfoAdicional(values: InfoAdicional?) = apply { infoAdicional = values }
-    fun updateInfoAdicional(values: InfoAdicional) = apply {
+    override fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>) = setInfoAdicional(values.toMap())
+    override fun setInfoAdicional(values: InfoAdicional?) = apply { infoAdicional = values }
+    override fun updateInfoAdicional(values: InfoAdicional) = apply {
         infoAdicional = if (infoAdicional == null) { values } else { infoAdicional!! + values }
     }
 
@@ -72,6 +115,8 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
         other.comprador?.let { updateComprador(it) }
         other.valores?.let { updateValores(it) }
         other.detalles?.let { updateDetalles(it) }
+        other.reembolso?.let { updateReembolso(it) }
+        other.reembolsoDetalles?.let { updateReembolsoDetalles(it) }
         other.retenciones?.let { updateRetenciones(it) }
         other.infoAdicional?.let { updateInfoAdicional(it) }
     }
@@ -83,8 +128,65 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
         comprador!!.build(),
         valores!!.build(),
         detalles!!.map { it.build() },
+        reembolso?.build(),
+        reembolsoDetalles?.map { it.build() },
         retenciones,
         infoAdicional
     )
 }
 
+
+/**
+ * Mutable builder for a [Factura] that includes mandatory reembolsos.
+ *
+ * Behaves as a [FacturaBuilder], but with a constraint that
+ * `reembolso` and `reembolsoDetalles` fields are mandatory.
+ */
+class FacturaForReembolsosBuilder(private val inner: FacturaBuilder): CompositeBuilder<FacturaForReembolsosBuilder, Factura>(
+    Factura::class.java,
+    innerBuilderProperties = { builder -> listOf(
+        builder.inner.emisor,
+        builder.inner.comprador,
+        builder.inner.valores,
+        builder.inner.reembolso
+    ) + (
+    builder.inner.detalles ?: emptyList()
+    ) + (
+    builder.inner.reembolsoDetalles ?: emptyList()
+    )},
+    requires("sequencial") { it.inner.secuencial},
+    requires("fechaEmision") { it.inner.fechaEmision },
+    requires("emisor") { it.inner.emisor },
+    requires("comprador") { it.inner.comprador},
+    requires("valores") { it.inner.valores },
+    requiresNotEmpty("detalles") { it.inner.detalles },
+    requires("reembolso") { it.inner.reembolso },
+    requiresNotEmpty("reembolsoDetalles") { it.inner.reembolsoDetalles },
+    requiresNotMoreThan("infoAdicionales", 15) { it.inner.infoAdicional }
+), IFacturaBuilder by inner {
+
+    override val isValid: Boolean
+        get() = super.isValid
+
+    override val invalidProperties: List<String>
+        get() = super.invalidProperties
+
+
+    operator fun plus(other: FacturaForReembolsosBuilder) = merge(other)
+    fun merge(other: FacturaForReembolsosBuilder) = apply {
+        other.inner.secuencial?.let { setSecuencial(it) }
+        other.inner.fechaEmision?.let { setFechaEmision(it) }
+        other.inner.emisor?.let { updateEmisor(it) }
+        other.inner.comprador?.let { updateComprador(it) }
+        other.inner.valores?.let { updateValores(it) }
+        other.inner.detalles?.let { updateDetalles(it) }
+        other.inner.reembolso?.let { updateReembolso(it) }
+        other.inner.reembolsoDetalles?.let { updateReembolsoDetalles(it) }
+        other.inner.retenciones?.let { updateRetenciones(it) }
+        other.inner.infoAdicional?.let { updateInfoAdicional(it) }
+    }
+
+    override fun build(): Factura = super.build()
+
+    override fun validatedBuild() = inner.build()
+}
