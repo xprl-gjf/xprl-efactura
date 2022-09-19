@@ -11,8 +11,9 @@ class NotaDebito(
     emisor: Emisor,
     val comprador: Comprador,
     val debito: Debito,
+    maquinaFiscal: MaquinaFiscal? = null,
     infoAdicional: InfoAdicional? = null
-) : ComprobanteElectronicoBase<NotaDebito>(secuencial, fechaEmision, emisor, infoAdicional) {
+) : ComprobanteElectronicoBase<NotaDebito>(secuencial, fechaEmision, emisor, maquinaFiscal, infoAdicional) {
 
     data class Debito(
         val documentoModificado: DocModificado,

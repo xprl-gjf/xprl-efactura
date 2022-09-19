@@ -12,27 +12,28 @@ import kotlinx.datetime.LocalDate
  * Common interface for implementations of FacturaBuilder
  */
 interface IFacturaBuilder: Builder<Factura> {
-    fun setSecuencial(value: SecuencialValue): FacturaBuilder
-    fun setFechaEmision(value: LocalDate): FacturaBuilder
-    fun setEmisor(value: EmisorBuilder): FacturaBuilder
-    fun updateEmisor(value: EmisorBuilder): FacturaBuilder
-    fun setComprador(value: CompradorBuilder): FacturaBuilder
-    fun updateComprador(value: CompradorBuilder): FacturaBuilder
-    fun setValores(value: ValoresBuilder): FacturaBuilder
-    fun updateValores(value: ValoresBuilder): FacturaBuilder
-    fun setDetalles(vararg values: ComprobanteDetalleBuilder): FacturaBuilder
-    fun setDetalles(values: List<ComprobanteDetalleBuilder>): FacturaBuilder
-    fun updateDetalles(values: List<ComprobanteDetalleBuilder>): FacturaBuilder
-    fun setReembolso(value: ReembolsoBuilder?): FacturaBuilder
-    fun updateReembolso(value: ReembolsoBuilder): FacturaBuilder
-    fun setReembolsoDetalles(vararg values: ReembolsoDetalleBuilder): FacturaBuilder
-    fun setReembolsoDetalles(values: List<ReembolsoDetalleBuilder>?): FacturaBuilder
-    fun updateReembolsoDetalles(values: List<ReembolsoDetalleBuilder>): FacturaBuilder
-    fun setRetenciones(values: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>?): FacturaBuilder
-    fun updateRetenciones(values: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>): FacturaBuilder
-    fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>): FacturaBuilder
-    fun setInfoAdicional(values: InfoAdicional?): FacturaBuilder
-    fun updateInfoAdicional(values: InfoAdicional): FacturaBuilder
+    fun setSecuencial(value: SecuencialValue): IFacturaBuilder
+    fun setFechaEmision(value: LocalDate): IFacturaBuilder
+    fun setEmisor(value: EmisorBuilder): IFacturaBuilder
+    fun updateEmisor(value: EmisorBuilder): IFacturaBuilder
+    fun setComprador(value: CompradorBuilder): IFacturaBuilder
+    fun updateComprador(value: CompradorBuilder): IFacturaBuilder
+    fun setValores(value: ValoresBuilder): IFacturaBuilder
+    fun updateValores(value: ValoresBuilder): IFacturaBuilder
+    fun setDetalles(vararg values: ComprobanteDetalleBuilder): IFacturaBuilder
+    fun setDetalles(values: List<ComprobanteDetalleBuilder>): IFacturaBuilder
+    fun updateDetalles(values: List<ComprobanteDetalleBuilder>): IFacturaBuilder
+    fun setReembolso(value: ReembolsoBuilder?): IFacturaBuilder
+    fun updateReembolso(value: ReembolsoBuilder): IFacturaBuilder
+    fun setReembolsoDetalles(vararg values: ReembolsoDetalleBuilder): IFacturaBuilder
+    fun setReembolsoDetalles(values: List<ReembolsoDetalleBuilder>?): IFacturaBuilder
+    fun updateReembolsoDetalles(values: List<ReembolsoDetalleBuilder>): IFacturaBuilder
+    fun setRetenciones(values: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>?): IFacturaBuilder
+    fun updateRetenciones(values: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>): IFacturaBuilder
+    fun setMaquinaFiscal(value: MaquinaFiscal?): IFacturaBuilder
+    fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>): IFacturaBuilder
+    fun setInfoAdicional(values: InfoAdicional?): IFacturaBuilder
+    fun updateInfoAdicional(values: InfoAdicional): IFacturaBuilder
 }
 
 /**
@@ -67,6 +68,7 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
     internal var reembolso: ReembolsoBuilder? = null
     internal var reembolsoDetalles: List<ReembolsoDetalleBuilder>? = null
     internal var retenciones: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>? = null
+    internal var maquinaFiscal: MaquinaFiscal? = null
     internal var infoAdicional: InfoAdicional? = null
 
     override fun setSecuencial(value: SecuencialValue) = apply { secuencial = value }
@@ -101,6 +103,7 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
     override fun updateRetenciones(values: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>) = apply {
         retenciones = if (retenciones == null) { values } else { retenciones!! + values }
     }
+    override fun setMaquinaFiscal(value: MaquinaFiscal?) = apply { maquinaFiscal = value }
     override fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>) = setInfoAdicional(values.toMap())
     override fun setInfoAdicional(values: InfoAdicional?) = apply { infoAdicional = values }
     override fun updateInfoAdicional(values: InfoAdicional) = apply {
@@ -118,6 +121,7 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
         other.reembolso?.let { updateReembolso(it) }
         other.reembolsoDetalles?.let { updateReembolsoDetalles(it) }
         other.retenciones?.let { updateRetenciones(it) }
+        other.maquinaFiscal?.let { setMaquinaFiscal(it) }
         other.infoAdicional?.let { updateInfoAdicional(it) }
     }
 
@@ -131,6 +135,7 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
         reembolso?.build(),
         reembolsoDetalles?.map { it.build() },
         retenciones,
+        maquinaFiscal,
         infoAdicional
     )
 }
@@ -183,6 +188,7 @@ class FacturaForReembolsosBuilder(private val inner: FacturaBuilder): CompositeB
         other.inner.reembolso?.let { updateReembolso(it) }
         other.inner.reembolsoDetalles?.let { updateReembolsoDetalles(it) }
         other.inner.retenciones?.let { updateRetenciones(it) }
+        other.inner.maquinaFiscal?.let { setMaquinaFiscal(it) }
         other.inner.infoAdicional?.let { updateInfoAdicional(it) }
     }
 

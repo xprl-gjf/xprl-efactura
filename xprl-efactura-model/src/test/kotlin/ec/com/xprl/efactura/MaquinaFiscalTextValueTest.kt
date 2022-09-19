@@ -7,49 +7,49 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
 
-internal class ShortTextValueTest {
+internal class MaquinaFiscalTextValueTest {
 
     /**
-     * Verify that an attempt to create an [ShortTextValue] from
+     * Verify that an attempt to create an [MaquinaFiscalTextValue] from
      * an invalid string value raises an [IllegalArgumentException].
      */
     @ParameterizedTest(name = "invalid value {0} throws IllegalArgumentException")
     @MethodSource("getInvalidValues")
     fun invalidTextValueException(value: String) {
         assertThrows(IllegalArgumentException::class.java) {
-            ShortTextValue.from(value)
+            MaquinaFiscalTextValue.from(value)
         }
     }
 
     /**
-     * Verify that an [ShortTextValue] can be created from a
+     * Verify that an [MaquinaFiscalTextValue] can be created from a
      * valid string value.
      */
     @ParameterizedTest(name = "valid value {0}")
     @MethodSource("getValidValues")
     fun validTextValue(value: String) {
-        val result = ShortTextValue.from(value)
+        val result = MaquinaFiscalTextValue.from(value)
         assertEquals(value, result.value)
     }
 
     /**
-     * Verify that when a [ShortTextValue] is created from a string containing
+     * Verify that when a [MaquinaFiscalTextValue] is created from a string containing
      * 'special characters' (e.g. &<>/), then those characters are substituted
      * with corresponding HTML entity references (e.g. &amp; &lt; &gt; &sol;).
      */
     @ParameterizedTest(name = "html-escaped value {0}")
     @MethodSource("getHtmlEscapedValues")
     fun htmlEncodedTextValue(value: String, expected: String) {
-        val result = ShortTextValue.from(value)
+        val result = MaquinaFiscalTextValue.from(value)
         assertEquals(expected, result.value)
     }
 
     /**
-     * Verify that the ShortTextValue MAX_LENGTH property returns the expected value
+     * Verify that the MaquinaFiscalTextValue MAX_LENGTH property returns the expected value
      */
     @Test
     fun textValueMaxLength() {
-        kotlin.test.assertEquals(20, ShortTextValue.MAX_LENGTH)
+        kotlin.test.assertEquals(30, MaquinaFiscalTextValue.MAX_LENGTH)
     }
 
     companion object {
@@ -57,8 +57,8 @@ internal class ShortTextValueTest {
         private fun getInvalidValues(): List<Arguments> = arrayOf(
             "",             // empty
             " ",            // blank
-            "X".repeat(21),  // value too long
-            "&" + "X".repeat(18),  // html-escape causes value to be too long
+            "X".repeat(31),  // value too long
+            "&" + "X".repeat(28),  // html-escape causes value to be too long
             "ABC\n123",     // newline
             "ABC\u000A123", // line feed
             "ABC\u000B123", // vertical tab
@@ -80,7 +80,7 @@ internal class ShortTextValueTest {
         @JvmStatic
         private fun getHtmlEscapedValues(): List<Arguments> = listOf(
             arguments("ABC&123", "ABC&amp;123"),
-            arguments("A&<>/1", "A&amp;&lt;&gt;&sol;1"),
+            arguments("ABC&<>/123", "ABC&amp;&lt;&gt;&sol;123"),
             arguments(">", "&gt;"),      // solitary html-escaped char
             arguments("&".repeat(4), "&amp;".repeat(4))
         )

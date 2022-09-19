@@ -14,8 +14,9 @@ class LiquidacionCompra(
     val detalles: List<ComprobanteDetalle>,
     val reembolso: Reembolso? = null,
     val reembolsoDetalles: List<ReembolsoDetalle>? = null,
+    maquinaFiscal: MaquinaFiscal? = null,
     infoAdicional: InfoAdicional? = null
-    ) : ComprobanteElectronicoBase<LiquidacionCompra>(secuencial, fechaEmision, emisor, infoAdicional) {
+    ) : ComprobanteElectronicoBase<LiquidacionCompra>(secuencial, fechaEmision, emisor, maquinaFiscal, infoAdicional) {
 
     data class Valores(
         val totals: Totals,

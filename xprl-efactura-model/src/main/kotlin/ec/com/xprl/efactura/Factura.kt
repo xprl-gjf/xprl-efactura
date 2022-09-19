@@ -15,8 +15,9 @@ class Factura(
     val reembolso: Reembolso? = null,
     val reembolsoDetalles: List<ReembolsoDetalle>? = null,
     val retenciones: Map<ImpuestoRetencionIvaPresuntivoYRenta, Retencion>? = null,  // v1.1.0 only
+    maquinaFiscal: MaquinaFiscal? = null,
     infoAdicional: InfoAdicional? = null
-    ) : ComprobanteElectronicoBase<Factura>(secuencial, fechaEmision, emisor, infoAdicional) {
+    ) : ComprobanteElectronicoBase<Factura>(secuencial, fechaEmision, emisor, maquinaFiscal, infoAdicional) {
 
     data class Valores(
         val totals: Totals,

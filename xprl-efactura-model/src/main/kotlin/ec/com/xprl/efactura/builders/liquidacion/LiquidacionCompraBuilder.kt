@@ -35,6 +35,7 @@ class LiquidacionCompraBuilder: CompositeBuilder<LiquidacionCompraBuilder, Liqui
     internal var detalles: List<ComprobanteDetalleBuilder>? = null
     internal var reembolso: ReembolsoBuilder? = null
     internal var reembolsoDetalles: List<ReembolsoDetalleBuilder>? = null
+    internal var maquinaFiscal: MaquinaFiscal? = null
     internal var infoAdicional: InfoAdicional? = null
 
     override fun setSecuencial(value: SecuencialValue) = apply { secuencial = value }
@@ -65,6 +66,7 @@ class LiquidacionCompraBuilder: CompositeBuilder<LiquidacionCompraBuilder, Liqui
     override fun updateReembolsoDetalles(values: List<ReembolsoDetalleBuilder>) = apply {
         reembolsoDetalles = if (reembolsoDetalles == null) { values } else { reembolsoDetalles!! + values }
     }
+    override fun setMaquinaFiscal(value: MaquinaFiscal?) = apply { maquinaFiscal = value }
     override fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>) = setInfoAdicional(values.toMap())
     override fun setInfoAdicional(values: InfoAdicional?) = apply { infoAdicional = values }
     override fun updateInfoAdicional(values: InfoAdicional) = apply {
@@ -81,6 +83,7 @@ class LiquidacionCompraBuilder: CompositeBuilder<LiquidacionCompraBuilder, Liqui
         other.detalles?.let { updateDetalles(it) }
         other.reembolso?.let { updateReembolso(it) }
         other.reembolsoDetalles?.let { updateReembolsoDetalles(it) }
+        other.maquinaFiscal?.let { setMaquinaFiscal(it) }
         other.infoAdicional?.let { updateInfoAdicional(it) }
     }
 
@@ -93,6 +96,7 @@ class LiquidacionCompraBuilder: CompositeBuilder<LiquidacionCompraBuilder, Liqui
         detalles!!.map { it.build() },
         reembolso?.build(),
         reembolsoDetalles?.map { it.build() },
+        maquinaFiscal,
         infoAdicional
     )
 }
@@ -144,6 +148,7 @@ class LiquidacionCompraForReembolsosBuilder(private val inner: LiquidacionCompra
         other.inner.detalles?.let { updateDetalles(it) }
         other.inner.reembolso?.let { updateReembolso(it) }
         other.inner.reembolsoDetalles?.let { updateReembolsoDetalles(it) }
+        other.inner.maquinaFiscal?.let { setMaquinaFiscal(it) }
         other.inner.infoAdicional?.let { updateInfoAdicional(it) }
     }
 
@@ -173,6 +178,7 @@ interface ILiquidacionCompraBuilder: Builder<LiquidacionCompra> {
     fun setReembolsoDetalles(vararg values: ReembolsoDetalleBuilder): ILiquidacionCompraBuilder
     fun setReembolsoDetalles(values: List<ReembolsoDetalleBuilder>?): ILiquidacionCompraBuilder
     fun updateReembolsoDetalles(values: List<ReembolsoDetalleBuilder>): ILiquidacionCompraBuilder
+    fun setMaquinaFiscal(value: MaquinaFiscal?): ILiquidacionCompraBuilder
     fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>): ILiquidacionCompraBuilder
     fun setInfoAdicional(values: InfoAdicional?): ILiquidacionCompraBuilder
     fun updateInfoAdicional(values: InfoAdicional): ILiquidacionCompraBuilder

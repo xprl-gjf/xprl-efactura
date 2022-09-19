@@ -21,8 +21,8 @@ class ShortTextValue private constructor (value: CharSequence)
         /**
          * Factory function to create a [ShortTextValue] from a string.
          *
-         * Note that HTML special characters (&,<,>) will be html-encoded,
-         * e.g. as &amp; &lt; or &gt respectively.
+         * Note that HTML special characters (&,<,>,/) will be html-encoded,
+         * e.g. as &amp; &lt; &gt or &sol; respectively.
          *
          * @exception IllegalArgumentException the string value is not a valid [ShortTextValue].
          */
@@ -32,7 +32,7 @@ class ShortTextValue private constructor (value: CharSequence)
             if (value.isBlank()) {
                     throw IllegalArgumentException("${ShortTextValue::class.java.simpleName} cannot be blank.")
             }
-            return validate(value, SHORT_TEXT_MAX_LENGTH)
+            return validate(ShortTextValue::class.java, value, SHORT_TEXT_MAX_LENGTH)
         }
     }
 }

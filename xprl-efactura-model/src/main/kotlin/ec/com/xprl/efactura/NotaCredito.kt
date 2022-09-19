@@ -12,8 +12,9 @@ class NotaCredito(
     val comprador: Comprador,
     val credito: Credito,
     val detalles: List<ComprobanteDetalle>,
+    maquinaFiscal: MaquinaFiscal? = null,
     infoAdicional: InfoAdicional? = null
-) : ComprobanteElectronicoBase<Factura>(secuencial, fechaEmision, emisor, infoAdicional) {
+) : ComprobanteElectronicoBase<Factura>(secuencial, fechaEmision, emisor, maquinaFiscal, infoAdicional) {
 
     data class Credito(
         val documentoModificado: DocModificado,

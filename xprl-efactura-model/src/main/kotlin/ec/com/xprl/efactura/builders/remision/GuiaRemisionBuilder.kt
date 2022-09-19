@@ -28,6 +28,7 @@ class GuiaRemisionBuilder: CompositeBuilder<GuiaRemisionBuilder, GuiaRemision>(
     private var emisor: EmisorBuilder? = null
     private var remision: RemisionBuilder? = null
     private var destinatarios: List<DestinatarioBuilder>? = null
+    private var maquinaFiscal: MaquinaFiscal? = null
     private var infoAdicional: InfoAdicional? = null
 
     fun setSecuencial(value: SecuencialValue) = apply { secuencial = value }
@@ -45,6 +46,7 @@ class GuiaRemisionBuilder: CompositeBuilder<GuiaRemisionBuilder, GuiaRemision>(
     fun updateDestinatarios(values: List<DestinatarioBuilder>) = apply {
         destinatarios = if (destinatarios == null) { values } else { destinatarios!! + values }
     }
+    fun setMaquinaFiscal(value: MaquinaFiscal?) = apply { maquinaFiscal = value }
     fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>) = setInfoAdicional(values.toMap())
     fun setInfoAdicional(values: InfoAdicional?) = apply { infoAdicional = values }
     fun updateInfoAdicional(values: InfoAdicional) = apply {
@@ -58,6 +60,7 @@ class GuiaRemisionBuilder: CompositeBuilder<GuiaRemisionBuilder, GuiaRemision>(
         other.emisor?.let { updateEmisor(it) }
         other.remision?.let { updateRemision(it) }
         other.destinatarios?.let { updateDestinatarios(it) }
+        other.maquinaFiscal?.let { setMaquinaFiscal(it) }
         other.infoAdicional?.let { updateInfoAdicional(it) }
     }
 
@@ -67,6 +70,7 @@ class GuiaRemisionBuilder: CompositeBuilder<GuiaRemisionBuilder, GuiaRemision>(
         emisor!!.build(),
         remision!!.build(),
         destinatarios!!.map { it.build() },
+        maquinaFiscal,
         infoAdicional
     )
 }

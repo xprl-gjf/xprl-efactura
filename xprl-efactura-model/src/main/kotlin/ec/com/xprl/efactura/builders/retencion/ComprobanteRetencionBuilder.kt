@@ -1,9 +1,6 @@
 package ec.com.xprl.efactura.builders.retencion
 
-import ec.com.xprl.efactura.ComprobanteRetencion
-import ec.com.xprl.efactura.InfoAdicional
-import ec.com.xprl.efactura.SecuencialValue
-import ec.com.xprl.efactura.TextValue
+import ec.com.xprl.efactura.*
 import ec.com.xprl.efactura.builders.CompositeBuilder
 import ec.com.xprl.efactura.builders.EmisorBuilder
 import ec.com.xprl.efactura.builders.requires
@@ -29,6 +26,7 @@ class ComprobanteRetencionBuilder : CompositeBuilder<ComprobanteRetencionBuilder
     private var emisor: EmisorBuilder? = null
     private var sujecto: SujectoBuilder? = null
     private var valores: ValoresBuilder? = null
+    private var maquinaFiscal: MaquinaFiscal? = null
     private var infoAdicional: InfoAdicional? = null
 
     fun setSecuencial(value: SecuencialValue) = apply { secuencial = value }
@@ -45,6 +43,7 @@ class ComprobanteRetencionBuilder : CompositeBuilder<ComprobanteRetencionBuilder
     fun updateValores(value: ValoresBuilder) = apply {
         valores = if (valores == null) { value } else { valores!! + value }
     }
+    fun setMaquinaFiscal(value: MaquinaFiscal?) = apply { maquinaFiscal = value }
     fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>) = setInfoAdicional(values.toMap())
     fun setInfoAdicional(values: InfoAdicional?) = apply { infoAdicional = values }
     fun updateInfoAdicional(values: InfoAdicional) = apply {
@@ -58,6 +57,7 @@ class ComprobanteRetencionBuilder : CompositeBuilder<ComprobanteRetencionBuilder
         other.emisor?.let { updateEmisor(it) }
         other.sujecto?.let { updateSujecto(it) }
         other.valores?.let { updateValores(it) }
+        other.maquinaFiscal?.let { setMaquinaFiscal(it) }
         other.infoAdicional?.let { updateInfoAdicional(it) }
     }
 
@@ -67,6 +67,7 @@ class ComprobanteRetencionBuilder : CompositeBuilder<ComprobanteRetencionBuilder
         emisor!!.build(),
         sujecto!!.build(),
         valores!!.build(),
+        maquinaFiscal,
         infoAdicional
     )
 }

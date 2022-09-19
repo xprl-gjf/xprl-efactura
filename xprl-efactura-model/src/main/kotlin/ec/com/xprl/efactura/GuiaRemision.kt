@@ -11,8 +11,9 @@ class GuiaRemision(
     emisor: Emisor,
     val remision: Remision,
     val destinatarios: List<Destinatario>,
+    maquinaFiscal: MaquinaFiscal? = null,
     infoAdicional: InfoAdicional? = null
-) : ComprobanteElectronicoBase<GuiaRemision>(secuencial, fechaEmision, emisor, infoAdicional) {
+) : ComprobanteElectronicoBase<GuiaRemision>(secuencial, fechaEmision, emisor, maquinaFiscal, infoAdicional) {
 
     data class Remision(
         val dirPartida: TextValue,

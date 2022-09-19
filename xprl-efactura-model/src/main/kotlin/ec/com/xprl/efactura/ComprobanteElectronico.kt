@@ -11,6 +11,8 @@ sealed interface ComprobanteElectronico {
     val secuencial: SecuencialValue
     val fechaEmision: LocalDate
     val emisor: Emisor
+
+    val maquinaFiscal: MaquinaFiscal?
     val infoAdicional: InfoAdicional?
 }
 
@@ -28,6 +30,7 @@ sealed class ComprobanteElectronicoBase<T : ComprobanteElectronico>(
     final override val secuencial: SecuencialValue,
     final override val fechaEmision: LocalDate,
     final override val emisor: Emisor,
+    final override val maquinaFiscal: MaquinaFiscal? = null,
     final override val infoAdicional: InfoAdicional? = null
 ): ComprobanteElectronico, PublishableComprobante<T> {
 

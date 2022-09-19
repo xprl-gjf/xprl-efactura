@@ -40,9 +40,12 @@ open class TextValue protected constructor (value: CharSequence) {
         }
 
         @JvmStatic
-        protected fun validate(value: CharSequence, maxLength: Int = TEXT_MAX_LENGTH): CharSequence {
+        private fun validate(value: CharSequence) = validate(TextValue::class.java, value)
+
+        @JvmStatic
+        protected fun <T : TextValue> validate(clazz: Class<T>, value: CharSequence, maxLength: Int = TEXT_MAX_LENGTH): CharSequence {
             if (value.length > maxLength) {
-                throw IllegalArgumentException("'${value}' exceeds maximum length for a ${TextValue::class.java.simpleName}.")
+                throw IllegalArgumentException("'${value}' exceeds maximum length of ${maxLength} for a ${clazz.simpleName}.")
             }
             if (value.contains(lineBreaksRegex)) {
                 throw IllegalArgumentException("${TextValue::class.java.simpleName} value may not contain line breaks.")

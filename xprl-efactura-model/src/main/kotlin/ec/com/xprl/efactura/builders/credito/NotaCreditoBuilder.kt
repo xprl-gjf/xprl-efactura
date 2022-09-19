@@ -28,6 +28,7 @@ class NotaCreditoBuilder: CompositeBuilder<NotaCreditoBuilder, NotaCredito>(
     private var comprador: CompradorBuilder? = null
     private var credito: CreditoBuilder? = null
     private var detalles: List<ComprobanteDetalle>? = null
+    private var maquinaFiscal: MaquinaFiscal? = null
     private var infoAdicional: InfoAdicional? = null
 
     fun setSecuencial(value: SecuencialValue) = apply { secuencial = value }
@@ -49,6 +50,7 @@ class NotaCreditoBuilder: CompositeBuilder<NotaCreditoBuilder, NotaCredito>(
     fun updateDetalles(values: List<ComprobanteDetalle>) = apply {
         detalles = if (detalles == null) { values } else { detalles!! + values }
     }
+    fun setMaquinaFiscal(value: MaquinaFiscal?) = apply { maquinaFiscal = value }
     fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>) = setInfoAdicional(values.toMap())
     fun setInfoAdicional(values: InfoAdicional?) = apply { infoAdicional = values }
     fun updateInfoAdicional(values: InfoAdicional) = apply {
@@ -63,6 +65,7 @@ class NotaCreditoBuilder: CompositeBuilder<NotaCreditoBuilder, NotaCredito>(
         other.comprador?.let { updateComprador(it) }
         other.credito?.let { updateCredito(it) }
         other.detalles?.let { updateDetalles(it) }
+        other.maquinaFiscal?.let { setMaquinaFiscal(it) }
         other.infoAdicional?.let { updateInfoAdicional(it) }
     }
 
@@ -73,6 +76,7 @@ class NotaCreditoBuilder: CompositeBuilder<NotaCreditoBuilder, NotaCredito>(
         comprador!!.build(),
         credito!!.build(),
         detalles!!,
+        maquinaFiscal,
         infoAdicional
     )
 }
