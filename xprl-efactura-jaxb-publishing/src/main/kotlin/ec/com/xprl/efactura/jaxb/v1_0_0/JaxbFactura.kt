@@ -26,6 +26,9 @@ internal fun createFactura(
     reembolsos = formatted.reembolsoDetalles?.let {
         createReembolsos(it)
     }
+    tipoNegociable = formatted.tipoNegociable?.let {
+        createTipoNegociable(it)
+    }
     maquinaFiscal = formatted.maquinaFiscal?.let {
         createMaquinaFiscal(it)
     }
@@ -255,6 +258,12 @@ private fun createReembolsoDetalleImpuesto(
     tarifa = impuesto.tarifa
     baseImponibleReembolso = impuesto.baseImponible
     impuestoReembolso = impuesto.valor
+}
+
+private fun createTipoNegociable(
+    tipoNegociable: Factura.TipoNegociable
+) = ec.gob.sri.factura.v1_0_0.TipoNegociable().apply {
+    correo = tipoNegociable.correo
 }
 
 private fun createMaquinaFiscal(

@@ -20,6 +20,8 @@ internal class Factura(
     val retenciones: List<Retencion>? = src.retenciones?.map { (k, v) ->
         Retencion(k, v)
     }
+    val tipoNegociable: TipoNegociable? = src.tipoNegociable?.let { TipoNegociable(it) }
+
 
     internal class Valores(val src: Factura.Valores) {
         val totals: Totals = Totals(src.totals)
@@ -61,5 +63,13 @@ internal class Factura(
             get() = srcValor.tarifa.toBigDecimal()
         val valor: BigDecimal
             get() = srcValor.valor.toBigDecimal()
+    }
+
+
+    internal class TipoNegociable(
+        var src: Factura.TipoNegociable
+    ) {
+        val correo: String
+            get() = src.correo.value
     }
 }

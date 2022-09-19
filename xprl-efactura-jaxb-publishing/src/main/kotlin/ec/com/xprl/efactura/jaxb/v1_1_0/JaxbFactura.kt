@@ -68,6 +68,9 @@ internal fun createFactura(
     retenciones = formatted.retenciones?.let {
         createFacturaRetenciones(it)
     }
+    tipoNegociable = formatted.tipoNegociable?.let {
+        createTipoNegociable(it)
+    }
     maquinaFiscal = formatted.maquinaFiscal?.let {
         createMaquinaFiscal(it)
     }
@@ -322,6 +325,12 @@ private fun createDetalleAdicionale(
 ) = ec.gob.sri.factura.v1_1_0.Factura.Detalles.Detalle.DetallesAdicionales.DetAdicional().apply {
     this.nombre = nombre
     this.valor = valor
+}
+
+private fun createTipoNegociable(
+    tipoNegociable: Factura.TipoNegociable
+) = ec.gob.sri.factura.v1_1_0.TipoNegociable().apply {
+    correo = tipoNegociable.correo
 }
 
 private fun createMaquinaFiscal(
