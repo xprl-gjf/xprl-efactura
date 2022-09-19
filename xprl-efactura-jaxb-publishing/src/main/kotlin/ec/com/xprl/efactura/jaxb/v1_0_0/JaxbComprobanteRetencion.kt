@@ -23,6 +23,9 @@ internal fun createComprobanteRetencion(
     infoTributaria = createInfoTributaria(formatted, ambiente, tipoEmision, claveAcceso)
     infoCompRetencion = createInfoCompRetencion(formatted)
     impuestos = createImpuestos(formatted.valores.impuestos)
+    maquinaFiscal = formatted.maquinaFiscal?.let {
+        createMaquinaFiscal(it)
+    }
     infoAdicional = formatted.infoAdicional?.let {
         createInfosAdicionales(it)
     }
@@ -98,6 +101,14 @@ private fun createImpuesto(
     codDocSustento = impuesto.codDocSustento
     numDocSustento = impuesto.numDocSustento
     fechaEmisionDocSustento = impuesto.fechaEmisionDocSustento
+}
+
+private fun createMaquinaFiscal(
+    maquinaFiscal: MaquinaFiscal
+) = ec.gob.sri.retencion.v1_0_0.MaquinaFiscal().apply {
+    marca = maquinaFiscal.marca
+    modelo = maquinaFiscal.modelo
+    serie = maquinaFiscal.serie
 }
 
 private fun createInfosAdicionales(info: Map<String, String>) =

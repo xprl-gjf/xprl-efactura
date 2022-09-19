@@ -14,3 +14,4 @@ internal class Proveedor(val src: ec.com.xprl.efactura.Proveedor) {
     val dirección: String?
         get() = src.dirección?.value
 }
+

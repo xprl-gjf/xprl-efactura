@@ -27,6 +27,9 @@ internal fun createLiquidacionCompra(
     formatted.reembolsoDetalles?.let {
         reembolsos = createLiquidacionCompraReembolsos(it)
     }
+    maquinaFiscal = formatted.maquinaFiscal?.let {
+        createMaquinaFiscal(it)
+    }
     infoAdicional = formatted.infoAdicional?.let {
         createInfosAdicionales(it)
     }
@@ -250,6 +253,14 @@ private fun createDetalleAdicionale(
 ) = ec.gob.sri.liquidacion.v1_0_0.LiquidacionCompra.Detalles.Detalle.DetallesAdicionales.DetAdicional().apply {
     this.nombre = nombre
     this.valor = valor
+}
+
+private fun createMaquinaFiscal(
+    maquinaFiscal: MaquinaFiscal
+) = ec.gob.sri.liquidacion.v1_0_0.MaquinaFiscal().apply {
+    marca = maquinaFiscal.marca
+    modelo = maquinaFiscal.modelo
+    serie = maquinaFiscal.serie
 }
 
 private fun createInfosAdicionales(info: Map<String, String>) =

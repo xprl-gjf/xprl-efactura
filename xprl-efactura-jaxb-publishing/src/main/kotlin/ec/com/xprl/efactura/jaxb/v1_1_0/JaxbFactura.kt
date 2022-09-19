@@ -68,6 +68,9 @@ internal fun createFactura(
     retenciones = formatted.retenciones?.let {
         createFacturaRetenciones(it)
     }
+    maquinaFiscal = formatted.maquinaFiscal?.let {
+        createMaquinaFiscal(it)
+    }
     infoAdicional = formatted.infoAdicional?.let {
         createInfosAdicionales(it)
     }
@@ -321,6 +324,13 @@ private fun createDetalleAdicionale(
     this.valor = valor
 }
 
+private fun createMaquinaFiscal(
+    maquinaFiscal: MaquinaFiscal
+) = ec.gob.sri.factura.v1_1_0.MaquinaFiscal().apply {
+    marca = maquinaFiscal.marca
+    modelo = maquinaFiscal.modelo
+    serie = maquinaFiscal.serie
+}
 
 private fun createInfosAdicionales(info: Map<String, String>) =
     ec.gob.sri.factura.v1_1_0.Factura.InfoAdicional().apply {

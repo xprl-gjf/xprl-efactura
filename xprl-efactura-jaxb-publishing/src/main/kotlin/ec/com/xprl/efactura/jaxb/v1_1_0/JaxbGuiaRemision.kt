@@ -37,6 +37,9 @@ internal fun createGuiaRemision(
     infoTributaria = createInfoTributaria(formatted, ambiente, tipoEmision, claveAcceso)
     infoGuiaRemision = createInfoGuiaRemision(formatted)
     destinatarios = createDestinatarios(formatted)
+    maquinaFiscal = formatted.maquinaFiscal?.let {
+        createMaquinaFiscal(it)
+    }
     infoAdicional = formatted.infoAdicional?.let {
         createInfosAdicionales(it)
     }
@@ -156,6 +159,14 @@ private fun createDestinatarioDetalleAdicionale(
 ) = ec.gob.sri.remision.v1_1_0.Detalle.DetallesAdicionales.DetAdicional().apply {
     this.nombre = nombre
     this.valor = valor
+}
+
+private fun createMaquinaFiscal(
+    maquinaFiscal: MaquinaFiscal
+) = ec.gob.sri.remision.v1_1_0.MaquinaFiscal().apply {
+    marca = maquinaFiscal.marca
+    modelo = maquinaFiscal.modelo
+    serie = maquinaFiscal.serie
 }
 
 private fun createInfosAdicionales(info: Map<String, String>) =

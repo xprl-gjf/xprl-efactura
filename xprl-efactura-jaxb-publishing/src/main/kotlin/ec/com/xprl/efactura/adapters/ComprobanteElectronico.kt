@@ -10,10 +10,12 @@ internal sealed class ComprobanteElectronico(val src: ComprobanteElectronico) {
         get() = src.fechaEmision.toDateString()
     val codDoc: String
         get() = String.format("%02d", src.sriDocumentType.value)
+
+    val emisor: Emisor = Emisor(src.emisor)
+    val maquinaFiscal: MaquinaFiscal? = src.maquinaFiscal?.let { MaquinaFiscal(it) }
+
     val infoAdicional: Map<String, String>?
         get() = src.infoAdicional?.map { (k, v) ->
             k.value to v.value
         }?.toMap()
-
-    val emisor: Emisor = Emisor(src.emisor)
 }

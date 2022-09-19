@@ -23,6 +23,9 @@ internal fun createNotaDebito(
     infoTributaria = createInfoTributaria(formatted, ambiente, tipoEmision, claveAcceso)
     infoNotaDebito = createInfoNotaDebito(formatted)
     motivos = createMotivos(formatted)
+    maquinaFiscal = formatted.maquinaFiscal?.let {
+        createMaquinaFiscal(it)
+    }
     infoAdicional = formatted.infoAdicional?.let {
         createInfosAdicionales(it)
     }
@@ -124,6 +127,14 @@ private fun createMotivo(
     valor = motivo.valor
 }
 
+
+private fun createMaquinaFiscal(
+    maquinaFiscal: MaquinaFiscal
+) = ec.gob.sri.debito.v1_0_0.MaquinaFiscal().apply {
+    marca = maquinaFiscal.marca
+    modelo = maquinaFiscal.modelo
+    serie = maquinaFiscal.serie
+}
 
 private fun createInfosAdicionales(info: Map<String, String>) =
     ec.gob.sri.debito.v1_0_0.NotaDebito.InfoAdicional().apply {
