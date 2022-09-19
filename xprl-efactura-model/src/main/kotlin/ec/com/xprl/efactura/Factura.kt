@@ -15,6 +15,7 @@ class Factura(
     val reembolso: Reembolso? = null,
     val reembolsoDetalles: List<ReembolsoDetalle>? = null,
     val retenciones: Map<ImpuestoRetencionIvaPresuntivoYRenta, Retencion>? = null,  // v1.1.0 only
+    val tipoNegociable: TipoNegociable? = null,
     maquinaFiscal: MaquinaFiscal? = null,
     infoAdicional: InfoAdicional? = null
     ) : ComprobanteElectronicoBase<Factura>(secuencial, fechaEmision, emisor, maquinaFiscal, infoAdicional) {
@@ -38,5 +39,9 @@ class Factura(
     data class Retencion(
         val tarifa: UDecimalValue,
         val valor: UDecimalValue
+    )
+
+    data class TipoNegociable(
+        val correo: CorreoValue
     )
 }

@@ -30,6 +30,8 @@ interface IFacturaBuilder: Builder<Factura> {
     fun updateReembolsoDetalles(values: List<ReembolsoDetalleBuilder>): IFacturaBuilder
     fun setRetenciones(values: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>?): IFacturaBuilder
     fun updateRetenciones(values: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>): IFacturaBuilder
+    fun setTipoNegocible(value: TipoNegociableBuilder?): IFacturaBuilder
+    fun updateTipoNegociable(value: TipoNegociableBuilder): IFacturaBuilder
     fun setMaquinaFiscal(value: MaquinaFiscal?): IFacturaBuilder
     fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>): IFacturaBuilder
     fun setInfoAdicional(values: InfoAdicional?): IFacturaBuilder
@@ -45,7 +47,8 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
         builder.emisor,
         builder.comprador,
         builder.valores,
-        builder.reembolso
+        builder.reembolso,
+        builder.tipoNegociable,
     ) + (
         builder.detalles ?: emptyList()
     ) + (
@@ -68,6 +71,7 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
     internal var reembolso: ReembolsoBuilder? = null
     internal var reembolsoDetalles: List<ReembolsoDetalleBuilder>? = null
     internal var retenciones: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>? = null
+    internal var tipoNegociable: TipoNegociableBuilder? = null
     internal var maquinaFiscal: MaquinaFiscal? = null
     internal var infoAdicional: InfoAdicional? = null
 
@@ -103,6 +107,10 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
     override fun updateRetenciones(values: Map<ImpuestoRetencionIvaPresuntivoYRenta, Factura.Retencion>) = apply {
         retenciones = if (retenciones == null) { values } else { retenciones!! + values }
     }
+    override fun setTipoNegocible(value: TipoNegociableBuilder?) = apply { tipoNegociable = value }
+    override fun updateTipoNegociable(value: TipoNegociableBuilder) = apply {
+        tipoNegociable = if (tipoNegociable == null) { value } else { tipoNegociable!! + value }
+    }
     override fun setMaquinaFiscal(value: MaquinaFiscal?) = apply { maquinaFiscal = value }
     override fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>) = setInfoAdicional(values.toMap())
     override fun setInfoAdicional(values: InfoAdicional?) = apply { infoAdicional = values }
@@ -121,6 +129,7 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
         other.reembolso?.let { updateReembolso(it) }
         other.reembolsoDetalles?.let { updateReembolsoDetalles(it) }
         other.retenciones?.let { updateRetenciones(it) }
+        other.tipoNegociable?.let { updateTipoNegociable(it) }
         other.maquinaFiscal?.let { setMaquinaFiscal(it) }
         other.infoAdicional?.let { updateInfoAdicional(it) }
     }
@@ -135,6 +144,7 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
         reembolso?.build(),
         reembolsoDetalles?.map { it.build() },
         retenciones,
+        tipoNegociable?.build(),
         maquinaFiscal,
         infoAdicional
     )
@@ -153,7 +163,8 @@ class FacturaForReembolsosBuilder(private val inner: FacturaBuilder): CompositeB
         builder.inner.emisor,
         builder.inner.comprador,
         builder.inner.valores,
-        builder.inner.reembolso
+        builder.inner.reembolso,
+        builder.inner.tipoNegociable
     ) + (
     builder.inner.detalles ?: emptyList()
     ) + (
@@ -188,6 +199,7 @@ class FacturaForReembolsosBuilder(private val inner: FacturaBuilder): CompositeB
         other.inner.reembolso?.let { updateReembolso(it) }
         other.inner.reembolsoDetalles?.let { updateReembolsoDetalles(it) }
         other.inner.retenciones?.let { updateRetenciones(it) }
+        other.inner.tipoNegociable?.let { updateTipoNegociable(it) }
         other.inner.maquinaFiscal?.let { setMaquinaFiscal(it) }
         other.inner.infoAdicional?.let { updateInfoAdicional(it) }
     }
@@ -196,3 +208,4 @@ class FacturaForReembolsosBuilder(private val inner: FacturaBuilder): CompositeB
 
     override fun validatedBuild() = inner.build()
 }
+
