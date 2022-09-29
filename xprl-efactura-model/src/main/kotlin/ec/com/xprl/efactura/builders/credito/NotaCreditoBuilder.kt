@@ -9,11 +9,13 @@ import kotlinx.datetime.LocalDate
  */
 class NotaCreditoBuilder: CompositeBuilder<NotaCreditoBuilder, NotaCredito>(
     NotaCredito::class.java,
-    innerBuilderProperties = listOf(
-        { it.emisor },
-        { it.comprador },
-        { it.credito }
-    ),
+    innerBuilderProperties = { builder -> listOf(
+        builder.emisor,
+        builder.comprador,
+        builder.credito
+    ) + (
+        builder.detalles ?: emptyList()
+    ) },
     requires("secuencial") { it.secuencial },
     requires("fechaEmision") { it.fechaEmision },
     requires("emisor") { it.emisor },
@@ -27,7 +29,7 @@ class NotaCreditoBuilder: CompositeBuilder<NotaCreditoBuilder, NotaCredito>(
     private var emisor: EmisorBuilder? = null
     private var comprador: CompradorBuilder? = null
     private var credito: CreditoBuilder? = null
-    private var detalles: List<ComprobanteDetalle>? = null
+    private var detalles: List<ComprobanteDetalleBuilder>? = null
     private var maquinaFiscal: MaquinaFiscal? = null
     private var infoAdicional: InfoAdicional? = null
 
@@ -45,9 +47,9 @@ class NotaCreditoBuilder: CompositeBuilder<NotaCreditoBuilder, NotaCredito>(
     fun updateCredito(value: CreditoBuilder) = apply {
         credito = if (credito == null) { value } else { credito!! + value }
     }
-    fun setDetalles(vararg values: ComprobanteDetalle) = setDetalles(values.toList())
-    fun setDetalles(values: List<ComprobanteDetalle>) = apply { detalles = values }
-    fun updateDetalles(values: List<ComprobanteDetalle>) = apply {
+    fun setDetalles(vararg values: ComprobanteDetalleBuilder) = setDetalles(values.toList())
+    fun setDetalles(values: List<ComprobanteDetalleBuilder>) = apply { detalles = values }
+    fun updateDetalles(values: List<ComprobanteDetalleBuilder>) = apply {
         detalles = if (detalles == null) { values } else { detalles!! + values }
     }
     fun setMaquinaFiscal(value: MaquinaFiscal?) = apply { maquinaFiscal = value }
@@ -75,7 +77,7 @@ class NotaCreditoBuilder: CompositeBuilder<NotaCreditoBuilder, NotaCredito>(
         emisor!!.build(),
         comprador!!.build(),
         credito!!.build(),
-        detalles!!,
+        detalles!!.map { it.build() },
         maquinaFiscal,
         infoAdicional
     )
