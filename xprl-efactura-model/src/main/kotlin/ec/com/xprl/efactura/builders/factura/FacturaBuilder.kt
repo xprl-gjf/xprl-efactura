@@ -33,8 +33,9 @@ interface IFacturaBuilder: Builder<Factura> {
     fun setTipoNegocible(value: TipoNegociableBuilder?): IFacturaBuilder
     fun updateTipoNegociable(value: TipoNegociableBuilder): IFacturaBuilder
     fun setMaquinaFiscal(value: MaquinaFiscal?): IFacturaBuilder
-    fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>): IFacturaBuilder
+    fun setInfoAdicional(vararg values: Pair<TextValue, MultiLineTextValue>): IFacturaBuilder
     fun setInfoAdicional(values: InfoAdicional?): IFacturaBuilder
+    fun updateInfoAdicional(vararg values: Pair<TextValue, MultiLineTextValue>): IFacturaBuilder
     fun updateInfoAdicional(values: InfoAdicional): IFacturaBuilder
 }
 
@@ -112,8 +113,9 @@ class FacturaBuilder: CompositeBuilder<FacturaBuilder, Factura>(
         tipoNegociable = if (tipoNegociable == null) { value } else { tipoNegociable!! + value }
     }
     override fun setMaquinaFiscal(value: MaquinaFiscal?) = apply { maquinaFiscal = value }
-    override fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>) = setInfoAdicional(values.toMap())
+    override fun setInfoAdicional(vararg values: Pair<TextValue, MultiLineTextValue>) = setInfoAdicional(values.toMap())
     override fun setInfoAdicional(values: InfoAdicional?) = apply { infoAdicional = values }
+    override fun updateInfoAdicional(vararg values: Pair<TextValue, MultiLineTextValue>) = updateInfoAdicional(values.toMap())
     override fun updateInfoAdicional(values: InfoAdicional) = apply {
         infoAdicional = if (infoAdicional == null) { values } else { infoAdicional!! + values }
     }

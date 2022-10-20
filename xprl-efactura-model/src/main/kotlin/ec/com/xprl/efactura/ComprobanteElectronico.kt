@@ -2,7 +2,7 @@ package ec.com.xprl.efactura
 
 import kotlinx.datetime.LocalDate
 
-typealias InfoAdicional = Map<TextValue, TextValue>
+typealias InfoAdicional = Map<TextValue, MultiLineTextValue>
 
 /**
  * Interface shared by all types of comprobante electrónico.

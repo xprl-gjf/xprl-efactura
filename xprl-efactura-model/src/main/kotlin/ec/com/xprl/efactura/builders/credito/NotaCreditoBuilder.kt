@@ -53,8 +53,9 @@ class NotaCreditoBuilder: CompositeBuilder<NotaCreditoBuilder, NotaCredito>(
         detalles = if (detalles == null) { values } else { detalles!! + values }
     }
     fun setMaquinaFiscal(value: MaquinaFiscal?) = apply { maquinaFiscal = value }
-    fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>) = setInfoAdicional(values.toMap())
+    fun setInfoAdicional(vararg values: Pair<TextValue, MultiLineTextValue>) = setInfoAdicional(values.toMap())
     fun setInfoAdicional(values: InfoAdicional?) = apply { infoAdicional = values }
+    fun updateInfoAdicional(vararg values: Pair<TextValue, MultiLineTextValue>) = updateInfoAdicional(values.toMap())
     fun updateInfoAdicional(values: InfoAdicional) = apply {
         infoAdicional = if (infoAdicional == null) { values } else { infoAdicional!! + values }
     }

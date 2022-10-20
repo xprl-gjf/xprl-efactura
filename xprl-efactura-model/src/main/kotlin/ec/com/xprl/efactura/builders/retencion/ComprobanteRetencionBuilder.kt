@@ -44,8 +44,9 @@ class ComprobanteRetencionBuilder : CompositeBuilder<ComprobanteRetencionBuilder
         valores = if (valores == null) { value } else { valores!! + value }
     }
     fun setMaquinaFiscal(value: MaquinaFiscal?) = apply { maquinaFiscal = value }
-    fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>) = setInfoAdicional(values.toMap())
+    fun setInfoAdicional(vararg values: Pair<TextValue, MultiLineTextValue>) = setInfoAdicional(values.toMap())
     fun setInfoAdicional(values: InfoAdicional?) = apply { infoAdicional = values }
+    fun updateInfoAdicional(vararg values: Pair<TextValue, MultiLineTextValue>) = updateInfoAdicional(values.toMap())
     fun updateInfoAdicional(values: InfoAdicional) = apply {
         infoAdicional = if (infoAdicional == null) { values } else { infoAdicional!! + values }
     }

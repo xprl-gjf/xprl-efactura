@@ -67,8 +67,9 @@ class LiquidacionCompraBuilder: CompositeBuilder<LiquidacionCompraBuilder, Liqui
         reembolsoDetalles = if (reembolsoDetalles == null) { values } else { reembolsoDetalles!! + values }
     }
     override fun setMaquinaFiscal(value: MaquinaFiscal?) = apply { maquinaFiscal = value }
-    override fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>) = setInfoAdicional(values.toMap())
+    override fun setInfoAdicional(vararg values: Pair<TextValue, MultiLineTextValue>) = setInfoAdicional(values.toMap())
     override fun setInfoAdicional(values: InfoAdicional?) = apply { infoAdicional = values }
+    override fun updateInfoAdicional(vararg values: Pair<TextValue, MultiLineTextValue>) = updateInfoAdicional(values.toMap())
     override fun updateInfoAdicional(values: InfoAdicional) = apply {
         infoAdicional = if (infoAdicional == null) { values } else { infoAdicional!! + values }
     }
@@ -179,8 +180,9 @@ interface ILiquidacionCompraBuilder: Builder<LiquidacionCompra> {
     fun setReembolsoDetalles(values: List<ReembolsoDetalleBuilder>?): ILiquidacionCompraBuilder
     fun updateReembolsoDetalles(values: List<ReembolsoDetalleBuilder>): ILiquidacionCompraBuilder
     fun setMaquinaFiscal(value: MaquinaFiscal?): ILiquidacionCompraBuilder
-    fun setInfoAdicional(vararg values: Pair<TextValue, TextValue>): ILiquidacionCompraBuilder
+    fun setInfoAdicional(vararg values: Pair<TextValue, MultiLineTextValue>): ILiquidacionCompraBuilder
     fun setInfoAdicional(values: InfoAdicional?): ILiquidacionCompraBuilder
+    fun updateInfoAdicional(vararg values: Pair<TextValue, MultiLineTextValue>): ILiquidacionCompraBuilder
     fun updateInfoAdicional(values: InfoAdicional): ILiquidacionCompraBuilder
 }
 
