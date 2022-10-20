@@ -7,7 +7,7 @@ import java.math.BigDecimal
  * Immutable formatted data representation of a GuiaRemision.
  */
 @Suppress("MemberVisibilityCanBePrivate")
-internal class GuiaRemision(
+class GuiaRemision(
     src: GuiaRemision
 ) : ComprobanteElectronico(src) {
 

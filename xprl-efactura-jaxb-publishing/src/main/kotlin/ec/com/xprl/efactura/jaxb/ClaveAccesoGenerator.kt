@@ -22,7 +22,7 @@ interface ClaveAccesoGenerator {
     fun genClaveAcceso(comprobante: ComprobanteElectronico, ambiente: Ambiente, tipoEmision: TipoEmisión): ClaveAcceso
 }
 
-internal sealed class ClaveAccesoGeneratorImpl(
+sealed class ClaveAccesoGeneratorImpl(
     val genClaveValores: (ComprobanteElectronico, Ambiente, TipoEmisión) -> Pair<Serie, CodigoNumerico>
 ) : ClaveAccesoGenerator {
 

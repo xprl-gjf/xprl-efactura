@@ -7,7 +7,7 @@ import java.math.BigDecimal
  * Immutable formatted data representation of a NotaDebito.
  */
 @Suppress("MemberVisibilityCanBePrivate")
-internal class NotaDebito(
+class NotaDebito(
     src: NotaDebito
 ) : ComprobanteElectronico(src) {
 

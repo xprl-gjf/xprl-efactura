@@ -2,7 +2,7 @@ package ec.com.xprl.efactura.adapters
 
 import ec.com.xprl.efactura.ReembolsoDetalle
 
-internal class ReembolsoDetalle(val src: ReembolsoDetalle) {
+class ReembolsoDetalle(val src: ReembolsoDetalle) {
     val tipoIdentificación: String
         get() = String.format("%02d", src.proveedor.tipoIdentificacionCodigo)
     val identificación: String
@@ -18,7 +18,7 @@ internal class ReembolsoDetalle(val src: ReembolsoDetalle) {
     }
 
 
-    internal class DocReembolso(val src: ec.com.xprl.efactura.DocReembolso) {
+    class DocReembolso(val src: ec.com.xprl.efactura.DocReembolso) {
         val codDocReembolso: String
             get() = String.format("%02d", src.códigoDocumento.value)
         val estabDocReembolso: String

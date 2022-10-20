@@ -8,7 +8,7 @@ import java.math.BigDecimal
  * Immutable formatted data representation of a Factura.
  */
 @Suppress("MemberVisibilityCanBePrivate")
-internal class Factura(
+class Factura(
     src: Factura
 ) : ComprobanteElectronico(src) {
 
@@ -23,7 +23,7 @@ internal class Factura(
     val tipoNegociable: TipoNegociable? = src.tipoNegociable?.let { TipoNegociable(it) }
 
 
-    internal class Valores(val src: Factura.Valores) {
+    class Valores(val src: Factura.Valores) {
         val totals: Totals = Totals(src.totals)
         val pagos: List<Pago> = src.pagos.map { Pago(it) }
 
@@ -38,7 +38,7 @@ internal class Factura(
     }
 
 
-    internal class Totals(val src: Factura.Totals) {
+    class Totals(val src: Factura.Totals) {
         val totalConImpuestos: List<Impuesto> = src.totalConImpuestos.map { (k, v) ->
             Impuesto(k, v)
         }
@@ -51,7 +51,7 @@ internal class Factura(
     }
 
 
-    internal class Retencion(
+    class Retencion(
         val srcIdentidad: ImpuestoRetencionIvaPresuntivoYRenta,
         val srcValor: Factura.Retencion
     ) {
@@ -66,7 +66,7 @@ internal class Factura(
     }
 
 
-    internal class TipoNegociable(
+    class TipoNegociable(
         var src: Factura.TipoNegociable
     ) {
         val correo: String

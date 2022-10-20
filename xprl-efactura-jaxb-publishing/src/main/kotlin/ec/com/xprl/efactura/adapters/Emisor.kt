@@ -4,7 +4,7 @@ package ec.com.xprl.efactura.adapters
  * Immutable formatted representation of emisor data for a comprobante electrónico.
  */
 @Suppress("MemberVisibilityCanBePrivate")
-internal class Emisor(val src: ec.com.xprl.efactura.Emisor) {
+class Emisor(val src: ec.com.xprl.efactura.Emisor) {
     val RUC: String
         get() = src.RUC.value
     val razónSocial: String

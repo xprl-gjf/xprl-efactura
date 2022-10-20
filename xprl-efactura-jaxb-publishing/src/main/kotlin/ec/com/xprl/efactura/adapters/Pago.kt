@@ -7,7 +7,7 @@ import java.math.BigDecimal
  * Immutable formatted representation of pago data for a comprobante electrónico.
  */
 @Suppress("MemberVisibilityCanBePrivate")
-internal class Pago(val src: Pago) {
+class Pago(val src: Pago) {
     val formaPago: String
         get() = String.format("%02d", src.formaPago.formaDePagoCodigo)
     val total: BigDecimal

@@ -8,7 +8,7 @@ import ec.com.xprl.efactura.*
 class ComprobanteDetalleBuilder: AbstractBuilder<ComprobanteDetalleBuilder, ComprobanteDetalle>(
     ComprobanteDetalle::class.java,
     requires("codigoPrincipal") { it.codigoPrincipal },
-    requires("descipcion") { it.descripcion },
+    requires("descripcion") { it.descripcion },
     requires("cantidad") { it.cantidad },
     requires("precioUnitario") { it.precioUnitario },
     requires("descuento") { it.descuento },

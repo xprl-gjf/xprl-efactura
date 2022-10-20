@@ -12,7 +12,7 @@ class BuilderValidationRule<T: Builder<*>>(
 /**
  * Create a [Builder] validation rule to check that a given builder property is not null.
  */
-internal fun <T: Builder<*>> requires(
+fun <T: Builder<*>> requires(
     propertyName: String,
     propertyGetter: (T) -> Any?
 ) = BuilderValidationRule(
@@ -26,7 +26,7 @@ internal fun <T: Builder<*>> requires(
  * Create a [Builder] validation rule to check that a builder property is
  * not null and that if the property is a collection it is not empty.
  */
-internal fun <T: Builder<*>> requiresNotEmpty(
+fun <T: Builder<*>> requiresNotEmpty(
     propertyName: String,
     propertyGetter: (T) -> Any?
 ) = BuilderValidationRule(
@@ -42,7 +42,7 @@ internal fun <T: Builder<*>> requiresNotEmpty(
  * Create a [Builder] validation rule to check that a builder property (that is a collection)
  * contains fewer than the specified number of items.
  */
-internal fun <T: Builder<*>> requiresNotMoreThan(
+fun <T: Builder<*>> requiresNotMoreThan(
     propertyName: String,
     maxItems: Int,
     propertyGetter: (T) -> Any?

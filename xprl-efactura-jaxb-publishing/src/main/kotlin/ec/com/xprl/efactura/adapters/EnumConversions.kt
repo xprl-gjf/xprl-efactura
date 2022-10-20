@@ -4,7 +4,7 @@ import ec.com.xprl.efactura.*
 import ec.com.xprl.efactura.Pago
 import ec.gob.sri.efactura.IdentificationType
 
-internal val IdentityValue.tipoIdentificacionCodigo: Int
+val IdentityValue.tipoIdentificacionCodigo: Int
     get() = when(this) {
         is IdentityValue.RUC -> IdentificationType.RUC.value
         is IdentityValue.Cedula -> IdentificationType.CEDULA.value
@@ -14,7 +14,7 @@ internal val IdentityValue.tipoIdentificacionCodigo: Int
         // else -> throw Exception("Unhandled IdentityValue type: ${this::class.simpleName}.")
     }
 
-internal val FormaDePago.formaDePagoCodigo: Int
+val FormaDePago.formaDePagoCodigo: Int
     get() = when(this) {
         FormaDePago.SIN_SISTEMA_FINANCIERO -> ec.gob.sri.efactura.FormaDePago.SIN_SISTEMA_FINANCIERO.value
         FormaDePago.COMPENSACION_DE_DEUDAS -> ec.gob.sri.efactura.FormaDePago.COMPENSACION_DE_DEUDAS.value
@@ -26,12 +26,12 @@ internal val FormaDePago.formaDePagoCodigo: Int
         FormaDePago.TARJETA_PREPAGO -> ec.gob.sri.efactura.FormaDePago.TARJETA_PREPAGO.value
     }
 
-internal val TipoImpuesto.tipoImpuestoCodigo: Int
+val TipoImpuesto.tipoImpuestoCodigo: Int
     get() = when(this) {
         TipoImpuesto.ICE -> ec.gob.sri.efactura.TipoImpuesto.ICE.value
         TipoImpuesto.IVA -> ec.gob.sri.efactura.TipoImpuesto.IVA.value
         TipoImpuesto.IRBPNR -> ec.gob.sri.efactura.TipoImpuesto.IRBPNR.value
     }
 
-internal val Pago.Plazo.UnidadTiempo.jaxbString: String
+val Pago.Plazo.UnidadTiempo.jaxbString: String
     get() = this.name.lowercase()

@@ -8,7 +8,7 @@ import ec.com.xprl.efactura.ComprobanteRetencion
  * Immutable formatted data representation of a ComprobanteRetencion.
  */
 @Suppress("MemberVisibilityCanBePrivate")
-internal class ComprobanteRetencion(
+class ComprobanteRetencion(
     src: ComprobanteRetencion
 ) : ComprobanteElectronico(src) {
 

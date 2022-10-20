@@ -6,7 +6,7 @@ import ec.com.xprl.efactura.Comprador
  * Immutable formatted representation of comprador data for a comprobante electrónico.
  */
 @Suppress("MemberVisibilityCanBePrivate")
-internal class Comprador(val src: Comprador) {
+class Comprador(val src: Comprador) {
     val tipoIdentificación: String
         get() = String.format("%02d", src.identificación.tipoIdentificacionCodigo)
     val identificación: String

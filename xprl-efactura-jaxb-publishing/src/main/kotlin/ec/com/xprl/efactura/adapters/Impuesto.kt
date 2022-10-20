@@ -9,7 +9,7 @@ import java.math.BigDecimal
  * Immutable formatted representation of an impuesto for a factura.
  */
 @Suppress("MemberVisibilityCanBePrivate")
-internal class Impuesto(
+class Impuesto(
     val srcIdentidad: ImpuestoIdentidad,
     val srcValor: ImpuestoTotal
 ) {
@@ -31,7 +31,7 @@ internal class Impuesto(
  * Immutable formatted representation of an impuesto for a liquidacion de compra.
  */
 @Suppress("MemberVisibilityCanBePrivate")
-internal class ImpuestoLiquidacion(
+class ImpuestoLiquidacion(
     val srcIdentidad: ImpuestoIdentidad,
     val srcValor: ImpuestoLiquidacionTotal
 ) {

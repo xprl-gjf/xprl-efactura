@@ -2,7 +2,7 @@
 
 package ec.com.xprl.efactura
 
-internal inline fun <reified T: Any> validateCharSequence(
+inline fun <reified T: Any> validateCharSequence(
     value: CharSequence,
     descriptor: String,
     maxLength: Int,
@@ -11,7 +11,7 @@ internal inline fun <reified T: Any> validateCharSequence(
     value, descriptor, minLength=0, maxLength, allowBlank=false, isValid
 )
 
-internal inline fun <reified T: Any> validateCharSequence(
+inline fun <reified T: Any> validateCharSequence(
     value: CharSequence,
     descriptor: String,
     maxLength: Int,
@@ -21,7 +21,7 @@ internal inline fun <reified T: Any> validateCharSequence(
     value, descriptor, minLength=0, maxLength, allowBlank, isValid
 )
 
-internal inline fun <reified T: Any> validateCharSequence(
+inline fun <reified T: Any> validateCharSequence(
     value: CharSequence,
     descriptor: String,
     minLength: Int,
@@ -31,7 +31,7 @@ internal inline fun <reified T: Any> validateCharSequence(
     value, descriptor, minLength, maxLength, allowBlank=false, isValid
 )
 
-internal inline fun <reified T: Any> validateCharSequence(
+inline fun <reified T: Any> validateCharSequence(
     value: CharSequence,
     descriptor: String,
     minLength: Int,
@@ -54,7 +54,7 @@ internal inline fun <reified T: Any> validateCharSequence(
     return value
 }
 
-internal inline fun <reified T : Any> validateLength(
+inline fun <reified T : Any> validateLength(
     value: CharSequence,
     vararg validLengths: Int
 ): CharSequence {
@@ -64,16 +64,16 @@ internal inline fun <reified T : Any> validateLength(
     return value
 }
 
-internal fun Char.isValidSimpleAlpha(): Boolean =
+fun Char.isValidSimpleAlpha(): Boolean =
     isLetterOrDigit() || isSpace()
 
-internal fun Char.isValidSimpleAlpha(allowedSymbols: Iterable<Char>): Boolean =
+fun Char.isValidSimpleAlpha(allowedSymbols: Iterable<Char>): Boolean =
     isValidSimpleAlpha() || (allowedSymbols.contains(this))
 
-internal fun Char.isValidIdentifier(allowExtendedChars: Boolean = false): Boolean =
+fun Char.isValidIdentifier(allowExtendedChars: Boolean = false): Boolean =
     isLetterOrDigit() || (allowExtendedChars && isUnderscoreOrHyphen())
 
-internal fun Char.isValidNumeric(allowExtendedChars: Boolean = false): Boolean =
+fun Char.isValidNumeric(allowExtendedChars: Boolean = false): Boolean =
     isDigit() || (allowExtendedChars && isUnderscoreOrHyphen())
 
 private fun Char.isSpace(): Boolean =

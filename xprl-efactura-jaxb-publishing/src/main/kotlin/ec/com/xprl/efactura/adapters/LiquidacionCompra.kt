@@ -7,7 +7,7 @@ import java.math.BigDecimal
  * Immutable formatted data representation of a LiquidacionCompra.
  */
 @Suppress("MemberVisibilityCanBePrivate")
-internal class LiquidacionCompra(
+class LiquidacionCompra(
     src: LiquidacionCompra
 ) : ComprobanteElectronico(src) {
 
@@ -18,7 +18,7 @@ internal class LiquidacionCompra(
     val reembolsoDetalles: List<ReembolsoDetalle>? = src.reembolsoDetalles?.map { ReembolsoDetalle(it) }
 
 
-    internal class Valores(val src: LiquidacionCompra.Valores) {
+    class Valores(val src: LiquidacionCompra.Valores) {
         val totals: Totals = Totals(src.totals)
         val pagos: List<Pago> = src.pagos.map { Pago(it) }
 
@@ -27,7 +27,7 @@ internal class LiquidacionCompra(
     }
 
 
-    internal class Totals(val src: LiquidacionCompra.Totals) {
+    class Totals(val src: LiquidacionCompra.Totals) {
         val totalConImpuestos: List<ImpuestoLiquidacion> = src.totalConImpuestos.map { (k, v) ->
             ImpuestoLiquidacion(k, v)
         }

@@ -3,13 +3,13 @@ package ec.com.xprl.efactura.jaxb
 import ec.com.xprl.efactura.*
 import ec.gob.sri.efactura.TipoEmision
 
-internal val Ambiente.ambienteCodigo: Int
+val Ambiente.ambienteCodigo: Int
     get() = when(this) {
         Ambiente.PRUEBAS -> ec.gob.sri.efactura.Ambiente.PRUEBAS.value
         Ambiente.PRODUCCIÓN -> ec.gob.sri.efactura.Ambiente.PRODUCCION.value
     }
 
-internal val TipoEmisión.tipoEmisionCodigo: Int
+val TipoEmisión.tipoEmisionCodigo: Int
     get() = when(this) {
         TipoEmisión.NORMAL -> TipoEmision.NORMAL.value
     }
