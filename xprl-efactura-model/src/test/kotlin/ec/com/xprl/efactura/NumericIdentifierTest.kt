@@ -72,6 +72,17 @@ internal class NumericIdentifierTest {
         assertEquals(13, NumericIdentifier.MAX_LENGTH)
     }
 
+    /**
+     * Verify that [NumericIdentifier] equality uses value comparison and not reference comparison
+     */
+    @ParameterizedTest
+    @MethodSource("getValidNumericStringValues")
+    fun numericIdentifierValueEquality(value: String) {
+        val result1 = NumericIdentifier.from(value)
+        val result2 = NumericIdentifier.from(value)
+        Assertions.assertNotSame(result2, result1)
+        Assertions.assertEquals(result2, result1)
+    }
 
     companion object {
         @JvmStatic

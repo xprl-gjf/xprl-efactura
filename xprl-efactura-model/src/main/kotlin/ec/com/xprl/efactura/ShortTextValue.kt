@@ -9,8 +9,6 @@ private const val SHORT_TEXT_MAX_LENGTH = 20
 class ShortTextValue private constructor (value: CharSequence)
     : TextValue(value) {
 
-    override fun toString() = value
-
     companion object {
         /**
          * Maximum length of a [ShortTextValue].

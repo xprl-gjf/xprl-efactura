@@ -52,6 +52,18 @@ internal class ShortTextValueTest {
         kotlin.test.assertEquals(20, ShortTextValue.MAX_LENGTH)
     }
 
+    /**
+     * Verify that [ShortTextValue] equality uses value comparison and not reference comparison
+     */
+    @ParameterizedTest
+    @MethodSource("getValidValues", "getHtmlEscapedValues")
+    fun shortTextValueEquality(str: String) {
+        val text1 = ShortTextValue.from(str)
+        val text2 = ShortTextValue.from(str)
+        assertNotSame(text2, text1)
+        assertEquals(text2, text1)
+    }
+
     companion object {
         @JvmStatic
         private fun getInvalidValues(): List<Arguments> = arrayOf(

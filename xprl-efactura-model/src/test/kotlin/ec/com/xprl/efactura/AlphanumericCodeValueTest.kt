@@ -39,6 +39,18 @@ internal class AlphanumericCodeValueTest {
         kotlin.test.assertEquals(25, AlphanumericCodeValue.MAX_LENGTH)
     }
 
+    /**
+     * Verify that [AlphanumericCodeValue] equality uses value comparison and not reference comparison
+     */
+    @ParameterizedTest
+    @MethodSource("getValidValues")
+    fun alphanumericCodeValueEquality(value: String) {
+        val result1 = AlphanumericCodeValue.from(value)
+        val result2 = AlphanumericCodeValue.from(value)
+        assertNotSame(result2, result1)
+        assertEquals(result2, result1)
+    }
+
     companion object {
         @JvmStatic
         private fun getInvalidValues(): List<Arguments> = arrayOf(

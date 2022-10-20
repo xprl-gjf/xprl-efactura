@@ -72,6 +72,18 @@ internal class CodeValueTest {
         assertEquals(3, CodeValue.MAX_LENGTH)
     }
 
+    /**
+     * Verify that [CodeValue] equality uses value comparison and not reference comparison
+     */
+    @ParameterizedTest
+    @MethodSource("getValidValues")
+    fun codeValueEquality(value: Int) {
+        val result1 = CodeValue.from(value)
+        val result2 = CodeValue.from(value)
+        Assertions.assertNotSame(result2, result1)
+        Assertions.assertEquals(result2, result1)
+    }
+
     companion object {
         @JvmStatic
         private fun getInvalidIntValues(): List<Arguments> = arrayOf(

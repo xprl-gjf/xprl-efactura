@@ -52,6 +52,18 @@ internal class MaquinaFiscalTextValueTest {
         kotlin.test.assertEquals(30, MaquinaFiscalTextValue.MAX_LENGTH)
     }
 
+    /**
+     * Verify that [MaquinaFiscalTextValue] equality uses value comparison and not reference comparison
+     */
+    @ParameterizedTest
+    @MethodSource("getValidValues", "getHtmlEscapedValues")
+    fun maquinaFiscalTextValueEquality(str: String) {
+        val text1 = MaquinaFiscalTextValue.from(str)
+        val text2 = MaquinaFiscalTextValue.from(str)
+        assertNotSame(text2, text1)
+        assertEquals(text2, text1)
+    }
+
     companion object {
         @JvmStatic
         private fun getInvalidValues(): List<Arguments> = arrayOf(

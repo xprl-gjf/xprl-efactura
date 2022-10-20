@@ -19,7 +19,6 @@ internal class UDecimalValueTest {
         }
     }
 
-
     /**
      * Verify that a [UDecimalValue] can be created from a
      * valid BigDecimal value.
@@ -29,6 +28,18 @@ internal class UDecimalValueTest {
     fun validUDecimalValue(value: BigDecimal) {
         val result = UDecimalValue.from(value)
         Assertions.assertEquals(value, result.value)
+    }
+
+    /**
+     * Verify that [UDecimalValue] equality uses value comparison and not reference comparison
+     */
+    @ParameterizedTest
+    @MethodSource("getValidValues")
+    fun testUDecimalValueEquality(value: BigDecimal) {
+        val result1 = UDecimalValue.from(value)
+        val result2 = UDecimalValue.from(value)
+        Assertions.assertNotSame(result2, result1)
+        Assertions.assertEquals(result2, result1)
     }
 
     companion object {

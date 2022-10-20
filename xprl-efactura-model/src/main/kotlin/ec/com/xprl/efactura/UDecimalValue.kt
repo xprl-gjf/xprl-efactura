@@ -30,6 +30,20 @@ class UDecimalValue
 
     override fun toString() = value.toString()
 
+    /**
+     * Value equality comparison
+     */
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as UDecimalValue
+        return other.value == this.value
+    }
+
+    override fun hashCode(): Int {
+        return value.hashCode()
+    }
+
     companion object {
         private val ZERO = BigDecimal(0)
         /**

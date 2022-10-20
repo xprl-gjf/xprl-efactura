@@ -15,6 +15,9 @@ data class Version(
  * Known schema versions for comprobantes electrónicos.
  */
 sealed class SchemaVersion<T: ComprobanteElectronico>(val efacturaClass: Class<T>, val version: Version) {
+
+    override fun toString() = "${efacturaClass.simpleName}_v${version}"
+
     /* Factura schema versions */
     object FacturaV100: SchemaVersion<Factura>(Factura::class.java, Version(1, 0, 0))
     object FacturaV110: SchemaVersion<Factura>(Factura::class.java, Version(1, 1, 0))

@@ -39,6 +39,18 @@ internal class DocumentIdTest {
         kotlin.test.assertEquals(17, DocumentId.MAX_LENGTH)
     }
 
+    /**
+     * Verify that [DocumentId] equality uses value comparison and not reference comparison
+     */
+    @ParameterizedTest
+    @MethodSource("getValidValues")
+    fun documentIdValueEquality(value: String) {
+        val result1 = DocumentId.from(value)
+        val result2 = DocumentId.from(value)
+        assertNotSame(result2, result1)
+        assertEquals(result2, result1)
+    }
+
     companion object {
         @JvmStatic
         private fun getInvalidValues(): List<Arguments> = arrayOf(

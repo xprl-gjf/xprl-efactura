@@ -7,6 +7,26 @@ sealed class ImpuestoRetencionIdentidad(
     val tipoImpuesto: TipoImpuestoRetencion,
     val codigoPorcentaje: Int) {
 
+    override fun toString() = "${tipoImpuesto}[${codigoPorcentaje}]"
+
+    /**
+     * Value equality comparison
+     */
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as ImpuestoRetencionIdentidad
+        return other.tipoImpuesto == this.tipoImpuesto &&
+            other.codigoPorcentaje == this.codigoPorcentaje
+    }
+
+    override fun hashCode(): Int {
+        return sequenceOf(
+            tipoImpuesto.hashCode(),
+            codigoPorcentaje.hashCode()
+        ).fold(29) { acc, x -> acc * 37 + x }
+    }
+
     companion object {
         /* empty - included solely to support extensions */
     }

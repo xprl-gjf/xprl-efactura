@@ -13,6 +13,20 @@ class DocAutorizacionValue private constructor (val value: String) {
 
     override fun toString() = value
 
+    /**
+     * Value equality comparison
+     */
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as DocAutorizacionValue
+        return other.value == this.value
+    }
+
+    override fun hashCode(): Int {
+        return value.hashCode()
+    }
+
     companion object {
         /**
          * Maximum length of a [DocAutorizacionValue] value.
@@ -24,8 +38,8 @@ class DocAutorizacionValue private constructor (val value: String) {
             @JvmStatic get() = DocAutorizacionValueLengths.toTypedArray()
 
         /**
-         * Factory function to create a [DocumentId] value from an arbitrary string.
-         * @exception IllegalArgumentException the string is not a valid [DocumentId] value.
+         * Factory function to create a [DocAutorizacionValue] value from an arbitrary string.
+         * @exception IllegalArgumentException the string is not a valid [DocAutorizacionValue] value.
          */
         fun from(value: CharSequence) = DocAutorizacionValue(validate(value))
 

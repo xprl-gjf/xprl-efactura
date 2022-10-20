@@ -8,7 +8,21 @@ internal const val RISE_MAX_LENGTH = 40
  */
 class Rise private constructor (val value: String) {
 
-    override fun toString() = value
+    override fun toString() = value.toString()
+
+    /**
+     * Value equality comparison
+     */
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as Rise
+        return other.value == this.value
+    }
+
+    override fun hashCode(): Int {
+        return value.hashCode()
+    }
 
     companion object {
         /**

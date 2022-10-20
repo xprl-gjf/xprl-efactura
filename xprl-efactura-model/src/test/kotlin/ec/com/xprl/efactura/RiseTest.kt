@@ -1,5 +1,6 @@
 package ec.com.xprl.efactura
 
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -37,6 +38,18 @@ internal class RiseTest {
     @Test
     fun riseMaxLength() {
         kotlin.test.assertEquals(40, Rise.MAX_LENGTH)
+    }
+
+    /**
+     * Verify that [Rise] equality uses value comparison and not reference comparison
+     */
+    @ParameterizedTest
+    @MethodSource("getValidValues")
+    fun riseValueEquality(value: String) {
+        val result1 = Rise.from(value)
+        val result2 = Rise.from(value)
+        assertNotSame(result2, result1)
+        assertEquals(result2, result1)
     }
 
     companion object {

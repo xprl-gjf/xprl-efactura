@@ -9,8 +9,6 @@ private const val CORREO_TEXT_MAX_LENGTH = 100
 class CorreoValue private constructor (value: CharSequence)
     : TextValue(value) {
 
-    override fun toString() = value
-
     companion object {
         /**
          * Maximum length of a [CorreoValue].

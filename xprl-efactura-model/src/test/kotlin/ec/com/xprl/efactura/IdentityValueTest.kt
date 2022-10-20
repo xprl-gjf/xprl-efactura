@@ -11,6 +11,24 @@ import kotlin.test.assertEquals
 internal class IdentityValueTest {
 
     /**
+     * Verify that [IdentityValue] equality uses value comparison and not reference comparison
+     */
+    @Suppress("AssertBetweenInconvertibleTypes")
+    @ParameterizedTest(name = "RUC value {0}")
+    @MethodSource("getValidRUCStringValues")
+    fun identityValueEquality(value: String) {
+        val result1 = RUC.from(value)
+        val result2 = RUC.from(value)
+
+        val notEquals = ConsumidorFinal
+
+        Assertions.assertNotSame(result2, result1)
+        Assertions.assertEquals(result2, result1)
+
+        Assertions.assertNotEquals(notEquals, result1)
+    }
+
+    /**
      * Verify that an attempt to create a [RUC] identity value from
      * an invalid long integer raises an [IllegalArgumentException].
      */

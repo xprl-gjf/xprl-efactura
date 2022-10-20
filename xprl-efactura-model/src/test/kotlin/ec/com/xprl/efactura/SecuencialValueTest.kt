@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import java.math.BigDecimal
 import kotlin.test.assertEquals
 
 internal class SecuencialValueTest {
@@ -74,6 +75,17 @@ internal class SecuencialValueTest {
         assertEquals(9, SecuencialValue.MAX_LENGTH)
     }
 
+    /**
+     * Verify that [SecuencialValue] equality uses value comparison and not reference comparison
+     */
+    @ParameterizedTest
+    @MethodSource("getValidSecuencialStringValues")
+    fun secuencialValueEquality(value: String) {
+        val result1 = SecuencialValue.from(value)
+        val result2 = SecuencialValue.from(value)
+        Assertions.assertNotSame(result2, result1)
+        Assertions.assertEquals(result2, result1)
+    }
 
     companion object {
         @JvmStatic

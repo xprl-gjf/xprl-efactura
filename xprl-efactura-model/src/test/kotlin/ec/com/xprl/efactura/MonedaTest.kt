@@ -1,5 +1,6 @@
 package ec.com.xprl.efactura
 
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -54,6 +55,18 @@ internal class MonedaTest {
     @Test
     fun monedaMaxLength() {
         kotlin.test.assertEquals(15, Moneda.MAX_LENGTH)
+    }
+
+    /**
+     * Verify that [Moneda] equality uses value comparison and not reference comparison
+     */
+    @ParameterizedTest
+    @MethodSource("getValidValues")
+    fun monedaValueEquality(value: String) {
+        val result1 = Moneda.from(value)
+        val result2 = Moneda.from(value)
+        assertNotSame(result2, result1)
+        assertEquals(result2, result1)
     }
 
     companion object {

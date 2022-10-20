@@ -52,6 +52,18 @@ internal class CorreoValueTest {
         kotlin.test.assertEquals(100, CorreoValue.MAX_LENGTH)
     }
 
+    /**
+     * Verify that [CorreoValue] equality uses value comparison and not reference comparison
+     */
+    @ParameterizedTest
+    @MethodSource("getValidValues", "getHtmlEscapedValues")
+    fun correoTextValueEquality(str: String) {
+        val text1 = CorreoValue.from(str)
+        val text2 = CorreoValue.from(str)
+        assertNotSame(text2, text1)
+        assertEquals(text2, text1)
+    }
+
     companion object {
         @JvmStatic
         private fun getInvalidValues(): List<Arguments> = arrayOf(

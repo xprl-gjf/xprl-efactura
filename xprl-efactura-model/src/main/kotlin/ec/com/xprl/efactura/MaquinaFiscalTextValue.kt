@@ -9,8 +9,6 @@ private const val MAQUINA_FISCAL_TEXT_MAX_LENGTH = 30
 class MaquinaFiscalTextValue private constructor (value: CharSequence)
     : TextValue(value) {
 
-    override fun toString() = value
-
     companion object {
         /**
          * Maximum length of a [MaquinaFiscalTextValue].

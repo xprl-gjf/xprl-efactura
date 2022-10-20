@@ -67,9 +67,9 @@ internal class TextValueTest {
     }
 
     /**
-     * Verify that TextValue equality uses value comparison and not reference comparison
+     * Verify that [TextValue] equality uses value comparison and not reference comparison
      */
-    @ParameterizedTest()
+    @ParameterizedTest
     @MethodSource("getValidValues", "getHtmlEscapedValues")
     fun textValueEquality(str: String) {
         val text1 = TextValue.from(str)
