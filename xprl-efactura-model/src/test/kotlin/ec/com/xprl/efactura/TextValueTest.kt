@@ -37,11 +37,25 @@ internal class TextValueTest {
      * 'special characters' (e.g. &<>/), then those characters are substituted
      * with corresponding HTML entity references (e.g. &amp; &lt; &gt; &sol; ).
      */
-    @ParameterizedTest(name = "html-escaped value {0}")
+    @ParameterizedTest(name = "html-escaped {0}")
     @MethodSource("getHtmlEscapedValues")
     fun htmlEncodedTextValue(value: String, expected: String) {
         val result = TextValue.from(value)
         assertEquals(expected, result.value)
+    }
+
+    /**
+     * Verify that when a [TextValue] is created from an already-html-encoded
+     * string containing 'special characters' (e.g. &<>/), then those characters
+     * are retained and are not double-encoded.
+     */
+    @ParameterizedTest(name = "html-escaped {0}")
+    @MethodSource("getHtmlEscapedValues")
+    fun htmlDoubleEncodedTextValue(value: String, expected: String) {
+        val result = TextValue.from(value)
+        val result2 = TextValue.from(result.value)
+        // double-encoded html strings should be the same as single-encoded strings
+        assertEquals(expected, result2.value)
     }
 
     /**
@@ -50,6 +64,18 @@ internal class TextValueTest {
     @Test
     fun textValueMaxLength() {
         kotlin.test.assertEquals(300, TextValue.MAX_LENGTH)
+    }
+
+    /**
+     * Verify that TextValue equality uses value comparison and not reference comparison
+     */
+    @ParameterizedTest()
+    @MethodSource("getValidValues", "getHtmlEscapedValues")
+    fun textValueEquality(str: String) {
+        val text1 = TextValue.from(str)
+        val text2 = TextValue.from(str)
+        assertNotSame(text2, text1)
+        assertEquals(text2, text1)
     }
 
     companion object {

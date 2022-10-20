@@ -10,7 +10,7 @@ import jakarta.xml.bind.JAXBContext
 import jakarta.xml.bind.Marshaller
 import java.io.StringReader
 import java.io.StringWriter
-import javax.xml.stream.XMLOutputFactory
+// import javax.xml.stream.XMLOutputFactory
 import javax.xml.transform.OutputKeys
 import javax.xml.transform.Transformer
 import javax.xml.transform.TransformerFactory
@@ -57,9 +57,12 @@ class JaxbComprobantePublisher<T: ComprobanteElectronico>(
         val jaxbContext = JAXBContext.newInstance(klass)
         val jaxbMarshaller = jaxbContext.createMarshaller()
         val stringWriter = StringWriter()
-        val outputFactory = XMLOutputFactory.newDefaultFactory()
         // using XmlStreamWriter ensures that characters '&<>' are HTML-encoded
-        val writer = outputFactory.createXMLStreamWriter(stringWriter)
+        // ...BUT, since we have already HTML-encoded our text values, they end up
+        //    being double-encoded. So, don't do this.
+        // val outputFactory = XMLOutputFactory.newDefaultFactory()
+        // val writer = outputFactory.createXMLStreamWriter(stringWriter)
+        val writer = stringWriter
         jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false)
         jaxbMarshaller.setProperty(Marshaller.JAXB_ENCODING, JAXB_UTF8_ENCODING)
         jaxbMarshaller.marshal(jaxbComprobante, writer)

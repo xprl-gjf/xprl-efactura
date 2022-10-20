@@ -11,6 +11,20 @@ open class TextValue protected constructor (value: CharSequence) {
 
     override fun toString() = value
 
+    /**
+     * Value equality comparison
+     */
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as TextValue
+        return other.value == this.value
+    }
+
+    override fun hashCode(): Int {
+        return value.hashCode()
+    }
+
     companion object {
         /**
          * Maximum length of a [TextValue].
@@ -29,7 +43,9 @@ open class TextValue protected constructor (value: CharSequence) {
         @JvmStatic fun from(value: CharSequence) = TextValue(validate(htmlEncode(value)))
 
         @JvmStatic
-        protected fun htmlEncode(value: CharSequence): CharSequence = value.replace(htmlEncodeRegex) {
+        // call htmlDecode() before encoding to prevent double-encoding of ampersand,
+        // e.g. "&" -> "&amp;" -> "&amp;amp:" etc.
+        protected fun htmlEncode(value: CharSequence): CharSequence = htmlDecode(value).replace(htmlEncodeRegex) {
             when (it.value) {
                 "&" -> "&amp;"
                 "<" -> "&lt;"
@@ -40,20 +56,37 @@ open class TextValue protected constructor (value: CharSequence) {
         }
 
         @JvmStatic
+        protected fun htmlDecode(value: CharSequence): CharSequence = value.replace(htmlDecodeRegex) {
+            when (it.value) {
+                "&amp;" -> "&"
+                "&lt;" -> "<"
+                "&gt;" -> ">"
+                "&sol;" -> "/"
+                else -> it.value
+            }
+        }
+
+        @JvmStatic
         private fun validate(value: CharSequence) = validate(TextValue::class.java, value)
 
         @JvmStatic
-        protected fun <T : TextValue> validate(clazz: Class<T>, value: CharSequence, maxLength: Int = TEXT_MAX_LENGTH): CharSequence {
+        protected fun <T : TextValue> validate(
+            clazz: Class<T>,
+            value: CharSequence,
+            maxLength: Int = TEXT_MAX_LENGTH,
+            multiLine: Boolean = false
+        ): CharSequence {
             if (value.length > maxLength) {
                 throw IllegalArgumentException("'${value}' exceeds maximum length of ${maxLength} for a ${clazz.simpleName}.")
             }
-            if (value.contains(lineBreaksRegex)) {
-                throw IllegalArgumentException("${TextValue::class.java.simpleName} value may not contain line breaks.")
+            if (!multiLine && value.contains(lineBreaksRegex)) {
+                throw IllegalArgumentException("${clazz.simpleName} value may not contain line breaks.")
             }
             return value
         }
 
         private val lineBreaksRegex = Regex("[\\u000A\\u000B\\u000C\\u000D\\u0085\\u2028\\u2029]")
         private val htmlEncodeRegex = Regex("[&<>/]")
+        private val htmlDecodeRegex = Regex("(&amp;|&lt;|&gt;|&sol;)")
     }
 }
