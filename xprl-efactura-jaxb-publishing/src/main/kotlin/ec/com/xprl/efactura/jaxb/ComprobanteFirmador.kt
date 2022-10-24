@@ -5,6 +5,7 @@ import ec.com.xprl.efactura.PublishedComprobante
 import ec.com.xprl.efactura.XAdESBESSignature
 import org.w3c.dom.Document
 import java.io.StringWriter
+import javax.xml.XMLConstants
 import javax.xml.transform.TransformerException
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.dom.DOMSource
@@ -57,7 +58,11 @@ private fun Document.transformToString(): String {
     val domSource = DOMSource(this)
     val writer = StringWriter()
     val result = StreamResult(writer)
-    val tf = TransformerFactory.newInstance()
+    val tf = TransformerFactory.newDefaultInstance()
+    // security-conscious settings:
+    // tf.setAttribute(XMLConstants.FEATURE_SECURE_PROCESSING, true)
+    tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+    tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
     val transformer = tf.newTransformer()
     transformer.transform(domSource, result)
     return writer.toString()
