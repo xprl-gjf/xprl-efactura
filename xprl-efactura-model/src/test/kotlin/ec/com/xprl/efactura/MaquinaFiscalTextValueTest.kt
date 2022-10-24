@@ -34,14 +34,14 @@ internal class MaquinaFiscalTextValueTest {
 
     /**
      * Verify that when a [MaquinaFiscalTextValue] is created from a string containing
-     * 'special characters' (e.g. &<>/), then those characters are substituted
-     * with corresponding HTML entity references (e.g. &amp; &lt; &gt; &sol;).
+     * 'special characters' (e.g. &<>), then those characters are _not_
+     * substituted with corresponding XML entity references (e.g. &amp; &lt; &gt; ).
      */
-    @ParameterizedTest(name = "html-escaped value {0}")
-    @MethodSource("getHtmlEscapedValues")
-    fun htmlEncodedTextValue(value: String, expected: String) {
+    @ParameterizedTest(name = "xml-escaped value {0}")
+    @MethodSource("getXmlEscapedValues")
+    fun xmlEncodedMaquinaFiscalTextValue(value: String, expected: String) {
         val result = MaquinaFiscalTextValue.from(value)
-        assertEquals(expected, result.value)
+        assertEquals(value, result.value)
     }
 
     /**
@@ -56,7 +56,7 @@ internal class MaquinaFiscalTextValueTest {
      * Verify that [MaquinaFiscalTextValue] equality uses value comparison and not reference comparison
      */
     @ParameterizedTest
-    @MethodSource("getValidValues", "getHtmlEscapedValues")
+    @MethodSource("getValidValues", "getXmlEscapedValues")
     fun maquinaFiscalTextValueEquality(str: String) {
         val text1 = MaquinaFiscalTextValue.from(str)
         val text2 = MaquinaFiscalTextValue.from(str)
@@ -70,7 +70,7 @@ internal class MaquinaFiscalTextValueTest {
             "",             // empty
             " ",            // blank
             "X".repeat(31),  // value too long
-            "&" + "X".repeat(28),  // html-escape causes value to be too long
+            "&" + "X".repeat(28),  // xml-escape causes value to be too long
             "ABC\n123",     // newline
             "ABC\u000A123", // line feed
             "ABC\u000B123", // vertical tab
@@ -90,10 +90,10 @@ internal class MaquinaFiscalTextValueTest {
         ).asArgs()
 
         @JvmStatic
-        private fun getHtmlEscapedValues(): List<Arguments> = listOf(
+        private fun getXmlEscapedValues(): List<Arguments> = listOf(
             arguments("ABC&123", "ABC&amp;123"),
-            arguments("ABC&<>/123", "ABC&amp;&lt;&gt;&sol;123"),
-            arguments(">", "&gt;"),      // solitary html-escaped char
+            arguments("ABC&<>123", "ABC&amp;&lt;&gt;123"),
+            arguments(">", "&gt;"),      // solitary xml-escaped char
             arguments("&".repeat(4), "&amp;".repeat(4))
         )
     }

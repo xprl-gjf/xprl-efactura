@@ -34,14 +34,14 @@ internal class ShortTextValueTest {
 
     /**
      * Verify that when a [ShortTextValue] is created from a string containing
-     * 'special characters' (e.g. &<>/), then those characters are substituted
-     * with corresponding HTML entity references (e.g. &amp; &lt; &gt; &sol;).
+     * 'special characters' (e.g. &<>), then those characters are _not_
+     * substituted with corresponding XML entity references (e.g. &amp; &lt; &gt; ).
      */
-    @ParameterizedTest(name = "html-escaped value {0}")
-    @MethodSource("getHtmlEscapedValues")
-    fun htmlEncodedTextValue(value: String, expected: String) {
+    @ParameterizedTest(name = "xml-escaped value {0}")
+    @MethodSource("getXmlEscapedValues")
+    fun xmlEncodedShortTextValue(value: String, expected: String) {
         val result = ShortTextValue.from(value)
-        assertEquals(expected, result.value)
+        assertEquals(value, result.value)
     }
 
     /**
@@ -56,7 +56,7 @@ internal class ShortTextValueTest {
      * Verify that [ShortTextValue] equality uses value comparison and not reference comparison
      */
     @ParameterizedTest
-    @MethodSource("getValidValues", "getHtmlEscapedValues")
+    @MethodSource("getValidValues", "getXmlEscapedValues")
     fun shortTextValueEquality(str: String) {
         val text1 = ShortTextValue.from(str)
         val text2 = ShortTextValue.from(str)
@@ -70,7 +70,7 @@ internal class ShortTextValueTest {
             "",             // empty
             " ",            // blank
             "X".repeat(21),  // value too long
-            "&" + "X".repeat(18),  // html-escape causes value to be too long
+            "&" + "X".repeat(18),  // xml-escape causes value to be too long
             "ABC\n123",     // newline
             "ABC\u000A123", // line feed
             "ABC\u000B123", // vertical tab
@@ -90,10 +90,10 @@ internal class ShortTextValueTest {
         ).asArgs()
 
         @JvmStatic
-        private fun getHtmlEscapedValues(): List<Arguments> = listOf(
+        private fun getXmlEscapedValues(): List<Arguments> = listOf(
             arguments("ABC&123", "ABC&amp;123"),
-            arguments("A&<>/1", "A&amp;&lt;&gt;&sol;1"),
-            arguments(">", "&gt;"),      // solitary html-escaped char
+            arguments("A&<>1", "A&amp;&lt;&gt;1"),
+            arguments(">", "&gt;"),      // solitary xml-escaped char
             arguments("&".repeat(4), "&amp;".repeat(4))
         )
     }

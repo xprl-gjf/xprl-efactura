@@ -21,12 +21,12 @@ class MaquinaFiscalTextValue private constructor (value: CharSequence)
         /**
          * Factory function to create a [MaquinaFiscalTextValue] from a string.
          *
-         * Note that HTML special characters (&,<,>,/) will be html-encoded,
-         * e.g. as &amp; &lt; &gt or &sol; respectively.
+         * Note that the value is validated with special characters (&,<,>) xml-encoded
+         * (because this affects string length) but the stored value is _not_ xml-encoded.
          *
          * @exception IllegalArgumentException the string value is not a valid [MaquinaFiscalTextValue].
          */
-        @JvmStatic fun from(value: CharSequence) = MaquinaFiscalTextValue(validate(htmlEncode(value)))
+        @JvmStatic fun from(value: CharSequence) = MaquinaFiscalTextValue(validate(value))
 
         private fun validate(value: CharSequence): CharSequence {
             if (value.isBlank()) {

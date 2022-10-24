@@ -17,12 +17,12 @@ class MultiLineTextValue private constructor (value: CharSequence)
         /**
          * Factory function to create a [MultiLineTextValue] from a string.
          *
-         * Note that HTML special characters (&,<,>,/) will be html-encoded,
-         * e.g. as &amp; &lt; &gt or &sol; respectively.
+         * Note that the value is validated with special characters (&,<,>) xml-encoded
+         * (because this affects string length) but the stored value is _not_ xml-encoded.
          *
          * @exception IllegalArgumentException the string value is not a valid [MultiLineTextValue].
          */
-        @JvmStatic fun from(value: CharSequence) = MultiLineTextValue(validate(htmlEncode(value)))
+        @JvmStatic fun from(value: CharSequence) = MultiLineTextValue(validate(value))
 
         private fun validate(value: CharSequence): CharSequence {
             return validate(MultiLineTextValue::class.java, value, multiLine = true)

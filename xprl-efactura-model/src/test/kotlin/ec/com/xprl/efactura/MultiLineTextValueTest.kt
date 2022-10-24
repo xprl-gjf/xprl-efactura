@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
 
-internal class MultiLineTextlValueTest {
+internal class MultiLineTextValueTest {
 
     /**
      * Verify that an attempt to create an [MultiLineTextValue] from
@@ -34,14 +34,14 @@ internal class MultiLineTextlValueTest {
 
     /**
      * Verify that when a [MultiLineTextValue] is created from a string containing
-     * 'special characters' (e.g. &<>/), then those characters are substituted
-     * with corresponding HTML entity references (e.g. &amp; &lt; &gt; &sol; ).
+     * 'special characters' (e.g. &<>), then those characters are _not_
+     * substituted with corresponding XML entity references (e.g. &amp; &lt; &gt; ).
      */
-    @ParameterizedTest(name = "html-escaped value {0}")
-    @MethodSource("getHtmlEscapedValues")
-    fun htmlEncodedTextValue(value: String, expected: String) {
+    @ParameterizedTest(name = "xml-escaped value {0}")
+    @MethodSource("getXmlEscapedValues")
+    fun xmlEncodedMultiLineTextValue(value: String, expected: String) {
         val result = MultiLineTextValue.from(value)
-        assertEquals(expected, result.value)
+        assertEquals(value, result.value)
     }
 
     /**
@@ -56,7 +56,7 @@ internal class MultiLineTextlValueTest {
      * Verify that [MultiLineTextValue] equality uses value comparison and not reference comparison
      */
     @ParameterizedTest
-    @MethodSource("getValidValues", "getHtmlEscapedValues")
+    @MethodSource("getValidValues", "getXmlEscapedValues")
     fun textValueEquality(str: String) {
         val text1 = MultiLineTextValue.from(str)
         val text2 = MultiLineTextValue.from(str)
@@ -68,7 +68,7 @@ internal class MultiLineTextlValueTest {
         @JvmStatic
         private fun getInvalidValues(): List<Arguments> = arrayOf(
             "X".repeat(301),  // value too long
-            "&" + "X".repeat(298),  // html-escape causes value to be too long
+            "&" + "X".repeat(298),  // xml-escape causes value to be too long
         ).asArgs()
 
         @JvmStatic
@@ -90,10 +90,10 @@ internal class MultiLineTextlValueTest {
         ).asArgs()
 
         @JvmStatic
-        private fun getHtmlEscapedValues(): List<Arguments> = listOf(
+        private fun getXmlEscapedValues(): List<Arguments> = listOf(
             arguments("ABC&123", "ABC&amp;123"),
-            arguments("ABC&<>/123", "ABC&amp;&lt;&gt;&sol;123"),
-            arguments(">", "&gt;"),      // solitary html-escaped char
+            arguments("ABC&<>123", "ABC&amp;&lt;&gt;123"),
+            arguments(">", "&gt;"),      // solitary xml-escaped char
             arguments("&".repeat(60), "&amp;".repeat(60))
         )
     }

@@ -34,28 +34,30 @@ internal class TextValueTest {
 
     /**
      * Verify that when a [TextValue] is created from a string containing
-     * 'special characters' (e.g. &<>/), then those characters are substituted
-     * with corresponding HTML entity references (e.g. &amp; &lt; &gt; &sol; ).
+     * 'special characters' (e.g. &<>), then those characters are _not_
+     * substituted with corresponding XML entity references (e.g. &amp; &lt; &gt; ).
      */
-    @ParameterizedTest(name = "html-escaped {0}")
-    @MethodSource("getHtmlEscapedValues")
-    fun htmlEncodedTextValue(value: String, expected: String) {
+    @ParameterizedTest(name = "xml-escaped {0}")
+    @MethodSource("getXmlEscapedValues")
+    fun xmlEncodedTextValue(value: String) {
         val result = TextValue.from(value)
-        assertEquals(expected, result.value)
+        assertEquals(value, result.value)
     }
 
     /**
-     * Verify that when a [TextValue] is created from an already-html-encoded
-     * string containing 'special characters' (e.g. &<>/), then those characters
-     * are retained and are not double-encoded.
+     * Verify that when a [TextValue] is created from an already-xml-encoded
+     * string containing 'special characters' (e.g. &<>), then those characters
+     * are not double-encoded.
+     *
+     * The end result is that the xml-encoded characters are _decoded_ in the text value.
      */
-    @ParameterizedTest(name = "html-escaped {0}")
-    @MethodSource("getHtmlEscapedValues")
-    fun htmlDoubleEncodedTextValue(value: String, expected: String) {
-        val result = TextValue.from(value)
+    @ParameterizedTest(name = "xml-escaped {0}")
+    @MethodSource("getXmlEscapedValues")
+    fun htmlDoubleEncodedTextValue(value: String, xml_escaped: String) {
+        val result = TextValue.from(xml_escaped)
         val result2 = TextValue.from(result.value)
-        // double-encoded html strings should be the same as single-encoded strings
-        assertEquals(expected, result2.value)
+        // even double-encoded xml strings should be decoded
+        assertEquals(value, result2.value)
     }
 
     /**
@@ -70,7 +72,7 @@ internal class TextValueTest {
      * Verify that [TextValue] equality uses value comparison and not reference comparison
      */
     @ParameterizedTest
-    @MethodSource("getValidValues", "getHtmlEscapedValues")
+    @MethodSource("getValidValues", "getXmlEscapedValues")
     fun textValueEquality(str: String) {
         val text1 = TextValue.from(str)
         val text2 = TextValue.from(str)
@@ -82,7 +84,8 @@ internal class TextValueTest {
         @JvmStatic
         private fun getInvalidValues(): List<Arguments> = arrayOf(
             "X".repeat(301),  // value too long
-            "&" + "X".repeat(298),  // html-escape causes value to be too long
+            "&" + "X".repeat(298),  // xml-escape &amp; causes value to be too long
+            "&".repeat(61),         // xml-escape &amp; causes value to be too long
             "ABC\n123",     // newline
             "ABC\u000A123", // line feed
             "ABC\u000B123", // vertical tab
@@ -104,10 +107,10 @@ internal class TextValueTest {
         ).asArgs()
 
         @JvmStatic
-        private fun getHtmlEscapedValues(): List<Arguments> = listOf(
+        private fun getXmlEscapedValues(): List<Arguments> = listOf(
             arguments("ABC&123", "ABC&amp;123"),
-            arguments("ABC&<>/123", "ABC&amp;&lt;&gt;&sol;123"),
-            arguments(">", "&gt;"),      // solitary html-escaped char
+            arguments("ABC&<>123", "ABC&amp;&lt;&gt;123"),
+            arguments(">", "&gt;"),      // solitary xml-escaped char
             arguments("&".repeat(60), "&amp;".repeat(60))
         )
     }

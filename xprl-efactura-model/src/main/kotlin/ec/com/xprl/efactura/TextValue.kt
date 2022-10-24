@@ -35,58 +35,69 @@ open class TextValue protected constructor (value: CharSequence) {
         /**
          * Factory function to create a [TextValue] from a string.
          *
-         * Note that HTML special characters (&,<,>,/) will be html-encoded,
-         * e.g. as &amp; &lt; &gt or &sol; respectively.
-         *
          * @exception IllegalArgumentException the string value is not a valid [TextValue].
          */
-        @JvmStatic fun from(value: CharSequence) = TextValue(validate(htmlEncode(value)))
-
-        @JvmStatic
-        // call htmlDecode() before encoding to prevent double-encoding of ampersand,
-        // e.g. "&" -> "&amp;" -> "&amp;amp:" etc.
-        protected fun htmlEncode(value: CharSequence): CharSequence = htmlDecode(value).replace(htmlEncodeRegex) {
-            when (it.value) {
-                "&" -> "&amp;"
-                "<" -> "&lt;"
-                ">" -> "&gt;"
-                "/" -> "&sol;"
-                else -> it.value
-            }
-        }
-
-        @JvmStatic
-        protected fun htmlDecode(value: CharSequence): CharSequence = value.replace(htmlDecodeRegex) {
-            when (it.value) {
-                "&amp;" -> "&"
-                "&lt;" -> "<"
-                "&gt;" -> ">"
-                "&sol;" -> "/"
-                else -> it.value
-            }
-        }
+        @JvmStatic fun from(value: CharSequence) = TextValue(validate(value))
 
         @JvmStatic
         private fun validate(value: CharSequence) = validate(TextValue::class.java, value)
 
         @JvmStatic
+        /**
+         * Validate a text value.
+         *
+         * Note that, for purposes of validation special characters (&,<,>)
+         * will be xml-encoded (&amp; &lt; or &gt), because this affects
+         * the string length.
+         *
+         * However, the returned validated value is _not_ xml-encoded.
+         * The XML object marshaller or stream writer should perform
+         * xml-encoding automatically.
+         *
+         * @return the successfully validated text value.
+         * @throws IllegalArgumentException if the text value is not valid.
+         */
         protected fun <T : TextValue> validate(
             clazz: Class<T>,
             value: CharSequence,
             maxLength: Int = TEXT_MAX_LENGTH,
             multiLine: Boolean = false
         ): CharSequence {
-            if (value.length > maxLength) {
-                throw IllegalArgumentException("'${value}' exceeds maximum length of ${maxLength} for a ${clazz.simpleName}.")
+            val encoded = xmlEncode(value)
+            if (encoded.length > maxLength) {
+                throw IllegalArgumentException("'${encoded}' exceeds maximum length of ${maxLength} for a ${clazz.simpleName}.")
             }
             if (!multiLine && value.contains(lineBreaksRegex)) {
                 throw IllegalArgumentException("${clazz.simpleName} value may not contain line breaks.")
             }
-            return value
+            return xmlDecode(value)
+        }
+
+
+        @JvmStatic
+        // call xmlDecode() before encoding to prevent double-encoding of ampersand,
+        // e.g. "&" -> "&amp;" -> "&amp;amp:" etc.
+        protected fun xmlEncode(value: CharSequence): CharSequence = xmlDecode(value).replace(xmlEncodeRegex) {
+            when (it.value) {
+                "&" -> "&amp;"
+                "<" -> "&lt;"
+                ">" -> "&gt;"
+                else -> it.value
+            }
+        }
+
+        @JvmStatic
+        protected fun xmlDecode(value: CharSequence): CharSequence = value.replace(xmlDecodeRegex) {
+            when (it.value) {
+                "&amp;" -> "&"
+                "&lt;" -> "<"
+                "&gt;" -> ">"
+                else -> it.value
+            }
         }
 
         private val lineBreaksRegex = Regex("[\\u000A\\u000B\\u000C\\u000D\\u0085\\u2028\\u2029]")
-        private val htmlEncodeRegex = Regex("[&<>/]")
-        private val htmlDecodeRegex = Regex("(&amp;|&lt;|&gt;|&sol;)")
+        private val xmlEncodeRegex = Regex("[&<>]")
+        private val xmlDecodeRegex = Regex("(&amp;|&lt;|&gt;)")
     }
 }
