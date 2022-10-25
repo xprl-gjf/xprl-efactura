@@ -69,7 +69,7 @@ repositories {
 }
 
 dependencies {
-    implementation("ec.com.xprl.efactura:sri-efactura-core:0.1.0-SNAPSHOT")
+    implementation("ec.com.xprl.efactura:xprl-efactura:0.1.1-SNAPSHOT")
     // ...
 }
 ```
