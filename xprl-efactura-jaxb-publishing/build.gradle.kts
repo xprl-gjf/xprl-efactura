@@ -4,6 +4,7 @@ plugins {
 }
 
 repositories {
+    mavenCentral()
     // TODO: remove this if/when sri-efactura-core is published to MavenCentral.
     mavenLocal {
         content {
@@ -15,7 +16,7 @@ repositories {
 dependencies {
     api(project(":xprl-efactura-model"))
     implementation("ec.com.xprl.efactura:sri-efactura-core:0.1.0-SNAPSHOT")
-    testRuntimeOnly("com.sun.xml.bind:jaxb-impl:4.0.0", ) {
+    testRuntimeOnly("com.sun.xml.bind:jaxb-impl:4.0.1", ) {
         because("Runtime implementation of jaxb-api")
     }
     testRuntimeOnly("org.hibernate.validator:hibernate-validator:7.0.5.Final") {
