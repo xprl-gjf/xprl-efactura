@@ -30,7 +30,7 @@ class ReembolsoTotalsBuilder: AbstractBuilder<ReembolsoTotalsBuilder, Reembolso.
 
     override fun validatedBuild() = Reembolso.ReembolsoTotals(
         totalComprobantesReembolso!!,
-        totalComprobantesReembolso!!,
-        totalComprobantesReembolso!!
+        totalBaseImponibleReembolso!!,
+        totalImpuestoReembolso!!
     )
 }
