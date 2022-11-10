@@ -1,6 +1,7 @@
 package ec.com.xprl.efactura
 
 private const val RUC_LENGTH = 13
+private const val PASAPORTE_MAX_LENGTH = 14
 
 /**
  * Abstract data type representación por un valor de identidad.
@@ -64,7 +65,7 @@ sealed class IdentityValue(value: CharSequence) {
             @JvmStatic fun from(value: CharSequence) = Pasaporte(validate(value))
 
             private fun validate(value: CharSequence) =
-                validateIdentifier<Pasaporte>(value, IDENTIFIER_MAX_LENGTH)
+                validateIdentifier<Pasaporte>(value, PASAPORTE_MAX_LENGTH)
         }
     }
 

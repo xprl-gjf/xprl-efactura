@@ -77,7 +77,7 @@ open class TextValue protected constructor (value: CharSequence) {
         @JvmStatic
         // call xmlDecode() before encoding to prevent double-encoding of ampersand,
         // e.g. "&" -> "&amp;" -> "&amp;amp:" etc.
-        protected fun xmlEncode(value: CharSequence): CharSequence = xmlDecode(value).replace(xmlEncodeRegex) {
+        private fun xmlEncode(value: CharSequence): CharSequence = xmlDecode(value).replace(xmlEncodeRegex) {
             when (it.value) {
                 "&" -> "&amp;"
                 "<" -> "&lt;"
@@ -87,7 +87,7 @@ open class TextValue protected constructor (value: CharSequence) {
         }
 
         @JvmStatic
-        protected fun xmlDecode(value: CharSequence): CharSequence = value.replace(xmlDecodeRegex) {
+        private fun xmlDecode(value: CharSequence): CharSequence = value.replace(xmlDecodeRegex) {
             when (it.value) {
                 "&amp;" -> "&"
                 "&lt;" -> "<"

@@ -144,7 +144,7 @@ internal class IdentityValueTest {
      * an invalid string value raises an [IllegalArgumentException].
      */
     @ParameterizedTest(name = "invalid Pasaporte from String {0} throws IllegalArgumentException")
-    @MethodSource("getInvalidIdentifierStringValues")
+    @MethodSource("getInvalidPasaporteStringValues")
     fun invalidPasaporteValueException(value: String) {
         Assertions.assertThrows(IllegalArgumentException::class.java) {
             Pasaporte.from(value)
@@ -156,7 +156,7 @@ internal class IdentityValueTest {
      * valid string value.
      */
     @ParameterizedTest(name = "valid Pasaporte from {0}")
-    @MethodSource("getValidIdentifierStringValues")
+    @MethodSource("getValidPasaporteStringValues")
     fun validPasaporteValue(value: String) {
         val result = Pasaporte.from(value)
         assertEquals(value, result.value)
@@ -273,7 +273,25 @@ internal class IdentityValueTest {
         private fun getValidIdentifierStringValues(): List<Arguments> = arrayOf(
             "A",
             "ABC123",
-            "9".repeat(12),  // value too long
+            "9".repeat(13),  // value max length
+        ).asArgs()
+
+        @JvmStatic
+        private fun getInvalidPasaporteStringValues(): List<Arguments> = arrayOf(
+            " ",            // whitespace
+            "-1",           // negative
+            "9".repeat(15),  // value too long
+            "ABC 456",      // invalid char
+            "ABC-456",      // invalid char
+            "ABC_123",      // invalid char
+            "ABC&123",      // invalid char
+        ).asArgs()
+
+        @JvmStatic
+        private fun getValidPasaporteStringValues(): List<Arguments> = arrayOf(
+            "A",
+            "ABC123",
+            "9".repeat(14),  // value max length
         ).asArgs()
     }
 }
