@@ -5,9 +5,9 @@ package ec.com.xprl.efactura
 
 sealed class ImpuestoRetencionIdentidad(
     val tipoImpuesto: TipoImpuestoRetencion,
-    val codigoPorcentaje: Int) {
+    val codigoPorcentaje: CodigoRetencion) {
 
-    override fun toString() = "${tipoImpuesto}[${codigoPorcentaje}]"
+    override fun toString() = "${tipoImpuesto}[${codigoPorcentaje.value}]"
 
     /**
      * Value equality comparison
@@ -58,7 +58,7 @@ enum class TipoImpuestoRetencion(val codigo: Int) {
 
 class ImpuestoRetencionIva(
     porcentaje: IvaRetencionPorcentaje
-) : ImpuestoRetencionIdentidad(TipoImpuestoRetencion.IVA, porcentaje.codigo) {
+) : ImpuestoRetencionIdentidad(TipoImpuestoRetencion.IVA, codigo(porcentaje.codigo)) {
 
     /**
      * Valores por el campo `códigoPorcentaje` por impuestos a retener IVA.
@@ -80,7 +80,7 @@ class ImpuestoRetencionIva(
 
 class ImpuestoRetencionIsd(
     portentaje: IsdRetencionPorcentaje
-) : ImpuestoRetencionIdentidad(TipoImpuestoRetencion.ISD, portentaje.codigo) {
+) : ImpuestoRetencionIdentidad(TipoImpuestoRetencion.ISD, codigo(portentaje.codigo)) {
 
     /**
      * Valores por el campo `códigoPorcentaje` por impuestos a retener IVA.
@@ -89,12 +89,12 @@ class ImpuestoRetencionIsd(
      * Tabla 20.
      */
     enum class IsdRetencionPorcentaje(val codigo: Int) {
+        // TODO: confirm if this is correct - all values are 4580?
         CINCO_POR_CIENTO(4580),
         QUATRO_SETENTA_Y_CINCO_POR_CIENTO(4580),
         QUATRO_CINQUENTA_POR_CIENTO(4580),
         QUATRO_VEINTICINCO_POR_CIENTO(4580),
         QUATRO_POR_CIENTO(4580),
-        // TODO: confirm if this is correct - all values are 4580?
         UNKNOWN(4580)
     }
 }
@@ -102,11 +102,13 @@ class ImpuestoRetencionIsd(
 typealias RentaPorcentaje = Int
 
 class ImpuestoRetencionRenta(
-    portentaje: RentaPorcentaje
-) : ImpuestoRetencionIdentidad(TipoImpuestoRetencion.RENTA, portentaje)
+    porcentaje: RentaPorcentaje
+) : ImpuestoRetencionIdentidad(TipoImpuestoRetencion.RENTA, codigo(porcentaje))
 
 
 class ImpuestoRetencionIvaPresuntivoYRenta(
-    portentaje: RentaPorcentaje
-) : ImpuestoRetencionIdentidad(TipoImpuestoRetencion.IVA_PRESUNTIVO_Y_RENTA, portentaje)
+    porcentaje: RentaPorcentaje
+) : ImpuestoRetencionIdentidad(TipoImpuestoRetencion.IVA_PRESUNTIVO_Y_RENTA, codigo(porcentaje))
 
+
+private fun codigo(value: Int) = CodigoRetencion.from(value)
