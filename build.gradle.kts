@@ -27,7 +27,13 @@ tasks.jar {
 
 repositories {
     mavenCentral()
-    // TODO: remove this if/when sri-efactura-core is published to MavenCentral.
+    maven {
+        url = uri("https://maven.pkg.github.com/xprl-gjf/sri-efactura-core")
+        credentials {
+            username = (project.findProperty("gpr.user") ?: System.getenv("USERNAME")).toString()
+            password = (project.findProperty("gpr.key") ?: System.getenv("TOKEN")).toString()
+        }
+    }
     mavenLocal {
         content {
             includeGroup("ec.com.xprl.efactura")
@@ -38,7 +44,7 @@ repositories {
 // dependencies to be listed in the published maven artifact
 dependencies {
     api("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
-    implementation("ec.com.xprl.efactura:sri-efactura-core:0.1.0-SNAPSHOT")
+    implementation("ec.com.xprl.efactura:sri-efactura-core:0.1.0")
     runtimeOnly("com.sun.xml.bind:jaxb-impl:4.0.1", ) {
         because("Runtime implementation of jaxb-api")
     }
@@ -72,5 +78,13 @@ publishing {
             url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
         }
          */
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/xprl-gjf/xprl-efactura")
+            credentials {
+                username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
+            }
+        }
     }
 }

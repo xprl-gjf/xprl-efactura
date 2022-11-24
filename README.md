@@ -24,20 +24,9 @@ comprobantes electrónicos por esquemas v2.0.0 o v2.1.0
 
 **Prerequisites:**
 - JDK >= Java 11
-- `ec.com.xprl.efactura:sri-efactura-core` v1.0-SNAPSHOT (con dependencia transitivo `ec.com.xprl:krasa-jaxb-tools` v2.3-SNAPSHOT) - ver lo siguiente.
 
-Se puede instalar [sri-efactura-core](https://github.com/xprl-gjf/sri-efactura-core) y
-[krasa-jaxb-tools](https://github.com/xprl-gjf/krasa-jaxb-tools) con Maven, por:
-
-```console
-$ git clone https://github.com/xprl-gjf/krasa-jaxb-tools.git \
-    && cd krasa-jaxb-tools
-$ mvn clean install
-
-$ git clone https://github.com/xprl-gjf/sri-efactura-core.git \
-    && cd sri-efactura-core
-$ ./gradlew clean publishToMavenLocal
-```
+**Dependencias Principales:**
+- `ec.com.xprl.efactura:sri-efactura-core` v1.0 - ver repositorio [sri-efactura-core](https://github.com/xprl-gjf/sri-efactura-core).
 
 **Steps:**
 1) Clone el repositorio y compílelo usando el script contenedor `gradlew`:
@@ -51,6 +40,7 @@ $ ./gradlew clean build
 ```console
 $ ./gradlew publishToMavenLocal
 ```
+Este paso no es necesario si quiere usar la versión ya publicada en GitHub Packages.
 
 ## Para usar la libraría xprl-efactura :jigsaw:
 
@@ -60,6 +50,23 @@ Inclúyalo en su proyecto por Gradle en la manera siguiente:
 // build.gradle.kts:
 
 repositories {
+    // Elija una de los siguientes opciones:
+    // Opción 1: [GitHub Packages gradle registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry)
+    maven {
+        url = uri("https://maven.pkg.github.com/xprl-gjf/xprl-efactura")
+        credentials {
+            username = (project.findProperty("gpr.user") ?: System.getenv("USERNAME")).toString()
+            password = (project.findProperty("gpr.key") ?: System.getenv("TOKEN")).toString()
+        }
+    }
+    maven {
+        url = uri("https://maven.pkg.github.com/xprl-gjf/sri-efactura-core")
+        credentials {
+            username = (project.findProperty("gpr.user") ?: System.getenv("USERNAME")).toString()
+            password = (project.findProperty("gpr.key") ?: System.getenv("TOKEN")).toString()
+        }
+    }
+    // Opción 2: Maven local cache
     mavenLocal {
         // if using mavenLocal, it is good practice to restrict it to only specific libs/groups
         content {
