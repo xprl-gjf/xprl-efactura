@@ -1,8 +1,6 @@
 package uk.co.xprl.efactura.builders.retencion
 
-import uk.co.xprl.efactura.ComprobanteRetencion
-import uk.co.xprl.efactura.IdentityValue
-import uk.co.xprl.efactura.TextValue
+import uk.co.xprl.efactura.*
 import uk.co.xprl.efactura.builders.AbstractBuilder
 import uk.co.xprl.efactura.builders.requires
 
@@ -32,3 +30,4 @@ class SujectoBuilder : AbstractBuilder<SujectoBuilder, ComprobanteRetencion.Suje
         razonSocial!!,
     )
 }
+

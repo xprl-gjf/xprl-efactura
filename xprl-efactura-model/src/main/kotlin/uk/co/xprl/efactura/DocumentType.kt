@@ -28,6 +28,7 @@ val ComprobanteElectronico.documentType: DocumentType
         is NotaCredito -> DocumentType.NOTA_DE_CREDITO
         is NotaDebito -> DocumentType.NOTA_DE_DEBITO
         is ComprobanteRetencion -> DocumentType.COMPROBANTE_DE_RETENCION
+        is ComprobanteRetencionATS -> DocumentType.COMPROBANTE_DE_RETENCION
         is GuiaRemision -> DocumentType.GUIA_DE_REMISION
         is LiquidacionCompra -> DocumentType.LIQUIDACION_DE_COMPRA
         // occasionally when performing an incremental build, the compiler raises an error

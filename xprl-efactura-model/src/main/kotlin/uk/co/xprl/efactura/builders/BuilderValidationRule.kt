@@ -55,3 +55,39 @@ fun <T: Builder<*>> requiresNotMoreThan(
         ?: 0
     (count <= maxItems)
 }
+
+/**
+ * Create a [Builder] validation rule to conditionally check that a given builder property is not null.
+ */
+fun <T: Builder<*>> requiresIf(
+    predicate: (T) -> Boolean,
+    propertyName: String,
+    propertyGetter: (T) -> Any?
+) = BuilderValidationRule<T>(
+    { Pair(predicate(it), propertyGetter(it)) },
+    "$propertyName is null"
+) {
+    (it as? Pair<*, *>)?.let { (predicate, value) ->
+        !(predicate as? Boolean ?: true) || value != null
+    } ?: false
+}
+
+/**
+ * Create a [Builder] validation rule to conditionally check that a given builder property
+ * is not null and that if the property is a collection it is not empty.
+ */
+fun <T: Builder<*>> requiresNotEmptyIf(
+    predicate: (T) -> Boolean,
+    propertyName: String,
+    propertyGetter: (T) -> Any?
+) = BuilderValidationRule<T>(
+    { Pair(predicate(it), propertyGetter(it)) },
+    "$propertyName is empty"
+) {
+    (it as? Pair<*, *>)?.let { (predicate, value) ->
+        !(predicate as? Boolean ?: true) ||
+            (value != null &&
+                (value as? Collection<*>)?.isNotEmpty() ?: (value as? Map<*, *>)?.isNotEmpty() ?: true
+            )
+    } ?: false
+}

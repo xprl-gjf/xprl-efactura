@@ -11,6 +11,7 @@ class ReembolsoDetalleBuilder: AbstractBuilder<ReembolsoDetalleBuilder, Reembols
     ReembolsoDetalle::class.java,
     requires("proveedor") { it.proveedor },
     requires("tipoProveedorReembolso") { it.tipoProveedorReembolso },
+    requires("paisPago") { it.paisPago },
     requires("docReembolso") { it.docReembolso },
     requires("detalleImpuestos") { it.impuestos }
 ) {
@@ -40,7 +41,7 @@ class ReembolsoDetalleBuilder: AbstractBuilder<ReembolsoDetalleBuilder, Reembols
 
     override fun validatedBuild() = ReembolsoDetalle(
         proveedor!!,
-        paisPago,
+        paisPago!!,
         tipoProveedorReembolso!!,
         docReembolso!!,
         impuestos!!
