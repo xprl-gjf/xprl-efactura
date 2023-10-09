@@ -2,7 +2,7 @@ package ec.com.xprl.efactura.jaxb
 
 import ec.com.xprl.efactura.ComprobanteElectronico
 import ec.com.xprl.efactura.PublishedComprobante
-import ec.com.xprl.efactura.XAdESBESSignature
+import uk.co.xprl.efactura.XAdESBESSignature
 import org.w3c.dom.Document
 import java.io.StringWriter
 import javax.xml.XMLConstants
