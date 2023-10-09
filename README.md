@@ -64,13 +64,13 @@ repositories {
     mavenLocal {
         // if using mavenLocal, it is good practice to restrict it to only specific libs/groups
         content {
-            includeGroup("ec.com.xprl.efactura")
+            includeGroup("uk.co.xprl.efactura")
         }
     }
 }
 
 dependencies {
-    implementation("ec.com.xprl.efactura:xprl-efactura:0.1.2-SNAPSHOT")
+    implementation("uk.co.xprl.efactura:xprl-efactura:0.2.0-SNAPSHOT")
     // ...
 }
 ```
@@ -78,12 +78,12 @@ dependencies {
 Ejemplo de uso:
 
 ```kotlin
-import ec.com.xprl.efactura.*
-import ec.com.xprl.efactura.builders.InvalidBuilderOperation
-import ec.com.xprl.efactura.jaxb.ComprobanteFirmaException
-import ec.com.xprl.efactura.jaxb.ComprobanteFirmador
-import ec.com.xprl.efactura.jaxb.JaxbComprobantePublisher
-import ec.com.xprl.efactura.jaxb.JaxbValidationException
+import uk.co.xprl.efactura.*
+import uk.co.xprl.efactura.builders.InvalidBuilderOperation
+import uk.co.xprl.efactura.jaxb.ComprobanteFirmaException
+import uk.co.xprl.efactura.jaxb.ComprobanteFirmador
+import uk.co.xprl.efactura.jaxb.JaxbComprobantePublisher
+import uk.co.xprl.efactura.jaxb.JaxbValidationException
 import java.io.File
 
 fun main(args: Array<String>) {
