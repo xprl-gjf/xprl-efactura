@@ -28,6 +28,7 @@ comprobantes electrónicos por esquemas v2.0.0 o v2.1.0
 **Dependencias Principales:**
 - `uk.co.xprl.efactura:sri-efactura-core` v0.1.2 - ver repositorio [sri-efactura-core](https://github.com/xprl-gjf/sri-efactura-core).
 
+
 **Steps:**
 1) Clone el repositorio y compílelo usando el script contenedor `gradlew`:
 ```console
@@ -55,8 +56,8 @@ repositories {
     maven {
         url = uri("https://maven.pkg.github.com/xprl-gjf/xprl-efactura")
         credentials {
-            username = (project.findProperty("gpr.user") ?: System.getenv("USERNAME")).toString()
-            password = (project.findProperty("gpr.key") ?: System.getenv("TOKEN")).toString()
+            username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
+            password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
         }
     }
     // Opción 2: Maven local cache
