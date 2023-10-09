@@ -4,6 +4,11 @@ plugins {
     kotlin("jvm")
 }
 
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
 repositories {
     mavenCentral()
 }

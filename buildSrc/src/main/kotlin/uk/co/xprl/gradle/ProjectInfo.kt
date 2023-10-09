@@ -8,7 +8,8 @@ data class ProjectInfo (
     val version: String,
     val projectUrl: String? = null,
     var developers: Array<DeveloperInfo> = emptyArray(),
-    var license: LicenseInfo? = null
+    var license: LicenseInfo? = null,
+    var scm: ScmInfo? = null
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -20,6 +21,7 @@ data class ProjectInfo (
         if (version != other.version) return false
         if (projectUrl != other.projectUrl) return false
         if (license != other.license) return false
+        if (scm != other.scm) return false
         if (!developers.contentEquals(other.developers)) return false
 
         return true
@@ -31,6 +33,7 @@ data class ProjectInfo (
         result = 31 * result + projectUrl.hashCode()
         result = 31 * result + developers.contentHashCode()
         result = 31 * result + license.hashCode()
+        result = 31 * result + scm.hashCode()
         return result
     }
 }
@@ -47,4 +50,11 @@ data class DeveloperInfo(
 data class LicenseInfo(
     val name: String,
     val url: String? = null
+)
+
+@Serializable
+data class ScmInfo(
+    val connection: String,
+    val developerConnection: String,
+    val url: String
 )
