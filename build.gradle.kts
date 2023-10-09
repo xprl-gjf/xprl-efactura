@@ -3,6 +3,7 @@ plugins {
     id("uk.co.xprl.project-info")
     id("uk.co.xprl.maven-artifact")
     id("xprl-efactura.kotlin-jvm-conventions")
+    signing
 }
 
 evaluationDependsOnChildren()
@@ -42,7 +43,7 @@ dependencies {
     runtimeOnly("org.glassfish:jakarta.el:4.0.2") {
         because("Expression Language implementation needed for jakarta.validation.Validator.")
     }
-    runtimeOnly("org.bouncycastle:bcprov-jdk18on:1.72") {
+    runtimeOnly("org.bouncycastle:bcprov-jdk18on:1.76") {
         because("Runtime support for BouncyCastleProvider; a security provider with support for PKCS12, for xades-firma")
     }
     runtimeOnly("commons-logging:commons-logging:1.2") {
@@ -67,6 +68,14 @@ publishing {
         }
          */
         maven {
+            name = "OSSRH"      /* MavenCentral */
+            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials {
+                username = project.findProperty("ossrh.Username") as String? ?: System.getenv("MAVEN_USERNAME")
+                password = project.findProperty("ossrh.Password") as String? ?: System.getenv("MAVEN_PASSWORD")
+            }
+        }
+        maven {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/xprl-gjf/xprl-efactura")
             credentials {
@@ -75,4 +84,16 @@ publishing {
             }
         }
     }
+}
+
+signing {
+    /*
+    setRequired({
+        (project.extra["isReleaseVersion"] as Boolean) && gradle.taskGraph.hasTask("publish")
+    })
+     */
+    //val signingKey: String? by project
+    //val signingPassword: String? by project
+    //useInMemoryPgpKeys(signingKey, signingPassword)
+    sign(publishing.publications)
 }
