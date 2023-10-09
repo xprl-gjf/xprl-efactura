@@ -5,23 +5,11 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven {
-        url = uri("https://maven.pkg.github.com/xprl-gjf/sri-efactura-core")
-        credentials {
-            username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
-            password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
-        }
-    }
-    mavenLocal {
-        content {
-            includeGroup("ec.com.xprl.efactura")
-        }
-    }
 }
 
 dependencies {
     api(project(":xprl-efactura-model"))
-    implementation("ec.com.xprl.efactura:sri-efactura-core:0.1.0")
+    implementation("uk.co.xprl.efactura:sri-efactura-core:0.1.2")
     testRuntimeOnly("com.sun.xml.bind:jaxb-impl:4.0.1", ) {
         because("Runtime implementation of jaxb-api")
     }
