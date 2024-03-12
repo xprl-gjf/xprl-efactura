@@ -104,15 +104,24 @@ internal class BuilderTest {
             // requiredNotNullOrEmpty = null
         }
 
+        private fun inconsistentBuilderConfig(builder: FooBuilder): FooBuilder = builder.apply {
+            required = 0
+            requiredNotEmpty = listOf(0)
+            requiredNotNullOrEmpty = listOf(0)
+            condition = true
+        }
+
         internal fun minimumBuilderConfig(builder: FooBuilder): FooBuilder = builder.apply {
             required = 0
             requiredNotNullOrEmpty = listOf(0)
             requiredNotEmpty = listOf(0)
         }
 
-        internal fun completeBuilderConfig(builder: FooBuilder): FooBuilder = minimumBuilderConfig(builder)
-            .apply {
+        internal fun completeBuilderConfig(builder: FooBuilder): FooBuilder = minimumBuilderConfig(builder).apply {
             optional = 0
+            condition = true
+            requiredWhenConditionIsTrue = 0
+            requiredNotEmptyWhenConditionIsTrue = listOf(0)
         }
     }
 }
@@ -123,11 +132,17 @@ internal class FooBuilder: AbstractBuilder<FooBuilder, Int>(
     requires("Required Property") { it.required },
     requiresNotEmpty("RequiredNotEmpty Property") { it.requiredNotEmpty },
     requiresNotEmpty("RequiredNotNullOrEmpty Property") { it.requiredNotNullOrEmpty },
+    requiresIf({ it.condition == true }, "RequiredWhenConditionalIsTrue") { it.requiredWhenConditionIsTrue },
+    requiresNotEmptyIf({ it.condition == true }, "RequiredNotEmptyWhenConditionalIsTrue") { it.requiredNotEmptyWhenConditionIsTrue }
 ) {
     var required: Int? = null
     var requiredNotEmpty: List<Int> = emptyList()
     var requiredNotNullOrEmpty: List<Int>? = null
     var optional: Int? = null
+
+    var condition: Boolean? = null
+    var requiredWhenConditionIsTrue: Int? = null
+    var requiredNotEmptyWhenConditionIsTrue: List<Int>? = null
 
     val expectedResult: Int = 99
 
@@ -137,6 +152,11 @@ internal class FooBuilder: AbstractBuilder<FooBuilder, Int>(
         require(this.requiredNotNullOrEmpty != null)
         require(this.requiredNotEmpty.isNotEmpty())
         require(this.requiredNotNullOrEmpty?.isNotEmpty() ?: false)
+
+        if (this.condition == true) {
+            require(this.requiredWhenConditionIsTrue != null)
+            require(this.requiredNotEmptyWhenConditionIsTrue?.isNotEmpty() ?: false)
+        }
         return expectedResult
     }
 }

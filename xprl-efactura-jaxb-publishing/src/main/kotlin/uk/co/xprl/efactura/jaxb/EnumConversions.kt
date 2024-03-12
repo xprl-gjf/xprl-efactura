@@ -21,6 +21,7 @@ internal val ComprobanteElectronico.sriDocumentType: ec.gob.sri.efactura.Documen
         is NotaCredito -> ec.gob.sri.efactura.DocumentType.NOTA_DE_CREDITO
         is NotaDebito -> ec.gob.sri.efactura.DocumentType.NOTA_DE_DEBITO
         is ComprobanteRetencion -> ec.gob.sri.efactura.DocumentType.COMPROBANTE_DE_RETENCION
+        is ComprobanteRetencionATS -> ec.gob.sri.efactura.DocumentType.COMPROBANTE_DE_RETENCION
         is GuiaRemision -> ec.gob.sri.efactura.DocumentType.GUIA_DE_REMISION
         is LiquidacionCompra -> ec.gob.sri.efactura.DocumentType.LIQUIDACION_DE_COMPRA
     }

@@ -33,7 +33,7 @@ sealed class SchemaVersion<T: ComprobanteElectronico>(val efacturaClass: Class<T
 
     /* ComprobanteRetencion schema versions */
     object ComprobanteRetencionV100: SchemaVersion<ComprobanteRetencion>(ComprobanteRetencion::class.java, Version(1, 0, 0))
-    // TODO: ComprobanteRetencionV200
+    object ComprobanteRetencionV200: SchemaVersion<ComprobanteRetencionATS>(ComprobanteRetencionATS::class.java, Version(2, 0, 0))
 
     /* GuiaRemision schema versions */
     object GuiaRemisionV100: SchemaVersion<GuiaRemision>(GuiaRemision::class.java, Version(1, 0, 0))

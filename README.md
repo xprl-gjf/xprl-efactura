@@ -15,10 +15,11 @@ Con apoyo por las siguientes esquemas:
 * GuíaRemisión v1.0.0
 * GuíaRemisión v1.1.0
 * ComprobanteRetención v1.0.0
+* ComprobanteRetención v2.0.0
 
 **TODO:**
 
-comprobantes electrónicos por esquemas v2.0.0 o v2.1.0
+Facturas por esquemas v2.0.0 o v2.1.0
 
 ## Construir la libraría xprl-efactura :hammer_and_wrench:
 

@@ -2,6 +2,8 @@
 
 package uk.co.xprl.efactura
 
+import kotlinx.datetime.LocalDate
+
 
 sealed class ImpuestoRetencionIdentidad(
     val tipoImpuesto: TipoImpuestoRetencion,
@@ -32,12 +34,18 @@ sealed class ImpuestoRetencionIdentidad(
     }
 }
 
-
 data class ImpuestoRetencionValor(
     val baseImponible: UDecimalValue,
     val porcentajeRetener: UDecimalValue,
-    val valorRetenido: UDecimalValue
-)
+    val valorRetenido: UDecimalValue,
+    val dividendos: DividendoDetalle? = null
+) {
+    data class DividendoDetalle(
+        val fechaPago: LocalDate,
+        val imRentaSoc: UDecimalValue,
+        val ejerFisUtDiv: Int
+    )
+}
 
 /**
  * Valores por el campo `código` por impuestos a retener.
@@ -83,23 +91,24 @@ class ImpuestoRetencionIsd(
 ) : ImpuestoRetencionIdentidad(TipoImpuestoRetencion.ISD, codigo(portentaje.codigo)) {
 
     /**
-     * Valores por el campo `códigoPorcentaje` por impuestos a retener IVA.
+     * Valores por el campo `códigoPorcentaje` por impuestos a retener ISD.
      *
-     * Según [SRI Ficha técnica v2.21](https://www.sri.gob.ec/o/sri-portlet-biblioteca-alfresco-internet/descargar/435ca226-b48d-4080-bb12-bf03a54527fd/FICHA%20TE%cc%81CNICA%20COMPROBANTES%20ELECTRO%cc%81NICOS%20ESQUEMA%20OFFLINE%20Versio%cc%81n%202.21.pdf),
+     * Según [SRI Ficha técnica v2.25](https://www.sri.gob.ec/o/sri-portlet-biblioteca-alfresco-internet/descargar/6e0c602e-4389-4dc5-8182-bd9726c32012/FICHA%20TE%cc%81CNICA%20COMPROBANTES%20ELECTRO%cc%81NICOS%20ESQUEMA%20OFFLINE%20Versio%cc%81n%202.25.pdf),
      * Tabla 20.
      */
     enum class IsdRetencionPorcentaje(val codigo: Int) {
-        // TODO: confirm if this is correct - all values are 4580?
         CINCO_POR_CIENTO(4580),
         QUATRO_SETENTA_Y_CINCO_POR_CIENTO(4580),
         QUATRO_CINQUENTA_POR_CIENTO(4580),
         QUATRO_VEINTICINCO_POR_CIENTO(4580),
         QUATRO_POR_CIENTO(4580),
+        TRES_SETENTA_Y_CINCO_POR_CIENTO(4580),
+        TRES_CINQUENTA_POR_CIENTO(4580),
         UNKNOWN(4580)
     }
 }
 
-typealias RentaPorcentaje = Int
+typealias RentaPorcentaje = String
 
 class ImpuestoRetencionRenta(
     porcentaje: RentaPorcentaje
@@ -112,3 +121,5 @@ class ImpuestoRetencionIvaPresuntivoYRenta(
 
 
 private fun codigo(value: Int) = CodigoRetencion.from(value)
+
+private fun codigo(value: String) = CodigoRetencion.from(value)

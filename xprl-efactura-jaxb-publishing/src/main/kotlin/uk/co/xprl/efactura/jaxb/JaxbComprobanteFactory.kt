@@ -9,6 +9,7 @@ import uk.co.xprl.efactura.jaxb.v1_0_0.createNotaCredito as createNotaCredito_1_
 import uk.co.xprl.efactura.jaxb.v1_1_0.createNotaCredito as createNotaCredito_1_1_0
 import uk.co.xprl.efactura.jaxb.v1_0_0.createNotaDebito as createNotaDebito_1_0_0
 import uk.co.xprl.efactura.jaxb.v1_0_0.createComprobanteRetencion as createComprobanteRetencion_1_0_0
+import uk.co.xprl.efactura.jaxb.v2_0_0.createComprobanteRetencion as createComprobanteRetencion_2_0_0
 import uk.co.xprl.efactura.jaxb.v1_0_0.createGuiaRemision as createGuiaRemision_1_0_0
 import uk.co.xprl.efactura.jaxb.v1_1_0.createGuiaRemision as createGuiaRemision_1_1_0
 import uk.co.xprl.efactura.jaxb.v1_0_0.createLiquidacionCompra as createLiquidacionCompra_1_0_0
@@ -19,6 +20,7 @@ import ec.gob.sri.credito.v1_0_0.NotaCredito as NotaCredito_1_0_0
 import ec.gob.sri.credito.v1_1_0.NotaCredito as NotaCredito_1_1_0
 import ec.gob.sri.debito.v1_0_0.NotaDebito as NotaDebito_1_0_0
 import ec.gob.sri.retencion.v1_0_0.ComprobanteRetencion as ComprobanteRetencion_1_0_0
+import ec.gob.sri.retencion.v2_0_0.ComprobanteRetencion as ComprobanteRetencion_2_0_0
 import ec.gob.sri.remision.v1_0_0.GuiaRemision as GuiaRemision_1_0_0
 import ec.gob.sri.remision.v1_1_0.GuiaRemision as GuiaRemision_1_1_0
 import ec.gob.sri.liquidacion.v1_0_0.LiquidacionCompra as LiquidacionCompra_1_0_0
@@ -90,7 +92,9 @@ class JaxbComprobanteFactoryImpl(
                 comprobante as ComprobanteRetencion, ambiente, tipoEmision, claveAcceso
             ) to ComprobanteRetencion_1_0_0::class.java
 
-            // TODO: ComprobanteRetencion_2_0_0
+            SchemaVersion.ComprobanteRetencionV200 -> createComprobanteRetencion_2_0_0(
+                comprobante as ComprobanteRetencionATS, ambiente, tipoEmision, claveAcceso
+            ) to ComprobanteRetencion_2_0_0::class.java
 
             /* guia de remision */
             SchemaVersion.GuiaRemisionV100 -> createGuiaRemision_1_0_0(

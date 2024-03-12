@@ -7,8 +7,8 @@ class ReembolsoDetalle(val src: ReembolsoDetalle) {
         get() = String.format("%02d", src.proveedor.tipoIdentificacionCodigo)
     val identificación: String
         get() = src.proveedor.value
-    val paisPago: String?
-        get() = src.paisPago?.let { String.format("%03d", it.value) }
+    val paisPago: String
+        get() = String.format("%03d", src.paisPago.value)
     val tipoProveedorReembolso: String
         get() = String.format("%02d", src.tipoProveedorReembolso.value)
 
