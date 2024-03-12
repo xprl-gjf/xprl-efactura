@@ -65,6 +65,7 @@ abstract class AbstractBuilder<TBuilder: AbstractBuilder<TBuilder, T>, out T: An
      *
      * @return the invalid property names as a list of strings, or an empty list.
      */
+    @Suppress("UNCHECKED_CAST")
     protected open fun validate() = _validationRules.map {
         it.predicate(it.propertyGetter(this as TBuilder)) to it.validationErrorMessage
     }.filter { !it.first }.map { it.second }
@@ -111,6 +112,7 @@ abstract class CompositeBuilder<TBuilder: CompositeBuilder<TBuilder, T>, out T: 
         { builder: TBuilder -> innerBuilderProperties.map { it(builder) } },
         *validationRules)
 
+    @Suppress("UNCHECKED_CAST")
     override fun validate()
         // invoke validate for this builder
         = super.validate() +

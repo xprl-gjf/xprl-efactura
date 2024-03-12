@@ -4,7 +4,6 @@ import kotlinx.datetime.LocalDate
 import uk.co.xprl.efactura.*
 import uk.co.xprl.efactura.builders.*
 
-@Suppress("UNCHECKED_CAST")
 class DocSustentoATSBuilder: CompositeBuilder<DocSustentoATSBuilder, DocSustentoATS>(
     DocSustentoATS::class.java,
     innerBuilderProperties = { builder -> listOf(
@@ -42,7 +41,7 @@ class DocSustentoATSBuilder: CompositeBuilder<DocSustentoATSBuilder, DocSustento
     fun setReembolsos(value: ReembolsosATSBuilder) = apply { reembolsos = value }
 
     operator fun plus(other: DocSustentoATSBuilder) = merge(other)
-    protected open fun merge(other: DocSustentoATSBuilder) = apply {
+    fun merge(other: DocSustentoATSBuilder) = apply {
         other.tipoDocumento?.let { setTipoDocumento(it) }
         other.numDocSustento?.let { setNumDocSustento(it) }
         other.fechaEmisionDocSustento?.let { setFechaEmisionDocSustento(it) }
