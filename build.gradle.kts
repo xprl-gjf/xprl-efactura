@@ -32,21 +32,21 @@ repositories {
 
 // dependencies to be listed in the published maven artifact
 dependencies {
-    api("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+    api("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
     implementation("uk.co.xprl.efactura:sri-efactura-core:0.1.2")
-    runtimeOnly("com.sun.xml.bind:jaxb-impl:4.0.1", ) {
+    runtimeOnly("com.sun.xml.bind:jaxb-impl:4.0.4", ) {
         because("Runtime implementation of jaxb-api")
     }
-    runtimeOnly("org.hibernate.validator:hibernate-validator:7.0.5.Final") {
+    runtimeOnly("org.hibernate.validator:hibernate-validator:8.0.1.Final") {
         because("Runtime implementation of jakarta.validation.Validator used by JaxbComprobantePublisher.")
     }
-    runtimeOnly("org.glassfish:jakarta.el:4.0.2") {
+    runtimeOnly("org.glassfish:jakarta.el:5.0.0-M1") {
         because("Expression Language implementation needed for jakarta.validation.Validator.")
     }
-    runtimeOnly("org.bouncycastle:bcprov-jdk18on:1.76") {
+    runtimeOnly("org.bouncycastle:bcprov-jdk18on:1.77") {
         because("Runtime support for BouncyCastleProvider; a security provider with support for PKCS12, for xades-firma")
     }
-    runtimeOnly("commons-logging:commons-logging:1.2") {
+    runtimeOnly("commons-logging:commons-logging:1.3.0") {
         because("For es.mityc.javasign classes bundled from xades-firma")
     }
 }

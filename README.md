@@ -65,7 +65,7 @@ repositories {
 }
 
 dependencies {
-    implementation("uk.co.xprl.efactura:xprl-efactura:0.2.0")
+    implementation("uk.co.xprl.efactura:xprl-efactura:0.3.0")
     // ...
 }
 ```
