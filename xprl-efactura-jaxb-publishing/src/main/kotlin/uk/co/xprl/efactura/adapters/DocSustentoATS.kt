@@ -17,5 +17,5 @@ class DocSustentoATS(
     val fechaRegistroContable: String?
         get() = src.fechaRegistroContable?.toDateString()
     val numAutDocSustento: String?
-        get() = src.numDocSustento?.value
+        get() = src.numAutDocSustento?.value
 }
